@@ -1,7 +1,6 @@
-
+---
 layout: post
 title:  "OpenSCAD 教程"
-date:   2024-12-10 13:38:12 +0800
 ---
 # OpenSCAD 教程
 
