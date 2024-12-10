@@ -24,6 +24,7 @@ description:
 url: "https://openscad.tech" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: 
 github_username:  lich-wang
+repository: "openscad-cn/openscad-cn.github.io"
 
 # Build settings
 #theme: jekyll-theme-minimal
