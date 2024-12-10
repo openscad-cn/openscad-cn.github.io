@@ -1,6 +1,6 @@
 
 layout: post
-title:  "Welcome to Jekyll!"
+title:  "OpenSCAD 教程"
 date:   2024-12-10 13:38:12 +0800
 categories: jekyll update
 ---
