@@ -26,11 +26,11 @@ twitter_username:
 github_username:  lich-wang
 
 # Build settings
-theme: minima
-remote_theme: pages-themes/leap-day@v0.2.0
+theme: jekyll-theme-minima
+#remote_theme: pages-themes/leap-day@v0.2.0
 plugins:
   - jekyll-feed
-  - jekyll-remote-theme
+# - jekyll-remote-theme
 
 #remote_theme: pages-themes/leap-day@v0.2.0
 #plugins:
