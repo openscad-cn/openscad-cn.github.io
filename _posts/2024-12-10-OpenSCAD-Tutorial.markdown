@@ -1,4 +1,4 @@
----
+
 layout: post
 title:  "Welcome to Jekyll!"
 date:   2024-12-10 13:38:12 +0800
@@ -6,15 +6,14 @@ categories: jekyll update
 ---
 # OpenSCAD 教程
 
-## 关于 OpenSCAD
-
-![OpenSCAD logo](#) <!-- 请替换为实际的 OpenSCAD logo 链接 -->
-
+## 介绍
+### 关于 OpenSCAD
+ 
 **OpenSCAD** 是一款功能强大的 3D CAD 建模软件，支持通过脚本文件创建 CAD 模型。这款专为建模设计的领域特定语言，允许用户通过组合和变换现有的基本形状（以及自定义对象）来创建完全参数化的模型。
 
 ---
 
-## 关于本教程
+### 关于本教程
 
 本教程假设读者对编程或 CAD 完全没有任何基础知识，旨在通过逐步的示例和练习，引导您快速理解核心概念，并为您提供创建自己模型的必要工具。
 
@@ -24,6 +23,10 @@ categories: jekyll update
 
 ---
 
-## 项目背景
+### 项目背景
 
 截至 2019 年 11 月 29 日，本教程及其所有配套材料均作为 Google Season of Docs 项目完全开发完成。
+
+### 译注
+
+本教程基于https://en.wikibooks.org/wiki/OpenSCAD_Tutorial 翻译而来，目前还在进行中。
