@@ -26,7 +26,7 @@ twitter_username:
 github_username:  lich-wang
 
 # Build settings
-theme: leap-day
+theme: jekyll-theme-leap-day
 plugins:
   - jekyll-feed
 
