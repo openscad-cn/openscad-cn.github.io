@@ -21,12 +21,12 @@
 title: OpenSCAD中文站
 email: lich.wang@gmail.com
 description: 
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://openscad.tech" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: 
 github_username:  lich-wang
 
 # Build settings
-theme: minima
+theme: leap-day
 plugins:
   - jekyll-feed
 
