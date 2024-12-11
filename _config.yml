@@ -62,6 +62,13 @@ callouts:
     title: 注意
     color: yellow
 
+enable_copy_code_button: true
+
+kramdown:
+  syntax_highlighter_opts:
+    block:
+      line_numbers: false
+
 #remote_theme: pages-themes/leap-day@v0.2.0
 #plugins:
 #- jekyll-remote-theme # add this line to the plugins list if you already have one
