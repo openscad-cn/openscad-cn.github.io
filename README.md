@@ -1,10 +1,10 @@
 ---
-# Feel free to add content and custom Front Matter to this file.
-# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
 layout: home
 
 title:  "欢迎来到 OpenSCAD 中文站"
+
+permalink: /
 ---
 
 ## 我们的使命  
