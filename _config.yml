@@ -50,6 +50,23 @@ just_the_docs:
       # Give the collection a name
       name: OpenSCAD教程
 
+callouts_level: quiet # or loud
+callouts:
+  highlight:
+    color: yellow
+  important:
+    title: Important
+    color: blue
+  new:
+    title: New
+    color: green
+  note:
+    title: Note
+    color: purple
+  warning:
+    title: Warning
+    color: red
+
 #remote_theme: pages-themes/leap-day@v0.2.0
 #plugins:
 #- jekyll-remote-theme # add this line to the plugins list if you already have one
