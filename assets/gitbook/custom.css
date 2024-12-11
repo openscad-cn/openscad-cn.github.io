@@ -1,5 +1,3 @@
----
----
 .markdown-section blockquote.block-ex {
     border-color: var(--c-info); /* 替换为您需要的颜色变量 */
     background-color: var(--c-info-bg); /* 替换为您需要的背景颜色变量 */
