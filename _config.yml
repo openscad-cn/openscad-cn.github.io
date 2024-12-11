@@ -33,6 +33,8 @@ plugins:
   - jekyll-feed
   - jekyll-github-metadata
   - jekyll-remote-theme
+  - jekyll-readme-index
+  - jemoji
 syntax_highlighter_style: colorful
 toc:
     enabled: true
