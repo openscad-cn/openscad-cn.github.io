@@ -19,7 +19,6 @@ order: 0
 本教程中的大部分示例和练习的解决方案，都可以作为单独的 OpenSCAD 脚本在 [此处](#) 获取。 <!-- 请替换为实际链接 -->
 
 ---
-{: .highlight }
->## 译注
->
->本教程基于 https://en.wikibooks.org/wiki/OpenSCAD_Tutorial 翻译而来，目前还在进行中。
+
+本教程基于 https://en.wikibooks.org/wiki/OpenSCAD_Tutorial 翻译而来，目前还在进行中。
+{: .note }
