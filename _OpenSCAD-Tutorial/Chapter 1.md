@@ -115,7 +115,7 @@ cube(10);
 
 代码示例 `a_different_cube.scad`
 
-```openscad
+```cpp
 cube([25,35,55]);
 ```
 
@@ -180,7 +180,7 @@ cube([25,35,55]);
 
 代码示例 `a_centered_cube_with_different_side_lengths.scad`
 
-```openscad
+```cpp
 cube([20,30,50],center=true);
 ```
 
@@ -212,7 +212,7 @@ cube([20,30,50],center=true);
 
 首先创建一个边长分别为 60、20 和 10 的立方体，并将其中心设置在原点。
 
-```openscad
+```cpp
 cube([60,20,10],center=true);
 ```
 
@@ -224,7 +224,7 @@ cube([60,20,10],center=true);
 
 文件名：`a_smaller_cube_covered_by_a_bigger_cube.scad`
 
-```openscad
+```cpp
 cube([60,20,10],center=true);
 cube([30,20,10],center=true);
 ```
@@ -239,7 +239,7 @@ cube([30,20,10],center=true);
 
 文件名：`two_cubes.scad`
 
-```openscad
+```cpp
 cube([60,20,10],center=true);
 translate([0,0,5])
     cube([30,20,10],center=true);
@@ -267,7 +267,7 @@ translate([0,0,5])
 
 文件名：`two_cubes_with_small_overlap.scad`
 
-```openscad
+```cpp
 cube([60,20,10],center=true);
 translate([0,0,9.999])
     cube([30,20,10],center=true);
@@ -277,7 +277,7 @@ translate([0,0,9.999])
 
 文件名：`two_cubes_with_explicit_small_overlap.scad`
 
-```openscad
+```cpp
 cube([60,20,10],center=true);
 translate([0,0,10 - 0.001])
     cube([30,20,10],center=true);
@@ -287,7 +287,7 @@ translate([0,0,10 - 0.001])
 
 文件名：`third_cube_close_small_gap.scad`
 
-```openscad
+```cpp
 cube([60,20,10],center=true);
 translate([0,0,10])
     cube([30,20,10],center=true);
@@ -307,7 +307,7 @@ translate([0,0,5 - 0.001])
 
 代码示例 `a_cylinder_covered_by_cubes.scad`
 
-```openscad
+```cpp
 cube([60,20,10],center=true);
 translate([5,0,10 - 0.001])
     cube([30,20,10],center=true);
@@ -320,7 +320,7 @@ cylinder(h=3,r=8);
 
 代码示例 `two_cubes_and_a_cylinder.scad`
 
-```openscad
+```cpp
 cube([60,20,10],center=true);
 translate([5,0,10 - 0.001])
     cube([30,20,10],center=true);
@@ -334,7 +334,7 @@ translate([0,-20,0])
 
 代码示例 `two_cubes_and_a_rotated_cylinder.scad`
 
-```openscad
+```cpp
 cube([60,20,10],center=true);
 translate([5,0,10 - 0.001])
     cube([30,20,10],center=true);
@@ -361,7 +361,7 @@ rotate([90,0,0])
 
 代码示例 文件名：`two_cubes_and_a_rotated_and_translated_cylinder.scad`
 
-```openscad
+```cpp
 cube([60,20,10],center=true);
 translate([5,0,10 - 0.001])
     cube([30,20,10],center=true);
@@ -381,7 +381,7 @@ translate([0,-20,0])
 
 代码示例 `car_body_and_front_left_wheel.scad`
 
-```openscad
+```cpp
 cube([60,20,10],center=true);
 translate([5,0,10 - 0.001])
     cube([30,20,10],center=true);
@@ -398,7 +398,7 @@ translate([-20,-15,0])
 
 代码示例 `car_body_and_misaligned_front_wheels.scad`
 
-```openscad
+```cpp
 cube([60,20,10],center=true);
 translate([5,0,10 - 0.001])
     cube([30,20,10],center=true);
@@ -422,7 +422,7 @@ translate([-20,15,0])
 
 代码示例 `car_body_and_aligned_front_wheels.scad`
 
-```openscad
+```cpp
 cube([60,20,10],center=true);
 translate([5,0,10 - 0.001])
     cube([30,20,10],center=true);
@@ -446,7 +446,7 @@ translate([-20,15,0])
 
 代码示例 文件名：`completed_car.scad`
 
-```openscad
+```cpp
 cube([60,20,10],center=true);
 translate([5,0,10 - 0.001])
     cube([30,20,10],center=true);
@@ -478,7 +478,7 @@ translate([20,0,0])
 
 您可能已经注意到轮子的分辨率较低。目前，您使用的是 OpenSCAD 的默认分辨率设置。可以通过以下命令完全控制模型的分辨率：
 
-```openscad
+```cpp
 $fa = 1;
 $fs = 0.4;
 ```
@@ -489,7 +489,7 @@ $fs = 0.4;
 
 代码示例 `completed_car_higher_resolution.scad`
 
-```openscad
+```cpp
 $fa = 1;
 $fs = 0.4;
 cube([60,20,10],center=true);
@@ -529,7 +529,7 @@ translate([20,0,0])
 
 代码示例 `completed_car_commented.scad`
 
-```openscad
+```cpp
 $fa = 1;
 $fs = 0.4;
 // Car body base
