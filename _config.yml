@@ -48,7 +48,7 @@ just_the_docs:
     # Reference the "tests" collection
     OpenSCAD-Tutorial:
       # Give the collection a name
-      name: OpenSCAD-Tutorial
+      name: OpenSCAD教程
 
 #remote_theme: pages-themes/leap-day@v0.2.0
 #plugins:
