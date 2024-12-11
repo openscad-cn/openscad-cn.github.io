@@ -312,3 +312,153 @@ translate([0,0,5 - 0.001])
 ```
 
 在整个教程中，您会经常遇到这种情况。当两个对象完全接触时，您应始终通过增加或减少 0.001 单位的公差来保证小的重叠。
+
+### 圆柱原始体与旋转对象
+
+您刚刚创建的模型看起来像一辆空气动力学很差的汽车车身。没关系，您将在接下来的章节中让这辆车看起来更有趣且更具空气动力学特性。现在，您将使用圆柱原始体和旋转变换为汽车添加轮子和车轴。
+
+您可以通过添加一个包含 `cylinder` 命令的语句来创建一个轮子。您需要定义两个输入参数：`h` 和 `r`。第一个参数表示圆柱的高度，第二个参数表示圆柱的半径。
+
+---
+
+#### 代码示例
+
+文件名：`a_cylinder_covered_by_cubes.scad`
+
+```openscad
+cube([60,20,10],center=true);
+translate([5,0,10 - 0.001])
+    cube([30,20,10],center=true);
+cylinder(h=3,r=8);
+```
+
+您会注意到圆柱被其他对象遮挡。您可以使用 `translate` 命令将圆柱沿 Y 轴负方向平移 20 个单位以使其可见。
+
+---
+
+#### 代码示例
+
+文件名：`two_cubes_and_a_cylinder.scad`
+
+```openscad
+cube([60,20,10],center=true);
+translate([5,0,10 - 0.001])
+    cube([30,20,10],center=true);
+translate([0,-20,0])
+    cylinder(h=3,r=8);
+```
+
+轮子现在可见，但如果它没有正确放置，您的汽车无法移动。您可以使用 `rotate` 命令使轮子直立。为此，您需要围绕 X 轴旋转 90 度。
+
+---
+
+#### 代码示例
+
+文件名：`two_cubes_and_a_rotated_cylinder.scad`
+
+```openscad
+cube([60,20,10],center=true);
+translate([5,0,10 - 0.001])
+    cube([30,20,10],center=true);
+rotate([90,0,0])
+    translate([0,-20,0])
+    cylinder(h=3,r=8);
+```
+
+您应该注意以下几点：
+
+1. `rotate` 和 `translate` 命令之间没有分号。分号仅用于语句的结束。
+2. `rotate` 命令的输入参数是一个包含三个值的向量，每个值分别表示对象围绕 X、Y 和 Z 轴旋转的角度。
+3. 由于对象在旋转前已从原点移动，因此轮子旋转后移到了汽车下方。良好的建模实践是先旋转对象，然后再将其平移到所需位置。
+
+---
+
+#### 练习
+
+1. 尝试先旋转轮子，然后再平移它，改变 `rotate` 和 `translate` 命令的顺序。
+
+---
+
+#### 代码示例
+
+文件名：`two_cubes_and_a_rotated_and_translated_cylinder.scad`
+
+```openscad
+cube([60,20,10],center=true);
+translate([5,0,10 - 0.001])
+    cube([30,20,10],center=true);
+translate([0,-20,0])
+    rotate([90,0,0])
+    cylinder(h=3,r=8);
+```
+
+---
+
+#### 添加前轮
+
+##### 练习 1
+
+修改 `translate` 命令的输入参数，将轮子设置为汽车的左前轮。
+
+---
+
+#### 代码示例
+
+文件名：`car_body_and_front_left_wheel.scad`
+
+```openscad
+cube([60,20,10],center=true);
+translate([5,0,10 - 0.001])
+    cube([30,20,10],center=true);
+translate([-20,-15,0])
+    rotate([90,0,0])
+    cylinder(h=3,r=8);
+```
+
+##### 练习 2
+
+通过复制上一条语句并仅更改一个值的符号，为汽车添加右前轮。
+
+---
+
+#### 代码示例
+
+文件名：`car_body_and_misaligned_front_wheels.scad`
+
+```openscad
+cube([60,20,10],center=true);
+translate([5,0,10 - 0.001])
+    cube([30,20,10],center=true);
+translate([-20,-15,0])
+    rotate([90,0,0])
+    cylinder(h=3,r=8);
+translate([-20,15,0])
+    rotate([90,0,0])
+    cylinder(h=3,r=8);
+```
+
+您会注意到轮子的位置并不对称。这是因为圆柱在创建时未居中于原点。
+
+---
+
+##### 练习 3
+
+为 `cylinder` 命令添加一个额外的输入参数，指示 OpenSCAD 使两个轮子在创建时居中于原点。您的轮子现在对称了吗？
+
+---
+
+#### 代码示例
+
+文件名：`car_body_and_aligned_front_wheels.scad`
+
+```openscad
+cube([60,20,10],center=true);
+translate([5,0,10 - 0.001])
+    cube([30,20,10],center=true);
+translate([-20,-15,0])
+    rotate([90,0,0])
+    cylinder(h=3,r=8,center=true);
+translate([-20,15,0])
+    rotate([90,0,0])
+    cylinder(h=3,r=8,center=true);
+```
