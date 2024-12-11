@@ -51,7 +51,7 @@ order: 1
 
 代码示例 `a_small_cube.scad`
 
-```openscad
+```cpp
 cube(10);
 ```
 
