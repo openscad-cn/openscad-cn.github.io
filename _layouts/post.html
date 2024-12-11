@@ -14,7 +14,7 @@ layout: default
 <script src="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.js"></script>
 
 
-<script>hljs.highlightAll();</script>
+<script>hljs.highlightAll();hljs.addPlugin(new CopyButtonPlugin());</script>
 
 <!-- 渲染页面主体内容 -->
 {{ content }}
