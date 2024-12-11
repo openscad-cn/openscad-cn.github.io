@@ -42,7 +42,7 @@ toc:
 
 collections:
   OpenSCAD-Tutorial:
- #   output: true
+    output: true
     sort_by: order
     permalink: /OpenSCAD-Tutorial/:path/
 
