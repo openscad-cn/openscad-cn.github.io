@@ -20,10 +20,10 @@ title:  "OpenSCAD 教程"
 
 ---
 
-### 译注
-
-本教程基于 https://en.wikibooks.org/wiki/OpenSCAD_Tutorial 翻译而来，目前还在进行中。
-
+>### 译注
+>
+>本教程基于 https://en.wikibooks.org/wiki/OpenSCAD_Tutorial 翻译而来，目前还在进行中。
+{: .block-warning }
 
 ## 第一章 
 
