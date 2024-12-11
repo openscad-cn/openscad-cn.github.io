@@ -65,6 +65,7 @@ enable_copy_code_button: true
 
 kramdown:
   syntax_highlighter_opts:
+    default_lang: "cpp"
     block:
       line_numbers: false
 
