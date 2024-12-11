@@ -28,7 +28,8 @@ repository: "openscad-cn/openscad-cn.github.io"
 
 # Build settings
 #theme: jekyll-theme-minimal
-remote_theme: sighingnow/jekyll-gitbook
+#remote_theme: sighingnow/jekyll-gitbook
+remote_theme: just-the-docs/just-the-docs
 plugins:
   - jekyll-feed
   - jekyll-remote-theme
