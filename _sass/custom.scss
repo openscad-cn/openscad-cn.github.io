@@ -1,0 +1,22 @@
+.block-ex {
+    background: linear-gradient(to right, #e0f7fa 5px, #ffffff 5px);
+    border-left: 4px solid #03a9f4;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    font-family: "Arial", sans-serif;
+    position: relative;
+}
+
+.block-ex::before {
+    content: "Ex";
+    color: #ffffff;
+    background-color: #03a9f4;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 3px;
+    position: absolute;
+    top: 10px;
+    left: -30px;
+    font-size: 14px;
+}
