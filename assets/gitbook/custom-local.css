@@ -1,0 +1,29 @@
+.markdown-section blockquote.block-ex {
+    border-color: var(--c-info); /* 替换为您需要的颜色变量 */
+    background-color: var(--c-info-bg); /* 替换为您需要的背景颜色变量 */
+    color: var(--c-info-text); /* 替换为您需要的文本颜色变量 */
+    font-family: var(--font-family);
+    padding: 10px;
+}
+
+.markdown-section blockquote.block-ex h1,
+.markdown-section blockquote.block-ex h2,
+.markdown-section blockquote.block-ex h3,
+.markdown-section blockquote.block-ex h4,
+.markdown-section blockquote.block-ex h5,
+.markdown-section blockquote.block-ex h6 {
+    color: var(--c-info-title); /* 替换为您需要的标题颜色变量 */
+    margin: 0px;
+    margin-bottom: 5px;
+}
+
+.markdown-section blockquote.block-ex p {
+    margin-bottom: 0px;
+}
+
+:root {
+    --c-info: #2196f3; /* 边框颜色 */
+    --c-info-bg: #e3f2fd; /* 背景颜色 */
+    --c-info-text: #0d47a1; /* 文本颜色 */
+    --c-info-title: #0d47a1; /* 标题颜色 */
+}
