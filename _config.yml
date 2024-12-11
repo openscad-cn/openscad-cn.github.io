@@ -35,11 +35,6 @@ plugins:
   - jekyll-remote-theme
   - jekyll-readme-index
   - jemoji
-syntax_highlighter_style: colorful
-toc:
-    enabled: true
-    h_min: 1
-    h_max: 3
 
 collections:
   OpenSCAD-Tutorial:
@@ -47,6 +42,13 @@ collections:
     sort_by: order
     permalink: /OpenSCAD-Tutorial/:path/
 
+just_the_docs:
+  # Define which collections are used in just-the-docs
+  collections:
+    # Reference the "tests" collection
+    OpenSCAD-Tutorial:
+      # Give the collection a name
+      name: OpenSCAD-Tutorial
 
 #remote_theme: pages-themes/leap-day@v0.2.0
 #plugins:
