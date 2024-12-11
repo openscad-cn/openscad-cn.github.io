@@ -31,7 +31,6 @@ repository: "openscad-cn/openscad-cn.github.io"
 remote_theme: sighingnow/jekyll-gitbook
 plugins:
   - jekyll-feed
-  - jekyll-github-metadata
   - jekyll-remote-theme
   - jekyll-readme-index
   - jemoji
