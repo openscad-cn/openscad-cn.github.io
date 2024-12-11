@@ -17,10 +17,15 @@ layout: default
 <script>
     // 初始化Highlight.js的语法高亮
     hljs.highlightAll();
-  
+
     // 添加复制按钮插件
-    hljs.addPlugin(new CopyButtonPlugin());
-  </script>
+    hljs.addPlugin(
+        new CopyButtonPlugin({
+            autohide: false, // Always show the copy button
+            lang: "zh",
+        })
+    );
+</script>
 
 <!-- 渲染页面主体内容 -->
 {{ content }}
