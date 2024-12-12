@@ -506,7 +506,7 @@ translate([20,0,0])
 ```
 
 {: .new }
-> 特殊变量
+ 特殊变量
 >`$fa` 和 `$fs` 是特殊变量，用于根据分配给它们的值确定模型的分辨率。具体功能将在稍后章节详细解释。您只需记住，将这两条语句添加到任何脚本中，即可实现适合 3D 打印的通用高分辨率。
 
 ---
@@ -517,41 +517,41 @@ translate([20,0,0])
 
 ---
 
-代码示例 `completed_car_commented.scad`
-
-```openscad
-$fa = 1;
-$fs = 0.4;
-// Car body base
-cube([60,20,10],center=true);
-// Car body top
-translate([5,0,10 - 0.001])
-    cube([30,20,10],center=true);
-// Front left wheel
-translate([-20,-15,0])
-    rotate([90,0,0])
-    cylinder(h=3,r=8,center=true);
-// Front right wheel
-translate([-20,15,0])
-    rotate([90,0,0])
-    cylinder(h=3,r=8,center=true);
-// Rear left wheel
-translate([20,-15,0])
-    rotate([90,0,0])
-    cylinder(h=3,r=8,center=true);
-// Rear right wheel
-translate([20,15,0])
-    rotate([90,0,0])
-    cylinder(h=3,r=8,center=true);
-// Front axle
-translate([-20,0,0])
-    rotate([90,0,0])
-    cylinder(h=30,r=2,center=true);
-// Rear axle
-translate([20,0,0])
-    rotate([90,0,0])
-    cylinder(h=30,r=2,center=true);
-```
+{: .code }
+>代码示例 `completed_car_commented.scad`
+>```openscad
+>$fa = 1;
+>$fs = 0.4;
+>// Car body base
+>cube([60,20,10],center=true);
+>// Car body top
+>translate([5,0,10 - 0.001])
+>    cube([30,20,10],center=true);
+>// Front left wheel
+>translate([-20,-15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8,center=true);
+>// Front right wheel
+>translate([-20,15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8,center=true);
+>// Rear left wheel
+>translate([20,-15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8,center=true);
+>// Rear right wheel
+>translate([20,15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8,center=true);
+>// Front axle
+>translate([-20,0,0])
+>    rotate([90,0,0])
+>    cylinder(h=30,r=2,center=true);
+>// Rear axle
+>translate([20,0,0])
+>    rotate([90,0,0])
+>    cylinder(h=30,r=2,center=true);
+>```
 
 保存脚本并导出 STL 文件后，您可以将汽车模型用于 3D 打印。
 
@@ -560,5 +560,6 @@ translate([20,0,0])
 ## 创建一个新模型
 
 {: .ex }
+>### 练习
 >尝试使用您学到的所有知识创建一个新的简单模型。可以是房子、飞机或任何您喜欢的东西。不必追求完美，只需用您的新技能尽情实验！
 
