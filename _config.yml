@@ -70,7 +70,7 @@ callouts:
     color: yellow
 
 enable_copy_code_button: true
-
+highlighter: none
 kramdown:
   syntax_highlighter_opts:
     default_lang: "cpp"
