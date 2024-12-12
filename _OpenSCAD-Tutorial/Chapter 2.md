@@ -1,7 +1,7 @@
 ---
 layout: "post"
 title:  "第二章"
-order: 2
+nav_order: 2
 ---
 
 # 第二章

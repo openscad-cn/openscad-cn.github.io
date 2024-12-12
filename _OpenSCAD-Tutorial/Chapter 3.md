@@ -1,7 +1,7 @@
 ---
 layout: "post"
 title:  "第三章"
-order: 3
+nav_order: 3
 ---
 
 # 第三章

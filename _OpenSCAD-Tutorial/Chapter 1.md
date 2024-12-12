@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "第一章"
-order: 1
+nav_order: 1
 ---
 
 # 第一章
