@@ -60,7 +60,7 @@ callouts:
     color: green
   note:
     title: 注意
-    color: yellow
+    color: red
   code:
     color: yellow
 
