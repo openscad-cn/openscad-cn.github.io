@@ -90,3 +90,161 @@ order: 2.1
 {: .new }
 >为了防止轮子变形，沿 X 和 Z 轴的缩放因子应该相等。
 
+## 快速测验
+
+以下脚本是您在第一章中创建的模型：
+
+---
+
+{: .code }
+>```openscad
+>$fa = 1;
+>$fs = 0.4;
+>// Car body base
+>cube([60,20,10],center=true);
+>// Car body top
+>translate([5,0,10 - 0.001])
+>    cube([30,20,10],center=true);
+>// Front left wheel
+>translate([-20,-15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8,center=true);
+>// Front right wheel
+>translate([-20,15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8,center=true);
+>// Rear left wheel
+>translate([20,-15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8,center=true);
+>// Rear right wheel
+>translate([20,15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8,center=true);
+>// Front axle
+>translate([-20,0,0])
+>    rotate([90,0,0])
+>    cylinder(h=30,r=2,center=true);
+>// Rear axle
+>translate([20,0,0])
+>    rotate([90,0,0])
+>    cylinder(h=30,r=2,center=true);
+>```
+
+---
+
+{: .ex }
+>尝试让汽车的前轮围绕 Z 轴旋转 20 度，就像汽车正在向右转弯一样。为了让您的模型更加逼真，尝试让汽车的车身（底部和顶部）围绕 X 轴沿相反方向旋转 5 度。  
+>- 要使轮子转动，请修改现有的 `rotate` 命令的输入参数。  
+>- 要使车身旋转，请添加一个新的 `rotate` 命令。
+
+---
+
+{: .code-title }
+>示例代码 `turning_car.scad`
+>
+>```openscad
+>$fa = 1;
+>$fs = 0.4;
+>rotate([5,0,0]) {
+>    // Car body base
+>    cube([60,20,10],center=true);
+>    // Car body top
+>    translate([5,0,10 - 0.001])
+>        cube([30,20,10],center=true);
+>}
+>// Front left wheel
+>translate([-20,-15,0])
+>    rotate([90,0,-20])
+>    cylinder(h=3,r=8,center=true);
+>// Front right wheel
+>translate([-20,15,0])
+>    rotate([90,0,-20])
+>    cylinder(h=3,r=8,center=true);
+>// Rear left wheel
+>translate([20,-15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8,center=true);
+>// Rear right wheel
+>translate([20,15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8,center=true);
+>// Front axle
+>translate([-20,0,0])
+>    rotate([90,0,0])
+>    cylinder(h=30,r=2,center=true);
+>// Rear axle
+>translate([20,0,0])
+>    rotate([90,0,0])
+>    cylinder(h=30,r=2,center=true);
+>```
+
+---
+
+通过这次练习，您应该能更好地理解如何结合 `rotate` 命令创建更复杂、更逼真的模型。
+
+---
+
+## 使用变量控制轮子大小
+
+以下代码展示了如何通过变量 `wheel_radius` 控制轮子的大小：
+
+---
+
+{: .code-title }
+>示例代码 `car_with_same_sized_wheels.scad`
+>
+>```openscad
+>$fa = 1;
+>$fs = 0.4;
+>wheel_radius = 6;
+>// Car body base
+>cube([60,20,10],center=true);
+>// Car body top
+>translate([5,0,10 - 0.001])
+>    cube([30,20,10],center=true);
+>// Front left wheel
+>translate([-20,-15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=wheel_radius,center=true);
+>// Front right wheel
+>translate([-20,15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=wheel_radius,center=true);
+>wheel_radius = 12;
+>// Rear left wheel
+>translate([20,-15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=wheel_radius,center=true);
+>// Rear right wheel
+>translate([20,15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=wheel_radius,center=true);
+>// Front axle
+>translate([-20,0,0])
+>    rotate([90,0,0])
+>    cylinder(h=30,r=2,center=true);
+>// Rear axle
+>translate([20,0,0])
+>    rotate([90,0,0])
+>    cylinder(h=30,r=2,center=true);
+>```
+
+---
+
+{: .new }
+>1. **变量值的覆盖**  
+>   您会注意到所有轮子的大小都相同。这是因为 OpenSCAD 使用了变量的最后一次赋值。即使变量在更早的语句中已被引用，最终仍会采用最后赋值的值。
+>
+>2. **警告信息**  
+>   当出现变量被覆盖的情况时，OpenSCAD 会给出警告。例如：  
+>   ```
+>   WARNING: wheel_radius was assigned on line 3 but was overwritten on line 17
+>   ```
+>
+
+---
+
+{: .note }
+> **提示**  
+> 在 `{}` 大括号内定义的变量仅在大括号内有效。即使同名变量在不同的大括号层级中重复赋值，也不会被视为冲突。
