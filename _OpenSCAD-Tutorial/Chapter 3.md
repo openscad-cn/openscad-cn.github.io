@@ -1,8 +1,9 @@
 ---
 layout: "post"
 title:  "第三章"
-order: 3.1
+order: 3
 ---
+
 # 第三章
 {: .no_toc }
 
