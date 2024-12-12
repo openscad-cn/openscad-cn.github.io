@@ -518,7 +518,7 @@ translate([20,0,0])
 
 ---
 
-{: .code }
+{: .code-title }
 >代码示例 `completed_car_commented.scad`
 >
 >```openscad
