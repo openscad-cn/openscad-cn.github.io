@@ -62,7 +62,6 @@ callouts:
     title: 注意
     color: yellow
   code:
-    title: 代码
     color: yellow
 
 enable_copy_code_button: true
