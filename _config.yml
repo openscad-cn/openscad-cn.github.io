@@ -53,6 +53,7 @@ just_the_docs:
 callouts_level: quiet # or loud
 callouts:
   ex:
+    title: 练习
     color: blue
   new:
     title: 知识点
