@@ -69,8 +69,9 @@ callouts:
     title: 示例代码
     color: yellow
 
-enable_copy_code_button: true
-highlighter: none
+enable_copy_code_button: false
+
+
 kramdown:
   syntax_highlighter_opts:
     default_lang: "cpp"
@@ -102,10 +103,16 @@ kramdown:
 #   - vendor/ruby/
 
 
-# Footer content
-# appears at the bottom of every page's main content
-# Note: The footer_content option is deprecated and will be removed in a future major release. Please use `_includes/footer_custom.html` for more robust
-#markup / liquid-based content.
+aux_links:
+  "openscad.tech on GitHub":
+    - "//github.com/openscad-cn/openscad-cn.github.io"
+
+# Makes Aux links open in a new tab. Default is false
+aux_links_new_tab: true
+
+nav_enabled: true
+
+markup / liquid-based content.
 
 # Footer last edited timestamp
 last_edit_timestamp: true # show or hide edit time - page must have `last_modified_date` defined in the frontmatter
@@ -114,7 +121,7 @@ last_edit_time_format: "%b %e %Y at %I:%M %p" # uses ruby's time format: https:/
 # Footer "Edit this page on GitHub" link text
 gh_edit_link: true # show or hide edit this page link
 gh_edit_link_text: "Edit this page on GitHub."
-gh_edit_repository: "https://github.com/just-the-docs/just-the-docs" # the github URL for your repo
+gh_edit_repository: "https://github.com/openscad-cn/openscad-cn.github.io" # the github URL for your repo
 gh_edit_branch: "main" # the branch that your docs is served from
 # gh_edit_source: docs # the source that your files originate from
 gh_edit_view_mode: "tree" # "tree" or "edit" if you want the user to jump into the editor immediately
