@@ -1,6 +1,5 @@
-
 ---
-layout: post
+layout: "post"
 title:  "第二章"
 order: 2
 ---
