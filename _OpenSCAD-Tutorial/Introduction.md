@@ -26,9 +26,7 @@ nav_order: 0
 
 教程特别注重参数化设计原则，这些原则将帮助您快速修改已有的创作，同时构建可复用和可组合的模型库。
 
-本教程中的大部分示例和练习的解决方案，都可以作为单独的 OpenSCAD 脚本在 [此处](#) 获取。 <!-- 请替换为实际链接 -->
-
 ---
 
-本教程基于 https://en.wikibooks.org/wiki/OpenSCAD_Tutorial 翻译而来，目前还在进行中。
 {: .note }
+本教程基于 https://en.wikibooks.org/wiki/OpenSCAD_Tutorial 翻译、编辑而来，目前还在进行中。
