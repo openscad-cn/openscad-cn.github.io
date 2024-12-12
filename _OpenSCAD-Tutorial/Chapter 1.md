@@ -50,7 +50,7 @@ order: 1
 ---
 
 {: .code-title }
->代码示例 `a_small_cube.scad`
+>示例代码 `a_small_cube.scad`
 >
 >```openscad
 >cube(10);
@@ -115,7 +115,7 @@ order: 1
 ---
 
 {: .code-title }
->代码示例 `a_different_cube.scad`
+>示例代码 `a_different_cube.scad`
 >
 >```openscad
 >cube([25,35,55]);
@@ -175,7 +175,7 @@ order: 1
 
 ---
 
-{: .code-title }
+{: .code }
 >```openscad
 >cube([20,30,50],center=true);
 >```
@@ -218,7 +218,7 @@ order: 1
 为了在模型中添加第二个立方体，请在文本编辑器的下一行输入相同的语句，但将边长更改为 30、20 和 10。
 
 {: .code-title }
->代码文件`a_smaller_cube_covered_by_a_bigger_cube.scad`
+>示例代码`a_smaller_cube_covered_by_a_bigger_cube.scad`
 >
 >```openscad
 >cube([60,20,10],center=true);
@@ -234,7 +234,7 @@ order: 1
 通过以下方式修改第二条语句，您可以将第二个立方体平移到第一个立方体的顶部部分。
 
 {: .code-title }
->代码文件`two_cubes.scad`
+>示例代码`two_cubes.scad`
 >
 >```openscad
 >cube([60,20,10],center=true);
@@ -261,7 +261,7 @@ order: 1
 一种方法是将 Z 轴的平移值从 10 减少到 9.999：
 
 {: .code-title }
->代码文件`two_cubes_with_small_overlap.scad`
+>示例代码`two_cubes_with_small_overlap.scad`
 >
 >```openscad
 >cube([60,20,10],center=true);
@@ -272,7 +272,7 @@ order: 1
 另一种方法是更明确地从脚本中相应的值减去 0.001：
 
 {: .code-title }
->代码文件`two_cubes_with_explicit_small_overlap.scad`
+>示例代码`two_cubes_with_explicit_small_overlap.scad`
 >
 >```openscad
 >cube([60,20,10],center=true);
@@ -283,7 +283,7 @@ order: 1
 第三种方法是添加一个高度为 0.002 的立方体来填补间隙：
 
 {: .code-title }
->代码文件`third_cube_close_small_gap.scad`
+>示例代码`third_cube_close_small_gap.scad`
 >
 >```openscad
 >cube([60,20,10],center=true);
@@ -304,7 +304,7 @@ order: 1
 ---
 
 {: .code-title }
->代码示例 `a_cylinder_covered_by_cubes.scad`
+>示例代码 `a_cylinder_covered_by_cubes.scad`
 >
 >```openscad
 >cube([60,20,10],center=true);
@@ -318,7 +318,7 @@ order: 1
 ---
 
 {: .code-title }
->代码示例 `two_cubes_and_a_cylinder.scad`
+>示例代码 `two_cubes_and_a_cylinder.scad`
 >
 >```openscad
 >cube([60,20,10],center=true);
@@ -333,7 +333,7 @@ order: 1
 ---
 
 {: .code-title }
->代码示例 `two_cubes_and_a_rotated_cylinder.scad`
+>示例代码 `two_cubes_and_a_rotated_cylinder.scad`
 >
 >```openscad
 >cube([60,20,10],center=true);
@@ -361,7 +361,7 @@ order: 1
 ---
 
 {: .code-title }
->代码示例 `two_cubes_and_a_rotated_and_translated_cylinder.scad`
+>示例代码 `two_cubes_and_a_rotated_and_translated_cylinder.scad`
 >
 >```openscad
 >cube([60,20,10],center=true);
@@ -382,7 +382,7 @@ order: 1
 ---
 
 {: .code-title }
->代码示例 `car_body_and_front_left_wheel.scad`
+>示例代码 `car_body_and_front_left_wheel.scad`
 >
 >```openscad
 >cube([60,20,10],center=true);
@@ -400,7 +400,7 @@ order: 1
 ---
 
 {: .code-title }
->代码示例 `car_body_and_misaligned_front_wheels.scad`
+>示例代码 `car_body_and_misaligned_front_wheels.scad`
 >
 >```openscad
 >cube([60,20,10],center=true);
@@ -425,7 +425,7 @@ order: 1
 ---
 
 {: .code-title }
->代码示例 `car_body_and_aligned_front_wheels.scad`
+>示例代码 `car_body_and_aligned_front_wheels.scad`
 >
 >```openscad
 >cube([60,20,10],center=true);
@@ -449,7 +449,7 @@ order: 1
 ---
 
 {: .code-title }
->代码示例 代码文件`completed_car.scad`
+>示例代码 `completed_car.scad`
 >
 >```openscad
 >cube([60,20,10],center=true);
@@ -495,7 +495,7 @@ order: 1
 ---
 
 {: .code-title }
->代码示例 `completed_car_higher_resolution.scad`
+>示例代码 `completed_car_higher_resolution.scad`
 >
 >```openscad
 >$fa = 1;
@@ -539,7 +539,7 @@ order: 1
 ---
 
 {: .code-title }
->代码示例 `completed_car_commented.scad`
+>示例代码 `completed_car_commented.scad`
 >
 >```openscad
 >$fa = 1;
