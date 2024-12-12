@@ -2,7 +2,7 @@
 ---
 layout: post
 title:  "第二章"
-order: 2.1
+order: 2
 ---
 
 ## 缩放部分或整个模型
