@@ -260,3 +260,269 @@ order: 2
 > 在 `{}` 大括号内定义的变量仅在大括号内有效。即使同名变量在不同的大括号层级中重复赋值，也不会被视为冲突。
 
 ---
+
+
+## 参数化模型的更多部分
+
+通过参数化，您现在可以轻松调整轮子的大小。然而，如果能以同样的方式自定义模型的更多方面会更方便。请注意，修改轮子的大小并不会影响模型的其他部分，也不会破坏模型。这种情况并非总是如此。
+
+---
+
+{: .ex }
+>**练习**  
+>尝试通过定义 `base_height` 和 `top_height` 变量来修改汽车车身底部和顶部的高度，并在对应语句中做出适当更改。  
+>将 `base_height` 变量的值赋为 `5`，`top_height` 变量的值赋为 `8`。您注意到了什么？
+
+---
+
+{: .code-title }
+>示例代码 `car_with_floating_body_top.scad`
+>
+>```openscad
+>base_height = 5;
+>top_height = 8;
+>// Car body base
+>cube([60,20,base_height],center=true);
+>// Car body top
+>translate([5,0,10 - 0.001])
+>    cube([30,20,top_height],center=true);
+>```
+
+---
+
+{: .note }
+>可以明显看出，汽车的车身不再是一个整体，底部和顶部分离了。这是因为车身顶部的正确位置依赖于车身底部和顶部的高度。  
+>为了让顶部位于底部之上，您需要将顶部沿 Z 轴平移的距离定义为底部高度的一半加顶部高度的一半。  
+>如果您要参数化底部和顶部的高度，也应该同时参数化顶部沿 Z 轴的平移量。
+
+---
+
+{: .ex }
+>尝试使用 `base_height` 和 `top_height` 变量参数化车身顶部沿 Z 轴的平移量，使其位于车身底部之上。  
+>尝试为 `base_height` 和 `top_height` 分配不同的值。车身顶部的位置是否保持正确？
+
+---
+
+{: .code-title }
+>示例代码 `car_with_properly_attached_body_top.scad`
+>
+>```openscad
+>base_height = 5;
+>top_height = 8;
+>wheel_radius = 8;
+>// Car body base
+>cube([60,20,base_height],center=true);
+>// Car body top
+>translate([5,0,base_height/2+top_height/2 - 0.001])
+>    cube([30,20,top_height],center=true);
+>```
+
+---
+
+{: .code-title }
+>示例代码 `car_with_higher_body.scad`
+>
+>```openscad
+>base_height = 8;
+>top_height = 14;
+>```
+
+---
+
+
+{: .new }
+每次参数化模型的某些方面时，都应该同时参数化相关的依赖部分，以防模型分离或破碎。
+
+---
+
+{: .ex }
+>尝试使用一个名为 `track` 的新变量参数化左右轮之间的间距。  
+>为 `track` 变量赋予不同的值。您注意到了什么？模型中是否有其他部分依赖于 `track` 变量的值？如果是，请使用 `track` 变量参数化它们，以确保模型不分离。
+
+---
+
+{: .code-title }
+>示例代码 `car_with_unattached_wheels.scad`
+>
+>```openscad
+>track = 40;
+>// Front left wheel
+>translate([-20,-track/2,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=wheel_radius,center=true);
+>// Front right wheel
+>translate([-20,track/2,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=wheel_radius,center=true);
+>// Rear left wheel
+>translate([20,-track/2,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=wheel_radius,center=true);
+>// Rear right wheel
+>translate([20,track/2,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=wheel_radius,center=true);
+>```
+
+---
+
+{: .code-title }
+>示例代码 `car_with_properly_attached_wheels.scad`
+>
+>```openscad
+>track = 40;
+>// Front left wheel
+>translate([-20,-track/2,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=wheel_radius,center=true);
+>// Front right wheel
+>translate([-20,track/2,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=wheel_radius,center=true);
+>// Rear left wheel
+>translate([20,-track/2,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=wheel_radius,center=true);
+>// Rear right wheel
+>translate([20,track/2,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=wheel_radius,center=true);
+>// Front axle
+>translate([-20,0,0])
+>    rotate([90,0,0])
+>    cylinder(h=track,r=2,center=true);
+>// Rear axle
+>translate([20,0,0])
+>    rotate([90,0,0])
+>    cylinder(h=track,r=2,center=true);
+>```
+
+---
+
+通过这次练习，您可以掌握如何参数化模型的多个部分，同时确保相关依赖部分保持正确。
+
+---
+
+
+## 挑战
+
+以下脚本对应于具有参数化轮子半径、车身底部高度、顶部高度以及车轮间距的汽车模型：
+
+---
+
+{: .code-title }
+>示例代码 `car_from_parameterized_script.scad`
+>
+>```openscad
+>$fa = 1;
+>$fs = 0.4;
+>wheel_radius = 8;
+>base_height = 10;
+>top_height = 10;
+>track = 30;
+>// Car body base
+>cube([60,20,base_height],center=true);
+>// Car body top
+>translate([5,0,base_height/2+top_height/2 - 0.001])
+>    cube([30,20,top_height],center=true);
+>// Front left wheel
+>translate([-20,-track/2,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=wheel_radius,center=true);
+>// Front right wheel
+>translate([-20,track/2,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=wheel_radius,center=true);
+>// Rear left wheel
+>translate([20,-track/2,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=wheel_radius,center=true);
+>// Rear right wheel
+>translate([20,track/2,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=wheel_radius,center=true);
+>// Front axle
+>translate([-20,0,0])
+>    rotate([90,0,0])
+>    cylinder(h=track,r=2,center=true);
+>// Rear axle
+>translate([20,0,0])
+>    rotate([90,0,0])
+>    cylinder(h=track,r=2,center=true);
+>```
+
+---
+
+{: .ex }
+>尝试使用 `wheel_width` 变量参数化轮子的宽度，使用 `wheels_turn` 变量参数化前轮围绕 Z 轴的旋转角度，使用 `body_roll` 变量参数化车身围绕 X 轴的旋转角度。  
+>尝试为 `wheel_radius`、`base_height`、`top_height`、`track`、`wheel_width`、`wheels_turn` 和 `body_roll` 赋予不同的值，创建您喜欢的汽车版本。
+
+---
+
+{: .code-title }
+>示例代码 `turning_car_from_parameterized_script.scad`
+>
+>```openscad
+>$fa = 1;
+>$fs = 0.4;
+>wheel_radius = 10;
+>base_height = 10;
+>top_height = 14;
+>track = 40;
+>wheel_width = 10;
+>body_roll = -5;
+>wheels_turn = 20;
+>rotate([body_roll,0,0]) {
+>    // Car body base
+>    cube([60,20,base_height],center=true);
+>    // Car body top
+>    translate([5,0,base_height/2+top_height/2 - 0.001])
+>        cube([30,20,top_height],center=true);
+>}
+>// Front left wheel
+>translate([-20,-track/2,0])
+>    rotate([90,0,wheels_turn])
+>    cylinder(h=wheel_width,r=wheel_radius,center=true);
+>// Front right wheel
+>translate([-20,track/2,0])
+>    rotate([90,0,wheels_turn])
+>    cylinder(h=wheel_width,r=wheel_radius,center=true);
+>// Rear left wheel
+>translate([20,-track/2,0])
+>    rotate([90,0,0])
+>    cylinder(h=wheel_width,r=wheel_radius,center=true);
+>// Rear right wheel
+>translate([20,track/2,0])
+>    rotate([90,0,0])
+>    cylinder(h=wheel_width,r=wheel_radius,center=true);
+>// Front axle
+>translate([-20,0,0])
+>    rotate([90,0,0])
+>    cylinder(h=track,r=2,center=true);
+>// Rear axle
+>translate([20,0,0])
+>    rotate([90,0,0])
+>    cylinder(h=track,r=2,center=true);
+>```
+
+---
+
+通过这次练习，您应该已经清楚地了解，参数化您的模型可以让您轻松地复用、自定义和迭代设计，同时可以毫不费力地探索不同的可能性。
+
+---
+
+## 参数化您自己的模型
+
+您是否已经将新学到的技能付诸实践？是否尝试创建了其他模型？
+
+---
+
+{: .ex }
+>尝试参数化您已创建模型的几个或更多方面。  
+>- 尝试为您定义的变量分配各种不同的值组合。  
+>- 观察设计的不同版本之间有多大的差异。  
+>- 看看您能走多远！
+
+---
+
+通过参数化，您可以轻松探索设计的多种可能性，同时提高模型的可定制性和重用性。
