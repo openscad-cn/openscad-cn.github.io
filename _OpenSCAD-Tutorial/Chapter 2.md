@@ -237,7 +237,7 @@ order: 2
 >
 >2. **警告信息**  
 >   当出现变量被覆盖的情况时，OpenSCAD 会给出警告。例如：  
->   ```
+>   ```openscad
 >   WARNING: wheel_radius was assigned on line 3 but was overwritten on line 17
 >   ```
 >
