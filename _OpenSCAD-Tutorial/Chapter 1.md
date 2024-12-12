@@ -49,11 +49,12 @@ order: 1
 
 ---
 
-代码示例 `a_small_cube.scad`
-
-```openscad
-cube(10);
-```
+{: .code-title }
+>代码示例 `a_small_cube.scad`
+>
+>```openscad
+>cube(10);
+>```
 
 ---
 
@@ -113,11 +114,12 @@ cube(10);
 
 ---
 
-代码示例 `a_different_cube.scad`
-
-```openscad
-cube([25,35,55]);
-```
+{: .code-title }
+>代码示例 `a_different_cube.scad`
+>
+>```openscad
+>cube([25,35,55]);
+>```
 
 ---
 
@@ -173,11 +175,10 @@ cube([25,35,55]);
 
 ---
 
-代码示例 `a_centered_cube_with_different_side_lengths.scad`
-
-```openscad
-cube([20,30,50],center=true);
-```
+{: .code-title }
+>```openscad
+>cube([20,30,50],center=true);
+>```
 
 ---
 
@@ -205,9 +206,10 @@ cube([20,30,50],center=true);
 
 首先创建一个边长分别为 60、20 和 10 的立方体，并将其中心设置在原点。
 
-```openscad
-cube([60,20,10],center=true);
-```
+{: .code }
+>```openscad
+>cube([60,20,10],center=true);
+>```
 
 ---
 
@@ -215,12 +217,13 @@ cube([60,20,10],center=true);
 
 为了在模型中添加第二个立方体，请在文本编辑器的下一行输入相同的语句，但将边长更改为 30、20 和 10。
 
-文件名：`a_smaller_cube_covered_by_a_bigger_cube.scad`
-
-```openscad
-cube([60,20,10],center=true);
-cube([30,20,10],center=true);
-```
+{: .code-title }
+>代码文件`a_smaller_cube_covered_by_a_bigger_cube.scad`
+>
+>```openscad
+>cube([60,20,10],center=true);
+>cube([30,20,10],center=true);
+>```
 
 在模型中，您应该看不到任何变化，因为第二个立方体在任何方向上都不比第一个立方体大，并且完全被第一个立方体覆盖。
 
@@ -230,13 +233,14 @@ cube([30,20,10],center=true);
 
 通过以下方式修改第二条语句，您可以将第二个立方体平移到第一个立方体的顶部部分。
 
-文件名：`two_cubes.scad`
-
-```openscad
-cube([60,20,10],center=true);
-translate([0,0,5])
-    cube([30,20,10],center=true);
-```
+{: .code-title }
+>代码文件`two_cubes.scad`
+>
+>```openscad
+>cube([60,20,10],center=true);
+>translate([0,0,5])
+>    cube([30,20,10],center=true);
+>```
 
 通过使用 `translate` 命令，您完成了这一操作。`translate` 是可用的变换命令之一。这些变换命令本身不会创建任何对象，而是应用于现有对象以以某种方式修改它们。  
 `translate` 命令的输入参数是一个包含三个值的向量。每个值分别表示对象沿 X、Y 和 Z 轴移动的单位数值。注意，`translate` 命令后没有分号。紧接着 `translate` 命令的是要进行平移的对象定义，而分号则用于语句结束时。
@@ -256,35 +260,38 @@ translate([0,0,5])
 
 一种方法是将 Z 轴的平移值从 10 减少到 9.999：
 
-文件名：`two_cubes_with_small_overlap.scad`
-
-```openscad
-cube([60,20,10],center=true);
-translate([0,0,9.999])
-    cube([30,20,10],center=true);
-```
+{: .code-title }
+>代码文件`two_cubes_with_small_overlap.scad`
+>
+>```openscad
+>cube([60,20,10],center=true);
+>translate([0,0,9.999])
+>    cube([30,20,10],center=true);
+>```
 
 另一种方法是更明确地从脚本中相应的值减去 0.001：
 
-文件名：`two_cubes_with_explicit_small_overlap.scad`
-
-```openscad
-cube([60,20,10],center=true);
-translate([0,0,10 - 0.001])
-    cube([30,20,10],center=true);
-```
+{: .code-title }
+>代码文件`two_cubes_with_explicit_small_overlap.scad`
+>
+>```openscad
+>cube([60,20,10],center=true);
+>translate([0,0,10 - 0.001])
+>    cube([30,20,10],center=true);
+>```
 
 第三种方法是添加一个高度为 0.002 的立方体来填补间隙：
 
-文件名：`third_cube_close_small_gap.scad`
-
-```openscad
-cube([60,20,10],center=true);
-translate([0,0,10])
-    cube([30,20,10],center=true);
-translate([0,0,5 - 0.001])
-    cube([30,20,0.002],center=true);
-```
+{: .code-title }
+>代码文件`third_cube_close_small_gap.scad`
+>
+>```openscad
+>cube([60,20,10],center=true);
+>translate([0,0,10])
+>    cube([30,20,10],center=true);
+>translate([0,0,5 - 0.001])
+>    cube([30,20,0.002],center=true);
+>```
 
 在整个教程中，您会经常遇到这种情况。当两个对象完全接触时，您应始终通过增加或减少 0.001 单位的公差来保证小的重叠。
 
@@ -296,43 +303,46 @@ translate([0,0,5 - 0.001])
 
 ---
 
-代码示例 `a_cylinder_covered_by_cubes.scad`
-
-```openscad
-cube([60,20,10],center=true);
-translate([5,0,10 - 0.001])
-    cube([30,20,10],center=true);
-cylinder(h=3,r=8);
-```
+{: .code-title }
+>代码示例 `a_cylinder_covered_by_cubes.scad`
+>
+>```openscad
+>cube([60,20,10],center=true);
+>translate([5,0,10 - 0.001])
+>    cube([30,20,10],center=true);
+>cylinder(h=3,r=8);
+>```
 
 您会注意到圆柱被其他对象遮挡。您可以使用 `translate` 命令将圆柱沿 Y 轴负方向平移 20 个单位以使其可见。
 
 ---
 
-代码示例 `two_cubes_and_a_cylinder.scad`
-
-```openscad
-cube([60,20,10],center=true);
-translate([5,0,10 - 0.001])
-    cube([30,20,10],center=true);
-translate([0,-20,0])
-    cylinder(h=3,r=8);
-```
+{: .code-title }
+>代码示例 `two_cubes_and_a_cylinder.scad`
+>
+>```openscad
+>cube([60,20,10],center=true);
+>translate([5,0,10 - 0.001])
+>    cube([30,20,10],center=true);
+>translate([0,-20,0])
+>    cylinder(h=3,r=8);
+>```
 
 轮子现在可见，但如果它没有正确放置，您的汽车无法移动。您可以使用 `rotate` 命令使轮子直立。为此，您需要围绕 X 轴旋转 90 度。
 
 ---
 
-代码示例 `two_cubes_and_a_rotated_cylinder.scad`
-
-```openscad
-cube([60,20,10],center=true);
-translate([5,0,10 - 0.001])
-    cube([30,20,10],center=true);
-rotate([90,0,0])
-    translate([0,-20,0])
-    cylinder(h=3,r=8);
-```
+{: .code-title }
+>代码示例 `two_cubes_and_a_rotated_cylinder.scad`
+>
+>```openscad
+>cube([60,20,10],center=true);
+>translate([5,0,10 - 0.001])
+>    cube([30,20,10],center=true);
+>rotate([90,0,0])
+>    translate([0,-20,0])
+>    cylinder(h=3,r=8);
+>```
 
 您应该注意以下几点：
 
@@ -350,16 +360,17 @@ rotate([90,0,0])
 
 ---
 
-代码示例 文件名：`two_cubes_and_a_rotated_and_translated_cylinder.scad`
-
-```openscad
-cube([60,20,10],center=true);
-translate([5,0,10 - 0.001])
-    cube([30,20,10],center=true);
-translate([0,-20,0])
-    rotate([90,0,0])
-    cylinder(h=3,r=8);
-```
+{: .code-title }
+>代码示例 `two_cubes_and_a_rotated_and_translated_cylinder.scad`
+>
+>```openscad
+>cube([60,20,10],center=true);
+>translate([5,0,10 - 0.001])
+>    cube([30,20,10],center=true);
+>translate([0,-20,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8);
+>```
 
 ---
 
@@ -370,16 +381,17 @@ translate([0,-20,0])
 
 ---
 
-代码示例 `car_body_and_front_left_wheel.scad`
-
-```openscad
-cube([60,20,10],center=true);
-translate([5,0,10 - 0.001])
-    cube([30,20,10],center=true);
-translate([-20,-15,0])
-    rotate([90,0,0])
-    cylinder(h=3,r=8);
-```
+{: .code-title }
+>代码示例 `car_body_and_front_left_wheel.scad`
+>
+>```openscad
+>cube([60,20,10],center=true);
+>translate([5,0,10 - 0.001])
+>    cube([30,20,10],center=true);
+>translate([-20,-15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8);
+>```
 
 ### 添加右前轮
 
@@ -387,19 +399,20 @@ translate([-20,-15,0])
 
 ---
 
-代码示例 `car_body_and_misaligned_front_wheels.scad`
-
-```openscad
-cube([60,20,10],center=true);
-translate([5,0,10 - 0.001])
-    cube([30,20,10],center=true);
-translate([-20,-15,0])
-    rotate([90,0,0])
-    cylinder(h=3,r=8);
-translate([-20,15,0])
-    rotate([90,0,0])
-    cylinder(h=3,r=8);
-```
+{: .code-title }
+>代码示例 `car_body_and_misaligned_front_wheels.scad`
+>
+>```openscad
+>cube([60,20,10],center=true);
+>translate([5,0,10 - 0.001])
+>    cube([30,20,10],center=true);
+>translate([-20,-15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8);
+>translate([-20,15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8);
+>```
 
 您会注意到轮子的位置并不对称。这是因为圆柱在创建时未居中于原点。
 
@@ -411,19 +424,20 @@ translate([-20,15,0])
 
 ---
 
-代码示例 `car_body_and_aligned_front_wheels.scad`
-
-```openscad
-cube([60,20,10],center=true);
-translate([5,0,10 - 0.001])
-    cube([30,20,10],center=true);
-translate([-20,-15,0])
-    rotate([90,0,0])
-    cylinder(h=3,r=8,center=true);
-translate([-20,15,0])
-    rotate([90,0,0])
-    cylinder(h=3,r=8,center=true);
-```
+{: .code-title }
+>代码示例 `car_body_and_aligned_front_wheels.scad`
+>
+>```openscad
+>cube([60,20,10],center=true);
+>translate([5,0,10 - 0.001])
+>    cube([30,20,10],center=true);
+>translate([-20,-15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8,center=true);
+>translate([-20,15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8,center=true);
+>```
 
 
 ## 完成您的第一个模型
@@ -434,31 +448,33 @@ translate([-20,15,0])
 
 ---
 
-代码示例 文件名：`completed_car.scad`
+{: .code-title }
+>代码示例 代码文件`completed_car.scad`
+>
+>```openscad
+>cube([60,20,10],center=true);
+>translate([5,0,10 - 0.001])
+>    cube([30,20,10],center=true);
+>translate([-20,-15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8,center=true);
+>translate([-20,15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8,center=true);
+>translate([20,-15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8,center=true);
+>translate([20,15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8,center=true);
+>translate([-20,0,0])
+>    rotate([90,0,0])
+>    cylinder(h=30,r=2,center=true);
+>translate([20,0,0])
+>    rotate([90,0,0])
+>    cylinder(h=30,r=2,center=true);
+>```
 
-```openscad
-cube([60,20,10],center=true);
-translate([5,0,10 - 0.001])
-    cube([30,20,10],center=true);
-translate([-20,-15,0])
-    rotate([90,0,0])
-    cylinder(h=3,r=8,center=true);
-translate([-20,15,0])
-    rotate([90,0,0])
-    cylinder(h=3,r=8,center=true);
-translate([20,-15,0])
-    rotate([90,0,0])
-    cylinder(h=3,r=8,center=true);
-translate([20,15,0])
-    rotate([90,0,0])
-    cylinder(h=3,r=8,center=true);
-translate([-20,0,0])
-    rotate([90,0,0])
-    cylinder(h=30,r=2,center=true);
-translate([20,0,0])
-    rotate([90,0,0])
-    cylinder(h=30,r=2,center=true);
-```
 
 在上述模型中，轴和轮子之间的重叠等于轮子厚度的一半。如果模型是以轮子和轴刚好接触的方式创建的，则需要像汽车车身的两个立方体一样，确保它们之间有小的重叠。
 
@@ -468,45 +484,49 @@ translate([20,0,0])
 
 您可能已经注意到轮子的分辨率较低。目前，您使用的是 OpenSCAD 的默认分辨率设置。可以通过以下命令完全控制模型的分辨率：
 
-```openscad
-$fa = 1;
-$fs = 0.4;
-```
+{: .code }
+>```openscad
+>$fa = 1;
+>$fs = 0.4;
+>```
 
 将上述两条语句添加到汽车脚本的开头。您是否注意到轮子的分辨率有所变化？
 
 ---
 
-代码示例 `completed_car_higher_resolution.scad`
+{: .code-title }
+>代码示例 `completed_car_higher_resolution.scad`
+>
+>```openscad
+>$fa = 1;
+>$fs = 0.4;
+>cube([60,20,10],center=true);
+>translate([5,0,10 - 0.001])
+>    cube([30,20,10],center=true);
+>translate([-20,-15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8,center=true);
+>translate([-20,15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8,center=true);
+>translate([20,-15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8,center=true);
+>translate([20,15,0])
+>    rotate([90,0,0])
+>    cylinder(h=3,r=8,center=true);
+>translate([-20,0,0])
+>    rotate([90,0,0])
+>    cylinder(h=30,r=2,center=true);
+>translate([20,0,0])
+>    rotate([90,0,0])
+>    cylinder(h=30,r=2,center=true);
+>```
 
-```openscad
-$fa = 1;
-$fs = 0.4;
-cube([60,20,10],center=true);
-translate([5,0,10 - 0.001])
-    cube([30,20,10],center=true);
-translate([-20,-15,0])
-    rotate([90,0,0])
-    cylinder(h=3,r=8,center=true);
-translate([-20,15,0])
-    rotate([90,0,0])
-    cylinder(h=3,r=8,center=true);
-translate([20,-15,0])
-    rotate([90,0,0])
-    cylinder(h=3,r=8,center=true);
-translate([20,15,0])
-    rotate([90,0,0])
-    cylinder(h=3,r=8,center=true);
-translate([-20,0,0])
-    rotate([90,0,0])
-    cylinder(h=30,r=2,center=true);
-translate([20,0,0])
-    rotate([90,0,0])
-    cylinder(h=30,r=2,center=true);
-```
+---
 
-{: .new }
-> **特殊变量**
+{: .new-title }
+> 特殊变量
 >
 >`$fa` 和 `$fs` 是特殊变量，用于根据分配给它们的值确定模型的分辨率。具体功能将在稍后章节详细解释。您只需记住，将这两条语句添加到任何脚本中，即可实现适合 3D 打印的通用高分辨率。
 
