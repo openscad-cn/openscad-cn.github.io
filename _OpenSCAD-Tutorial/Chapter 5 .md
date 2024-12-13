@@ -405,3 +405,79 @@ nav_order: 5
 通过这节内容，您学习了如何在一个脚本中包含多个模块，并利用这些模块创建复杂的设计。
 
 --
+
+## 使用 MCAD 库
+
+MCAD 库（[GitHub 链接](https://github.com/openscad/MCAD)）是 OpenSCAD 附带的一个常用机械设计组件库。通过调用相应的 OpenSCAD 脚本和模块，您可以在设计中利用 MCAD 库中的对象。例如，`boxes.scad` 脚本包含了一个圆角盒子的模型模块。您可以打开此脚本以查看模块的参数，并将其用于设计中的圆角盒子。
+
+以下脚本展示了如何创建一个完全圆角的盒子，其边长为 10、20 和 30 单位，圆角半径为 3 单位：
+
+---
+
+{: .code-title }
+>示例代码 `completely_rounded_box.scad`
+>
+>```openscad
+>use <MCAD/boxes.scad>
+>$fa = 1;
+>$fs = 0.4;
+>roundedBox(size=[10,20,30], radius=3, sidesonly=false);
+>```
+
+---
+
+通过将参数 `sidesonly` 设置为 `true`，您可以创建一个具有相同尺寸但只有四个圆角边的盒子：
+
+---
+
+{: .code-title }
+>示例代码 `sides_only_rounded_box.scad`
+>
+>```openscad
+>use <MCAD/boxes.scad>
+>$fa = 1;
+>$fs = 0.4;
+>roundedBox(size=[10,20,30], radius=3, sidesonly=true);
+>```
+
+---
+
+`boxes.scad` 脚本位于 MCAD 目录中，而 MCAD 目录位于 OpenSCAD 的库目录下。库目录可以在 OpenSCAD 的安装文件夹中找到。如果您希望从任何目录中访问自己的库，可以将它们添加到库目录中。此外，您可以在 [OpenSCAD 的库页面](https://www.openscad.org/libraries.html) 浏览其他可用的 OpenSCAD 库。不过，GitHub 和 Thingiverse 上可用的库数量远远超过 OpenSCAD 网站上列出的库。
+
+---
+
+{: .ex }
+>使用 MCAD 库的 `boxes.scad` 脚本创建一个完全圆角的盒子，其边长为 50、20 和 15 单位，圆角半径为 5 单位。
+
+---
+
+{: .code-title }
+>示例代码 `horizontal_completely_rounded_box.scad`
+>
+>```openscad
+>use <MCAD/boxes.scad>
+>$fa = 1;
+>$fs = 0.4;
+>roundedBox(size=[50,20,15], radius=5, sidesonly=false);
+>```
+
+---
+
+{: .ex }
+>使用 MCAD 库的 `boxes.scad` 脚本创建一个只有四个圆角边的盒子，其边长为 50、50 和 15 单位，圆角半径为 20 单位。
+
+---
+
+{: .code-title }
+>示例代码 `short_sides_only_rounded_box.scad`
+>
+>```openscad
+>use <MCAD/boxes.scad>
+>$fa = 1;
+>$fs = 0.4;
+>roundedBox(size=[50,50,15], radius=20, sidesonly=true);
+>```
+
+---
+
+通过本节内容，您学习了如何使用 MCAD 库中的模块为设计添加更多功能和复杂性。
