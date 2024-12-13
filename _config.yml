@@ -22,7 +22,6 @@ title: OpenSCAD中文站
 email: lich.wang@gmail.com
 description: 
 url: "https://openscad.tech" # the base hostname & protocol for your site, e.g. http://example.com
-logo: "/assets/images/openscad.png"
 favicon_ico: "/assets/images/openscad.png"
 github_username:  lich-wang
 repository: "openscad-cn/openscad-cn.github.io"

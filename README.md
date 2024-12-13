@@ -2,7 +2,7 @@
 
 layout: home
 
-title:  "欢迎来到 OpenSCAD.Tech"
+title:  "欢迎来到 OpenSCAD.tech"
 
 permalink: /
 ---
