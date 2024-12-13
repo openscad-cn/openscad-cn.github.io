@@ -372,3 +372,291 @@ top_offset =
 >body_version = "n"; //s-短版, n-普通, l-长版, r-矩形版
 >wheels_version = "s"; //s-小号, m-中号, l-大号
 >```
+
+## 条件创建对象 - If语句
+
+条件变量赋值是轻松导航模型不同特定版本的强大工具。通过条件赋值，您能够为汽车定义不同的车身和轮子尺寸，并在不必每次手动提供所有变量值的情况下轻松选择它们。
+
+如果您想对轮子的类型（例如简单、圆形、复杂）或车身的类型（例如方形、圆形）拥有相同的控制，这将需要对象的条件创建，而这可以通过使用`if`语句实现。
+
+
+首先，让我们回顾一下之前创建的汽车车身模块。模块包含一些输入参数，用于创建两个立方体，一个是车身的底座，一个是车身的顶部。
+
+{: .code-title }
+>基本 If 语句示例
+>
+>```openscad
+>module body(base_height=10, top_height=14, base_length=60, top_length=30, width=20, top_offset=5) {
+>    // Car body base 
+>    cube([base_length,width,base_height],center=true); 
+>    // Car body top 
+>    translate([top_offset,0,base_height/2+top_height/2])
+>        cube([top_length,width,top_height],center=true);
+>}
+>$fa = 1;
+>$fs = 0.4;
+>body();
+>```
+
+现在，使用`if`语句，您可以看到如何参数化车身顶部的创建。首先，您需要为模块定义一个额外的输入参数。此参数命名为`top`，并存储布尔值。如果该参数为`false`，模块应仅创建车身的底座；如果为`true`，则还应创建车身的顶部。这可以通过以下方式实现：
+
+{: .code }
+>```openscad
+>module body(base_height=10, top_height=14, base_length=60, top_length=30, width=20, top_offset=5, top) {
+>    // Car body base 
+>    cube([base_length,width,base_height],center=true); 
+>    // Car body top
+>    if (top) {
+>        translate([top_offset,0,base_height/2+top_height/2])
+>        cube([top_length,width,top_height],center=true);
+>    }
+>}
+>$fa = 1;
+>$fs = 0.4;
+>```
+
+当输入参数`top`设置为`false`时，仅创建车身的底座。
+
+{: .code }
+>```openscad
+>body(top=false);
+>```
+
+当设置为`true`时，创建车身的底座和顶部。
+
+{: .code }
+>```openscad
+>body(top=true);
+>```
+
+
+以下汽车车身模块已被修改，以包括创建后保险杠的功能。`color`命令用于为保险杠添加视觉效果，仅在预览时起作用。
+
+{: .code-title }
+>添加前后保险杠
+>
+>```openscad
+>module body(base_height=10, top_height=14, base_length=60, top_length=30, width=20, top_offset=5, top) {
+>    // Car body base 
+>    cube([base_length,width,base_height],center=true); 
+>    // Car body top
+>    if (top) {
+>        translate([top_offset,0,base_height/2+top_height/2])
+>            cube([top_length,width,top_height],center=true);
+>    }
+>    // Rear bumper
+>    color("blue") {
+>        translate([base_length/2,0,0])rotate([90,0,0]) {
+>            cylinder(h=width - base_height,r=base_height/2,center=true);
+>            translate([0,0,(width - base_height)/2])
+>                sphere(r=base_height/2);
+>            translate([0,0,-(width - base_height)/2])
+>                sphere(r=base_height/2);
+>        }
+>    }
+>}
+>$fa = 1;
+>$fs = 0.4;
+>body(top=true);
+>```
+
+通过复制并修改后保险杠的语句，可以创建前保险杠：
+
+{: .code }
+>```openscad
+>module body(base_height=10, top_height=14, base_length=60, top_length=30, width=20, top_offset=5, top) {
+>    // Car body base 
+>    cube([base_length,width,base_height],center=true); 
+>    // Car body top
+>    if (top) {
+>        translate([top_offset,0,base_height/2+top_height/2])
+>            cube([top_length,width,top_height],center=true);
+>    }
+>    // Front bumper
+>    color("blue") {
+>        translate([-base_length/2,0,0])rotate([90,0,0]) {
+>            cylinder(h=width - base_height,r=base_height/2,center=true);
+>            translate([0,0,(width - base_height)/2])
+>                sphere(r=base_height/2);
+>            translate([0,0,-(width - base_height)/2])
+>                sphere(r=base_height/2);
+>        }
+>    }
+>    // Rear bumper
+>    color("blue") {
+>        translate([base_length/2,0,0])rotate([90,0,0]) {
+>            cylinder(h=width - base_height,r=base_height/2,center=true);
+>            translate([0,0,(width - base_height)/2])
+>                sphere(r=base_height/2);
+>            translate([0,0,-(width - base_height)/2])
+>                sphere(r=base_height/2);
+>        }
+>    }
+>}
+>$fa = 1;
+>$fs = 0.4;
+>body(top=true);
+>```
+
+
+为模块定义两个附加的输入参数：`front_bumper`和`rear_bumper`。这些参数应接受布尔值，并使用两个`if`语句条件性地创建前后保险杠。以下是实现后的模块和使用示例：
+
+>{: .code-title }
+>
+>使用条件创建前后保险杠
+>```openscad
+>module body(base_height=10, top_height=14, base_length=60, top_length=30, width=20, top_offset=5, top, front_bumper, rear_bumper) {
+>    // Car body base 
+>    cube([base_length,width,base_height],center=true); 
+>    // Car body top
+>    if (top) {
+>        translate([top_offset,0,base_height/2+top_height/2])
+>        cube([top_length,width,top_height],center=true);
+>    }
+>    // Front bumper
+>    if (front_bumper) {
+>        color("blue") {
+>            translate([-base_length/2,0,0])rotate([90,0,0]) {
+>                cylinder(h=width - base_height,r=base_height/2,center=true);
+>                translate([0,0,(width - base_height)/2])
+>                    sphere(r=base_height/2);
+>                translate([0,0,-(width - base_height)/2])
+>                    sphere(r=base_height/2);
+>            }
+>        }
+>    }
+>    // Rear bumper
+>    if (rear_bumper) {
+>        color("blue") {
+>            translate([base_length/2,0,0])rotate([90,0,0]) {
+>                cylinder(h=width - base_height,r=base_height/2,center=true);
+>                translate([0,0,(width - base_height)/2])
+>                    sphere(r=base_height/2);
+>                translate([0,0,-(width - base_height)/2])
+>                    sphere(r=base_height/2);
+>            }
+>        }
+>    }
+>}
+>$fa = 1;
+>$fs = 0.4;
+>body(top=false,front_bumper=true,rear_bumper=true);
+>```
+
+通过这种方式，您可以灵活地选择是否添加车身顶部、前保险杠和后保险杠。
+
+
+## 挑战
+
+在本章中，您学习了变量的条件赋值和简单的 `if` 语句。具体来说，您学会了如何有条件地修改设计各部分的尺寸和变换，以及如何有条件地包含或排除某些部分。现在是时候将这些知识结合在一个汽车模型中实践了。
+
+
+如果您一直在跟随本教程，那么您的计算机中应该已经有一个 `vehicle_parts.scad` 脚本文件（从前几章中创建）。打开此脚本并根据最后一个示例更新 `body` 模块，以便它具有条件创建车顶、前保险杠和后保险杠的功能。为新增的输入参数设置默认值。具体来说，将 `top`、`front_bumper` 和 `rear_bumper` 参数的默认值分别设置为 `true`、`false` 和 `false`。保存更改并关闭脚本。
+
+{: .code }
+>```openscad
+>module body(base_height=10, top_height=14, base_length=60, top_length=30, width=20, top_offset=5, top=true, front_bumper=false, rear_bumper=false) {
+>    // 车身底部
+>    cube([base_length, width, base_height], center=true); 
+>    // 车顶
+>    if (top) {
+>        translate([top_offset, 0, base_height / 2 + top_height / 2])
+>            cube([top_length, width, top_height], center=true);
+>    }
+>    // 前保险杠
+>    if (front_bumper) {
+>        color("blue") {
+>            translate([-base_length / 2, 0, 0]) rotate([90, 0, 0]) {
+>                cylinder(h=width - base_height, r=base_height / 2, center=true);
+>                translate([0, 0, (width - base_height) / 2])
+>                    sphere(r=base_height / 2);
+>                translate([0, 0, -(width - base_height) / 2])
+>                    sphere(r=base_height / 2);
+>            }
+>        }
+>    }
+>    // 后保险杠
+>    if (rear_bumper) {
+>        color("blue") {
+>            translate([base_length / 2, 0, 0]) rotate([90, 0, 0]) {
+>                cylinder(h=width - base_height, r=base_height / 2, center=true);
+>                translate([0, 0, (width - base_height) / 2])
+>                    sphere(r=base_height / 2);
+>                translate([0, 0, -(width - base_height) / 2])
+>                    sphere(r=base_height / 2);
+>            }
+>        }
+>    }
+>}
+>```
+
+保存更改后关闭脚本。
+
+
+以下是一个基本的汽车脚本示例，您需要对其进行适当的添加和修改，以参数化汽车的设计。具体来说，您需要定义以下变量：`body_version`、`wheels_version`、`top`、`front_bumper` 和 `rear_bumper`，用于为汽车的设计做出选择。
+
+```openscad
+use <vehicle_parts.scad>
+$fa=1;
+$fs=0.4;
+
+// 变量
+body_version = "l"; // s-短，n-普通，l-长，r-矩形
+wheels_version = "l"; // s-小，m-中，l-大
+top = true;
+front_bumper = true;
+rear_bumper = true;
+track = 30;
+wheelbase = 40;
+
+// 条件赋值
+// 车身：底部长度
+base_length =
+(body_version == "l") ? 80 :
+(body_version == "s") ? 60 :
+(body_version == "r") ? 65 : 70;
+
+// 车身：顶部长度
+top_length =
+(body_version == "l") ? 50 :
+(body_version == "s") ? 30 :
+(body_version == "r") ? 65 : 40;
+
+// 车身：顶部偏移
+top_offset =
+(body_version == "l") ? 10 :
+(body_version == "s") ? 5 :
+(body_version == "r") ? 0 : 7.5;
+
+// 车轮：半径
+wheel_radius =
+(wheels_version == "l") ? 10 :
+(wheels_version == "m") ? 8 : 6;
+
+// 车轮：宽度
+wheel_width =
+(wheels_version == "l") ? 8 :
+(wheels_version == "m") ? 6 : 4;
+
+// 创建车身
+body(base_length=base_length, top_length=top_length, top_offset=top_offset, top=top, front_bumper=front_bumper, rear_bumper=rear_bumper);
+
+// 前左车轮
+translate([-wheelbase/2, -track/2, 0])
+    simple_wheel(wheel_radius=wheel_radius, wheel_width=wheel_width);
+// 前右车轮
+translate([-wheelbase/2, track/2, 0])
+    simple_wheel(wheel_radius=wheel_radius, wheel_width=wheel_width);
+// 后左车轮
+translate([wheelbase/2, -track/2, 0])
+    simple_wheel(wheel_radius=wheel_radius, wheel_width=wheel_width);
+// 后右车轮
+translate([wheelbase/2, track/2, 0])
+    simple_wheel(wheel_radius=wheel_radius, wheel_width=wheel_width);
+// 前车轴
+translate([-wheelbase/2, 0, 0])
+    axle(track=track);
+// 后车轴
+translate([wheelbase/2, 0, 0])
+    axle(track=track);
+```
