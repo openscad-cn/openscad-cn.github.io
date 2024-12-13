@@ -481,3 +481,161 @@ MCAD 库（[GitHub 链接](https://github.com/openscad/MCAD)）是 OpenSCAD 附�
 ---
 
 通过本节内容，您学习了如何使用 MCAD 库中的模块为设计添加更多功能和复杂性。
+
+---
+
+
+## 创建更多可参数化的模块
+
+到目前为止，模块的输入参数是通过定义特定的模块输入参数实现的。例如，`complex_wheel` 模块能够根据输入参数（如 `wheel_radius`、`hub_thickness` 等）创建各种参数化的轮子。
+
+在设计中，您一直在使用 `body`、`wheel` 和 `axle` 模块的组合来生成各种车辆设计。在所有的车辆设计中，两轮和一个轴组合成了一个轮轴组。您可能已经考虑过创建一个 `axle_wheelset` 模块来同时定义这三种对象，而您这样想是正确的！但为什么之前没有实现这个模块呢？接下来我们将揭晓答案。
+
+---
+
+以下代码展示了如何使用现有知识将 `simple_wheel` 和 `axle` 模块组合到一起：
+
+---
+
+{: .code-title }
+>示例代码 `axle_with_simple_wheelset_from_module.scad`
+>
+>```openscad
+>use <vehicle_parts.scad>
+>$fa = 1;
+>$fs = 0.4;
+>module axle_wheelset(wheel_radius=10, wheel_width=6, track=35, radius=2) {
+>    translate([0,track/2,0])
+>        simple_wheel(wheel_radius=wheel_radius, wheel_width=wheel_width);
+>    axle(track=track, radius=radius);
+>    translate([0,-track/2,0])
+>        simple_wheel(wheel_radius=wheel_radius, wheel_width=wheel_width);
+>}
+>axle_wheelset();
+>```
+
+---
+
+此模块可以很好地满足创建一组 `simple_wheel` 的需求。然而，如果要切换到复杂的轮子设计，则需要完全重新定义一个新的模块：
+
+---
+
+{: .code-title }
+>示例代码 `axle_with_complex_wheelset_from_module.scad`
+>
+>```openscad
+>use <vehicle_parts.scad>
+>$fa = 1;
+>$fs = 0.4;
+>module axle_wheelset_complex(wheel_radius=10, side_spheres_radius=50, hub_thickness=4, cylinder_radius=2, track=35, radius=2) {
+>    translate([0,track/2,0])
+>        complex_wheel(wheel_radius=wheel_radius, side_spheres_radius=side_spheres_radius, hub_thickness=hub_thickness, cylinder_radius=cylinder_radius);
+>    axle(track=track, radius=radius);
+>    translate([0,-track/2,0])
+>        complex_wheel(wheel_radius=wheel_radius, side_spheres_radius=side_spheres_radius, hub_thickness=hub_thickness, cylinder_radius=cylinder_radius);
+>}
+>axle_wheelset_complex();
+>```
+
+---
+
+
+为了避免为不同的轮子和轴设计定义大量的模块，可以将轮子设计参数化。以下是改进的模块定义：
+
+---
+
+{: .code-title }
+>示例代码 `axle_with_simple_wheelset_from_parameterized_module.scad`
+>
+>```openscad
+>use <vehicle_parts.scad>
+>$fa = 1;
+>$fs = 0.4;
+>module axle_wheelset(track=35, radius=2) {
+>    translate([0,track/2,0])
+>        children(0);
+>    axle(track=track, radius=radius);
+>    translate([0,-track/2,0])
+>        children(0);
+>}
+>axle_wheelset() {
+>    simple_wheel();
+>}
+>```
+
+---
+
+通过在调用模块时使用大括号传递轮子设计，可以轻松切换轮子类型：
+
+---
+
+{: .code-title }
+>示例代码 `axle_with_complex_wheelset_from_parameterized_module.scad`
+>
+>```openscad
+>axle_wheelset() {
+>    complex_wheel();
+>}
+>```
+
+---
+
+{: .code-title }
+>示例代码 `axle_with_large_complex_wheelset_from_parameterized_module.scad`
+>
+>```openscad
+>axle_wheelset(radius=5) {
+>    complex_wheel(wheel_radius=20);
+>}
+>```
+
+---
+
+
+通过 `children` 命令可以传递多个对象。例如，可以通过以下修改使模块在一侧使用复杂轮子，另一侧使用简单轮子：
+
+---
+
+{: .code-title }
+>示例代码 `axle_with_different_wheels_from_parameterized_module.scad`
+>
+>```openscad
+>module axle_wheelset(track=35, radius=2) {
+>    translate([0,track/2,0])
+>        children(0);
+>    axle(track=track, radius=radius);
+>    translate([0,-track/2,0])
+>        children(1);
+>}
+>axle_wheelset() {
+>    complex_wheel();
+>    simple_wheel();
+>}
+>```
+
+---
+
+{: .ex }
+>1. 尝试交换调用模块时大括号内定义的轮子顺序。观察结果。
+>2. 尝试仅定义一个轮子。是否会出现错误提示？
+>3. 在 `vehicle_parts.scad` 中添加一个 `axle_wheelset` 模块，并使用 `children` 命令参数化轮子设计。用该脚本创建一个新的车辆设计。
+
+---
+
+## 挑战
+
+在过去两章中学习的内容为您提供了一套强大的工具，帮助您开始创建自己的对象库，这些对象可以灵活组合和自定义，以实现新的设计。
+
+---
+
+{: .ex }
+> **练习**  
+> 想象一个您希望创建的模型。将其分解为不同的部分。为每个部分设计多种替代方案，并定义生成它们的模块。  
+> - 每个模块的输入参数应该是什么？  
+> - 使用 `children` 功能定义一个或多个模块，以便灵活地组合您创建的各个部分。  
+
+---
+
+通过这次挑战，您将能够将模块化设计的概念应用于实际问题，同时提高设计的灵活性和可重用性。
+
+---
