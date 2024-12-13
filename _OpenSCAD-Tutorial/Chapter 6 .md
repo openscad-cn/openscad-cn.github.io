@@ -501,7 +501,7 @@ top_offset =
 
 为模块定义两个附加的输入参数：`front_bumper`和`rear_bumper`。这些参数应接受布尔值，并使用两个`if`语句条件性地创建前后保险杠。以下是实现后的模块和使用示例：
 
->{: .code-title }
+{: .code-title }
 >
 >使用条件创建前后保险杠
 >```openscad
