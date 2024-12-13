@@ -29,4 +29,4 @@ nav_order: 0
 ---
 
 {: .note }
-本教程基于 https://en.wikibooks.org/wiki/OpenSCAD_Tutorial 翻译、编辑而来，目前还在进行中。
+本教程基于 https://en.wikibooks.org/wiki/OpenSCAD_Tutorial 编译而来，目前还在进行中。
