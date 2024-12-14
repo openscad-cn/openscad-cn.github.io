@@ -438,4 +438,327 @@ nav_order: 9
 >```
 
 ---
+ 
+## 使用 polygon 原始体和数学创建更复杂的对象
+{: .no_toc }
 
+从上面的示例可以看出，`polygon` 原始体使创建无法仅使用基本 2D 或 3D 原始体实现的对象成为可能。为了最大限度地发挥 `polygon` 命令的潜力并创建更复杂的设计，需要通过数学编程生成轮廓点。这是因为手动定义数百个点来设计平滑的非方形轮廓是不可行的。例如，以下心形模型的轮廓点不可能手动定义。
+
+{: .code-title }
+>**代码示例：**
+>
+>```openscad
+>x = 16*sin(t)^3;
+>y = 13*cos(t) - 5*cos(2*t) - 2*cos(3*t) - cos(4*t);
+>```
+
+当变量 `t` 的范围覆盖从 0 到 360 度的值时，上述方程生成心形轮廓的 X 和 Y 坐标，从顶部中间点顺时针移动。可以使用以下方式生成包含点坐标的列表：
+
+{: .code-title }
+>**文件名：** `heart_points_list.scad`
+>
+>```openscad
+>n = 500;
+>h = 10;
+>step = 360/n;
+>points = [ for (t=[0:step:359.999]) [16*pow(sin(t),3), 13*cos(t) - 5*cos(2*t) - 2*cos(3*t) - cos(4*t)]];
+>linear_extrude(height=h)
+>    polygon(points);
+>```
+
+{: .new }
+>- 列表生成使用 `for` 关键字，类似于 for 循环的语法。
+>- `t` 变量从 0 到 359.999，避免重复点。
+>- 可以通过调整 `step` 控制生成的点数量。
+>- 点的数量 `n` 与 `step` 的关系为 `step = 360/n`。
+
+{: .ex }
+修改上述脚本，使心形轮廓由 20 个点组成。
+
+{: .code-title }
+>**文件名：** `heart_low_poly.scad`
+>
+>```openscad
+>n = 20;
+>h = 10;
+>step = 360/n;
+>points = [ for (t=[0:step:359.999]) [16*pow(sin(t),3), 13*cos(t) - 5*cos(2*t) - 2*cos(3*t) - cos(4*t)]];
+>linear_extrude(height=h)
+>    polygon(points);
+>```
+
+{: .ex }
+>使用新介绍的列表生成语法生成以下列表：
+>1. `[1, 2, 3, 4, 5, 6]`
+>2. `[10, 8, 6, 4, 2, 0, -2]`
+>3. `[[3, 30], [4, 40], [5, 50], [6, 60]]`
+
+{: .code-title }
+>**代码示例：**
+>
+>```openscad
+>// 第一题
+>x = [ for (i=[1:6]) i ];
+>
+>// 第二题
+>x = [ for (i=[10:-2:-2]) i ];
+>
+>// 第三题
+>x = [ for (i=[3:6]) [i, i*10] ];
+>```
+
+您可以定义自己的数学函数来组织复杂计算。例如，可以定义一个函数来生成心形轮廓点的 X 和 Y 坐标：
+
+{: .code-title }
+>**文件名：** `heart_function.scad`
+>
+>```openscad
+>function heart_coordinates(t) = [16*pow(sin(t),3), 13*cos(t) - 5*cos(2*t) - 2*cos(3*t) - cos(4*t)];
+>
+>n = 500;
+>h = 10;
+>step = 360/n;
+>points = [ for (t=[0:step:359.999]) heart_coordinates(t) ];
+>linear_extrude(height=h)
+>    polygon(points);
+>```
+
+您还可以定义生成点列表的函数：
+
+{: .code-title }
+>**文件名：** `heart_points_function.scad`
+>
+>```openscad
+>function heart_points(n=50) = [ for (t=[0:360/n:359.999]) heart_coordinates(t) ];
+>
+>n = 20;
+>h = 10;
+>points = heart_points(n=n);
+>linear_extrude(height=h)
+>    polygon(points);
+>```
+
+{: .ex }
+创建一个名为 `heart` 的模块。模块应具有两个输入参数 `h` 和 `n`，分别对应心形的高度和点的数量。模块应调用 `heart_points` 函数生成所需的点列表，并将该列表传递给 `polygon` 命令以创建 2D 轮廓，并将其拉伸为指定的高度。
+
+{: .code-title }
+>**文件名：** `heart.scad`
+>
+>{: .code}
+>```openscad
+>module heart(h=10, n=50) {
+>    points = heart_points(n=n);
+>    linear_extrude(height=h)
+>        polygon(points);
+>}
+>```
+
+{: .ex }
+将 `heart_coordinates` 和 `heart_points` 函数与 `heart` 模块保存在名为 `heart.scad` 的脚本中，并将其添加到您的库中。每次需要在设计中包含心形时，可以使用 `use` 命令引入该脚本的函数和模块。
+
+---
+
+## 新的挑战
+
+现在是时候运用您的新技能为赛车创建一个空气动力学扰流板了！
+
+{: .ex }
+
+使用一个对称的 NACA 00xx 四位数翼型创建扰流板。其半厚度公式如下：
+
+\[ y_t = 5t(0.2969\sqrt{x} - 0.1260x - 0.3516x^2 + 0.2843x^3 - 0.1015x^4) \]
+
+在上述公式中，`x` 是弦线上的位置，`t` 是以弦线长度的百分比表示的翼型最大厚度。
+
+创建一个名为 `naca_half_thickness` 的函数。该函数应具有两个输入参数：`x` 和 `t`。根据给定的 `x` 和 `t`，函数应返回对应的 NACA 翼型的半厚度。
+
+{: .code-title }
+>**文件名：** `naca_airfoil_module.scad`
+>
+>```openscad
+>function naca_half_thickness(x,t) = 5*t*(0.2969*sqrt(x) - 0.1260*x - 0.3516*pow(x,2) + 0.2843*pow(x,3) - 0.1015*pow(x,4));
+>```
+
+{: .ex }
+创建一个名为 `naca_top_coordinates` 的函数，用于生成翼型上半部分的 X 和 Y 坐标列表。函数应具有两个输入参数：`t` 和 `n`，分别对应翼型的最大厚度和点的数量。
+
+{: .code-title }
+>**文件名：** `naca_airfoil_module.scad`
+>
+>```openscad
+>function naca_top_coordinates(t,n) = [ for (x=[0:1/(n-1):1]) [x, naca_half_thickness(x,t)]];
+>```
+
+{: .ex }
+创建一个类似的函数 `naca_bottom_coordinates`，生成翼型下半部分的点列表。这些点应按逆序排列。
+
+{: .code-title }
+>**文件名：** `naca_airfoil_module.scad`
+>
+>```openscad
+>function naca_bottom_coordinates(t,n) = [ for (x=[1:-1/(n-1):0]) [x, -naca_half_thickness(x,t)]];
+>```
+
+{: .ex }
+创建一个名为 `naca_coordinates` 的函数，将上述两个列表连接起来，生成完整的翼型轮廓点列表。
+
+{: .code-title }
+>**文件名：** `naca_airfoil_module.scad`
+>
+>```openscad
+>function naca_coordinates(t,n) = concat(naca_top_coordinates(t,n), naca_bottom_coordinates(t,n));
+>```
+
+{: .ex }
+使用 `naca_coordinates` 函数生成具有最大厚度为 0.12 且每半部分包含 300 个点的翼型轮廓。
+
+{: .code-title }
+>**文件名：** `small_airfoil_polygon.scad`
+>
+>```openscad
+>points = naca_coordinates(t=0.12,n=300);
+>polygon(points);
+>```
+
+{: .ex }
+将上述脚本转换为一个名为 `naca_airfoil` 的模块。模块应具有三个输入参数：`chord`、`t` 和 `n`。
+
+{: .code-title }
+>**文件名：** `naca_airfoil_module.scad`
+>
+>```openscad
+>module naca_airfoil(chord,t,n) {
+>    points = naca_coordinates(t,n);
+>    scale([chord,chord,1])
+>        polygon(points);
+>}
+>```
+
+{: .ex }
+创建一个名为 `naca_wing` 的模块，通过对翼型 2D 轮廓应用 `linear_extrude` 命令生成机翼。模块应具有两个额外的输入参数：`span` 和 `center`。
+
+{: .code-title }
+>**文件名：** `spoiler_wing.scad`
+>
+>```openscad
+>module naca_wing(span,chord,t,n,center=false) {
+>    linear_extrude(height=span,center=center) {
+>        naca_airfoil(chord,t,n);
+>    }
+>}
+>
+>rotate([90,0,0])
+>    naca_wing(span=50,chord=20,t=0.12,n=500,center=true);
+>```
+
+{: .ex }
+使用 `naca_wing` 模块在上一个示例的基础上添加两个较小的垂直翼片，以完成汽车扰流板设计。
+
+{: .code-title }
+>**文件名：** `spoiler.scad`
+>
+>```openscad
+>rotate([90,0,0])
+>    naca_wing(span=50,chord=20,t=0.12,n=500,center=true);
+>translate([0,10,-15])
+>    naca_wing(span=15,chord=15,t=0.12,n=500);
+>translate([0,-10,-15])
+>    naca_wing(span=15,chord=15,t=0.12,n=500);
+>```
+
+{: .ex }
+将上述扰流板添加到赛车设计中完成最终设计。
+
+{: .code-title }
+>**文件名：** `racing_car_with_spoiler.scad`
+>
+>```openscad
+>use <vehicle_parts.scad>
+>use <naca.scad>
+>
+>$fa = 1;
+>$fs = 0.4;
+>
+>// 模型参数
+>d1=30;
+>d2=20;
+>d3=20;
+>d4=10;
+>d5=20;
+>
+>w1=15;
+>w2=45;
+>w3=25;
+>
+>h=14;
+>track=40;
+>
+>// 长度
+>l1 = d1;
+>l2 = d1 + d2;
+>l3 = d1 + d2 + d3;
+>l4 = d1 + d2 + d3 + d4;
+>l5 = d1 + d2 + d3 + d4 + d5;
+>
+>// 右侧点
+>p0 = [0, w1/2];
+>p1 = [l1, w1/2];
+>p2 = [l2, w2/2];
+>p3 = [l3, w2/2];
+>p4 = [l4, w3/2];
+>p5 = [l5, w3/2];
+>
+>// 左侧点
+>p6 = [l5, -w3/2];
+>p7 = [l4, -w3/2];
+>p8 = [l3, -w2/2];
+>p9 = [l2, -w2/2];
+>p10 = [l1, -w1/2];
+>p11 = [0, -w1/2];
+>
+>// 所有点
+>points = [p0, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11];
+>
+>// 拉伸车身轮廓
+>linear_extrude(height=h)
+>    polygon(points);
+>
+>// 座舱
+>translate([d1+d2+d3/2,0,h])
+>    resize([d2+d3+d4,w2/2,w2/2])
+>    sphere(d=w2/2);
+>
+>// 车轴
+>l_front_axle = d1/2;
+>l_rear_axle = d1 + d2 + d3 + d4 + d5/2;
+>half_track = track/2;
+>
+>translate([l_front_axle,0,h/2])
+>    axle(track=track);
+>translate([l_rear_axle,0,h/2])
+>    axle(track=track);
+>
+>// 车轮
+>translate([l_front_axle,half_track,h/2])
+>    simple_wheel(wheel_width=10);
+>translate([l_front_axle,-half_track,h/2])
+>    simple_wheel(wheel_width=10);
+>
+>translate([l_rear_axle,half_track,h/2])
+>    simple_wheel(wheel_width=10);
+>translate([l_rear_axle,-half_track,h/2])
+>    simple_wheel(wheel_width=10);
+>
+>// 扰流板
+>module car_spoiler() {
+>    rotate([90,0,0])
+>        naca_wing(span=50,chord=20,t=0.12,n=500,center=true);
+>    translate([0,10,-15])
+>        naca_wing(span=15,chord=15,t=0.12,n=500);
+>    translate([0,-10,-15])
+>        naca_wing(span=15,chord=15,t=0.12,n=500);
+>}
+>
+>translate([l4+d5/2,0,25])
+>    car_spoiler();
+>```
