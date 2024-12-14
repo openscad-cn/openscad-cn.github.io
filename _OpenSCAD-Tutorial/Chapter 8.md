@@ -228,3 +228,122 @@ nav_order: 8
 设计新零件时，考虑零件的制造过程通常是有帮助的。这种考虑不仅有助于适应当前的制造方法，还可以指导您的建模过程。
 
 例如，假设您不是使用增材制造（如3D打印）来制造此机器人轮子，而是使用减材制造（如车床或铣床）。在这种情况下，您可能会选择第二种方法，因为它更接近实际制造过程，并可能更好地估计最终制造过程需要的步骤数。
+
+--- 
+
+## 从2D对象线性拉伸创建3D对象
+
+正如之前简要提到的，OpenSCAD 还提供了另一个命令 `linear_extrude`，可用于从提供的2D轮廓创建3D对象。与 `rotate_extrude` 命令不同，`linear_extrude` 通过沿 Z 轴拉伸位于 XY 平面的2D轮廓来创建3D对象。以下是一个示例。
+
+{: .code-title }
+>**文件名：** `extruded_ellipse.scad`
+>
+>```openscad
+>$fa = 1;
+>$fs = 0.4;
+>linear_extrude(height=50)
+>    scale([2,1,1])
+>    circle(d=10);
+>```
+
+上述对象是一个具有以下轮廓的管状体：
+
+{: .code-title }
+>**文件名：** `ellipse_profile.scad`
+>
+>```openscad
+>$fa = 1;
+>$fs = 0.4;
+>scale([2,1,1])
+>    circle(d=10);
+>```
+
+{: .new }
+>- `linear_extrude` 命令的语法类似于 `rotate_extrude` 命令。
+>- 定义将沿 Z 轴拉伸的2D轮廓的命令需要放置在 `linear_extrude` 后的一对大括号内。
+>- 参数 `height` 用于定义沿 Z 轴的拉伸距离。
+>- 默认情况下，2D轮廓沿 Z 轴的正方向拉伸。
+>- 将参数 `center` 设置为 `true`，可使轮廓沿 Z 轴的两个方向拉伸，总长度等于 `height` 参数。
+
+{: .code-title }
+>**文件名：** `centered_extrusion.scad`
+>
+>```openscad
+>linear_extrude(height=50,center=true)
+>    scale([2,1,1])
+>    circle(d=10);
+>```
+
+另一个名为 `twist` 的参数可用于绕 Z 轴以指定角度扭曲生成的3D对象。
+
+{: .code-title }
+>**文件名：** `extrusion_with_twist.scad`
+>
+>```openscad
+>linear_extrude(height=50,center=true,twist=120)
+>    scale([2,1,1])
+>    circle(d=10);
+>```
+
+此外，参数 `scale` 可用于按指定比例缩放3D对象的一端。
+
+{: .code-title }
+>**文件名：** `extrusion_with_twist_and_scale.scad`
+>
+>```openscad
+>linear_extrude(height=50,center=true,twist=120,scale=1.5)
+>    scale([2,1,1])
+>    circle(d=10);
+>```
+
+通过 `rotate_extrude` 和 `linear_extrude` 命令，您可以创建无法直接通过现有3D原始体组合而成的对象。让我们看一个如何使用 `linear_extrude` 命令创建新车身的示例。
+
+{: .ex }
+使用类似于上述示例的 `linear_extrude` 命令创建以下汽车车身。您应该创建一个名为 `extruded_car_body` 的新模块。模块应具有 `length`、`rear_height`、`rear_width` 和 `scaling_factor` 输入参数。参数的默认值应分别为 80、20、25 和 0.5 单位。模块的 `length` 和 `scaling_factor` 参数将用于设置 `linear_extrude` 命令的 `height` 和 `scale` 参数值。提供的2D轮廓应为根据 `rear_height` 和 `rear_width` 参数调整大小的圆形。
+
+{: .code-title }
+>**文件名：** `extruded_car_body.scad`
+>
+>```openscad
+>module extruded_car_body(length=80, rear_height=20, rear_width=25, scaling_factor=0.5) {
+>    rotate([0,-90,0])
+>        linear_extrude(height=length,center=true,scale=scaling_factor)
+>        resize([rear_height,rear_width])
+>        circle(d=rear_height);    
+>}
+>```
+
+{: .ex }
+扩展上述模块，添加一个名为 `rounded` 的布尔输入参数。该参数的默认值应为 `false`。如果 `rounded` 参数设置为 `true`，则应在车身的前后部分创建两个额外的对象以使其具有圆润的外观。这两个对象是经过调整大小和缩放的球体。
+
+{: .code-title }
+>**文件名：** `rounded_extruded_car_body.scad`
+>
+>```openscad
+>module extruded_car_body(length=80, rear_height=20, rear_width=25, scaling_factor=0.5, rounded=false) {
+>    
+>    // 中间部分
+>    rotate([0,-90,0])
+>        linear_extrude(height=length,center=true,scale=scaling_factor)
+>        resize([rear_height,rear_width])
+>        circle(d=rear_height);
+>    
+>    if (rounded) {
+>        // 后部部分
+>        translate([length/2,0,0])
+>            resize([rear_height,rear_width,rear_height])
+>            sphere(d=rear_height);
+>        
+>        // 前部部分
+>        translate([-length/2,0,0])
+>            scale(scaling_factor)
+>            resize([rear_height,rear_width,rear_height])
+>            sphere(d=rear_height);
+>    }    
+>}
+>```
+
+{: .ex }
+在您喜欢的汽车设计中使用新的圆润车身模块。
+
+如前所述，`rotate_extrude` 和 `linear_extrude` 命令还可用于创建更抽象的对象。当提供的2D轮廓由现有的 `circle` 和 `square` 2D原始体创建且未使用 `linear_extrude` 命令的 `twist` 和 `scale` 参数时，生成的3D对象也可以直接使用现有的3D原始体创建。但真正使这些命令强大的地方在于能够创建非圆形和方形组合的任意2D轮廓。这种能力可以通过使用 `polygon` 2D原始体实现，您将在下一章学习到。
