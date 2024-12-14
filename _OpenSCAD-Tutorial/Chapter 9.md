@@ -73,7 +73,6 @@ nav_order: 9
 {: .code-title }
 >**文件名：** `car.scad`
 >
->{: .code}
 >```openscad
 >use <vehicle_parts.scad>
 >$fa = 1;
@@ -112,6 +111,7 @@ nav_order: 9
 {: .code-title }
 >**文件名：** `car_with_additional_variables.scad`
 >
+>```openscad
 >use <vehicle_parts.scad>
 >$fa = 1;
 >$fs = 0.4;
@@ -142,7 +142,7 @@ nav_order: 9
 >// 后轴
 >translate([half_wheelbase,0,0])
 >    axle(track=track);
->
+>```
 
 ---
 
