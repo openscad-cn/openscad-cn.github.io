@@ -70,7 +70,6 @@ nav_order: 7
 >{: .code-title }
 >**文件名：** `two_cars.scad`
 >
->{: .code}
 >```openscad
 >use <vehicle_parts.scad>
 >$fa=1;
