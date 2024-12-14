@@ -122,3 +122,109 @@ nav_order: 8
 
 {: .new }
 轴对称对象可以完全通过 `rotate_extrude` 命令创建。上述轮子设计是一个具体的例子。是否通过提供整个对象的2D轮廓并使用单个 `rotate_extrude` 创建轴对称对象，或仅对无法通过其他方式创建的部分使用 `rotate_extrude`，取决于具体情况并由您决定。
+
+---
+
+
+## 挑战
+现在是时候将您的新知识应用到实践中，为迷你机器人汽车项目创建一个轮辋。
+
+{: .ex }
+扩展 `rounded_simple_wheel` 模块，使轮子的设计在轮毂上有一个用于安装轴的孔。为此，您需要使用 `difference` 命令从现有模型中减去一个圆柱体。孔的直径应等于一个新的模块输入参数 `axle_diameter`，该参数的默认值应为 3 单位。在定义圆柱体高度时，需确保其总是略长于轮子的宽度，以避免使用 `difference` 命令时出现错误。保存修改后的模块后，使用以下参数创建轮子的版本：`wheel_radius=20`、`wheel_width=6`、`tire_diameter=4` 和 `axle_diameter=5`。
+
+{: .code-title }
+>**文件名：** `robot_wheel.scad`
+>
+>```openscad
+>module rounded_simple_wheel(wheel_radius=12, wheel_width=4, tyre_diameter=6, axle_diameter=3) {
+>    difference() {
+>        
+>        // 轮子
+>        rotate([90,0,0]) {
+>            rotate_extrude(angle=360) {
+>                translate([wheel_radius-tyre_diameter/2,0])
+>                    circle(d=tyre_diameter);
+>                translate([0,-wheel_width/2])
+>                    square([wheel_radius-tyre_diameter/2,wheel_width]);
+>            }
+>        }
+>        
+>        // 轴孔
+>        rotate([90,0,0])
+>            cylinder(h=wheel_width+1,r=axle_diameter/2,center=true);
+>    }
+>}
+>
+>rounded_simple_wheel(wheel_radius=20, wheel_width=6, tyre_diameter=4, axle_diameter=5);
+>```
+
+该轮子设计非常适合用于迷你机器人汽车，但您可以通过改进来为机器人提供更好的牵引力。例如，您可以只打印轮辋，并使用 O 型圈或橡皮圈作为轮胎，以提高牵引力。
+
+最终的轮子可能如下图所示，其中蓝色部分表示 O 型圈或橡皮圈。
+
+对应需要 3D 打印的轮辋如下所示：
+
+{: .ex }
+>以 `rounded_simple_wheel` 模块为参考，创建一个新的模块 `robot_rim`。`robot_rim` 模块应具有与 `rounded_simple_wheel` 模块相同的输入参数。添加所有必要的命令使其创建上述轮辋设计。有两种方法可以实现：
+>
+>1. 在 `rotate_extrude` 命令中，通过从表示轮胎的圆形减去表示轮辋的方形定义2D轮廓，并从生成的3D对象中减去轴的圆柱体以获得最终设计。
+>2. 从表示轮辋的较大圆柱体中减去表示轮胎的甜甜圈形对象和表示轴孔的圆柱体。
+>
+>虽然有一些关于良好设计实践的传统智慧，但实际上没有绝对的对错。选择最符合直觉或最合理的方法即可。为练习起见，可以尝试两种方法，看看哪种方法更适合您。
+
+
+{: .code-title }
+>**第一种方法** `robot_rim_from_profile_difference.scad`
+>
+>{: .code}
+>```openscad
+>module robot_rim(wheel_radius=12, wheel_width=4, tyre_diameter=6, axle_diameter=3) {
+>    rotate([90,0,0])difference() {
+>        
+>        // 轮辋
+>        rotate_extrude(angle=360) {
+>            difference() {
+>                
+>                // 圆柱轮廓
+>                translate([0,-wheel_width/2])
+>                    square([wheel_radius-tyre_diameter/2,wheel_width]);
+>                
+>                // 轮胎轮廓
+>                translate([wheel_radius-tyre_diameter/2,0])
+>                    circle(d=tyre_diameter);
+>            }
+>        }
+>        
+>        // 轴孔
+>        cylinder(h=wheel_width+1,r=axle_diameter/2,center=true);
+>    }
+>}
+>```
+
+
+{: .code-title }
+>**第二种方法** `robot_rim_from_3d_object_difference.scad`
+>
+>```openscad
+>module robot_rim(wheel_radius=12, wheel_width=4, tyre_diameter=6, axle_diameter=3) {
+>    rotate([90,0,0])
+>        difference() {
+>            
+>            // 轮辋
+>            cylinder(h=wheel_width,r=wheel_radius-tyre_diameter/2,center=true);
+>            
+>            // 轮胎
+>            rotate_extrude(angle=360) {
+>                translate([wheel_radius-tyre_diameter/2,0])
+>                    circle(d=tyre_diameter);
+>            }
+>
+>            // 轴孔
+>            cylinder(h=wheel_width+1,r=axle_diameter/2,center=true);
+>        }
+>}
+>```
+
+设计新零件时，考虑零件的制造过程通常是有帮助的。这种考虑不仅有助于适应当前的制造方法，还可以指导您的建模过程。
+
+例如，假设您不是使用增材制造（如3D打印）来制造此机器人轮子，而是使用减材制造（如车床或铣床）。在这种情况下，您可能会选择第二种方法，因为它更接近实际制造过程，并可能更好地估计最终制造过程需要的步骤数。
