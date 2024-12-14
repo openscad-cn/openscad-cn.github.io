@@ -10,6 +10,9 @@ nav_order: 9
 ## 目录
 {: .no_toc .text-delta }
 
+1. TOC
+{:toc}
+
 ## 在 OpenSCAD 中进行数学计算
 
 到目前为止，您已经了解到 OpenSCAD 中的变量在脚本执行期间只能保存一个值，即最后分配给它们的值。您还学会了 OpenSCAD 变量的一个常见用途是为模型提供参数化功能。在这种情况下，每个参数化模型都会有几个独立变量，您可以通过更改这些变量的值来调整模型。这些变量通常直接赋值，如以下示例所示：
@@ -432,6 +435,7 @@ nav_order: 9
 >    simple_wheel(wheel_width=10);
 >translate([l_rear_axle,-half_track,h/2])
 >    simple_wheel(wheel_width=10);
+>```
 
 ---
 

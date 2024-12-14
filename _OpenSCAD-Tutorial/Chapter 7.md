@@ -587,7 +587,7 @@ nav_order: 7
 {: .ex }
 修改上一个练习的脚本，使得不仅半径不同，每个模式的汽车数量也不同。为此，将外层循环变量从 `r` 更改为索引变量 `i`。在每次外层循环重复时，根据公式 `r = 70 + i*70` 计算半径，并根据公式 `n = 12 + i*2` 更新汽车数量变量 `n`。此外，每次外层循环重复时还需更新变量 `step`。
 
->{: .code-title }
+{: .code-title }
 >**文件名：** `three_circular_patterns_with_increasing_number_of_cars.scad`
 >
 >```openscad
