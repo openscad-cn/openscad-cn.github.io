@@ -489,3 +489,119 @@ nav_order: 7
 >translate([wheelbase/2,0,0])
 >    axle(track=rear_track);
 >```
+
+
+---
+
+
+## 创建模式的模式 - 嵌套 for 循环"
+
+以下脚本在 Y 轴上创建了一排汽车。
+
+{: .code-title }
+>**文件名：** `row_of_six_cars_along_y_axis.scad`
+>
+>```openscad
+>n = 6; // 汽车数量
+>y_spacing = 50;
+>for (dy=[0:y_spacing:n*y_spacing-1]) {
+>    translate([0,dy,0])
+>        car();
+>}
+>```
+
+{: .ex }
+修改上述脚本以创建另外 4 排汽车。每排汽车沿 X 轴正方向相对于上一排平移 70 个单位。
+
+{: .code-title }
+>**文件名：** `five_rows_of_six_cars.scad`
+>
+>```openscad
+>n = 6; // 汽车数量
+>y_spacing = 50;
+>for (dy=[0:y_spacing:n*y_spacing-1]) {
+>    translate([0,dy,0])
+>        car();
+>}
+>for (dy=[0:y_spacing:n*y_spacing-1]) {
+>    translate([70,dy,0])
+>        car();
+>}
+>for (dy=[0:y_spacing:n*y_spacing-1]) {
+>    translate([140,dy,0])
+>        car();
+>}
+>for (dy=[0:y_spacing:n*y_spacing-1]) {
+>    translate([210,dy,0])
+>        car();
+>}
+>for (dy=[0:y_spacing:n*y_spacing-1]) {
+>    translate([280,dy,0])
+>        car();
+>}
+>```
+
+如果您一直密切关注本教程，您可能已经注意到上述脚本效率不高。它包含大量重复代码，并且排数不能轻松修改。类似于本章开头创建汽车队列的问题，我们可以通过嵌套 for 循环来解决这一问题。
+
+{: .code-title }
+>**文件名：** `five_rows_of_six_cars_with_nested_for_loops.scad`
+>
+>```openscad
+>n_cars = 6;
+>y_spacing = 50;
+>n_rows = 5;
+>x_spacing = 70;
+>for (dx=[0:x_spacing:n_rows*x_spacing-1]) {
+>    for (dy=[0:y_spacing:n_cars*y_spacing-1]) {
+>        translate([dx,dy,0])
+>            car();
+>    }
+>}
+>```
+
+{: .new }
+>- 外层循环的每次重复会执行内层循环的所有迭代，从而创建一排汽车。
+>- 每排汽车的位置由变量 `dx` 控制，其值在外层循环的每次迭代中更新。
+>- 在每次外层循环迭代期间，`dx` 的值保持不变，而内层循环修改 `dy` 的值，从而生成汽车队列。
+
+{: .ex }
+使用嵌套 for 循环创建三个圆形汽车模式，类似于下图。外层循环变量用于参数化每个模式的半径，圆形模式的半径应分别为 140、210 和 280 单位。每个模式应包含 12 辆车。
+
+{: .code-title }
+>**文件名：** `three_circular_patterns.scad`
+>
+>```openscad
+>n = 12; // 汽车数量
+>step = 360/n;
+>for (r=[140:70:280]) {
+>    for (angle=[0:step:359]) {
+>        dx = r*cos(angle);
+>        dy = r*sin(angle);
+>        translate([dx,dy,0])
+>            rotate(angle)
+>            car();
+>    }
+>}
+>```
+
+{: .ex }
+>修改上一个练习的脚本，使得不仅半径不同，每个模式的汽车数量也不同。为此，将外层循环变量从 `r` 更改为索引变量 `i`。在每次外层循环重复时，根据公式 `r = 70 + i*70` 计算半径，并根据公式 `n = 12 + i*2` 更新汽车数量变量 `n`。此外，每次外层循环重复时还需更新变量 `step`。
+>
+>{: .code-title }
+>>**文件名：** `three_circular_patterns_with_increasing_number_of_cars.scad`
+>
+>{: .code}
+>```openscad
+>for (i=[1:1:3]) {
+>    r = 70 + i*70;
+>    n = 12 + i*2;
+>    step = 360/n;
+>    for (angle=[0:step:359]) {
+>        dx = r*cos(angle);
+>        dy = r*sin(angle);
+>        translate([dx,dy,0])
+>            rotate(angle)
+>            car();
+>    }
+>}
+>```
