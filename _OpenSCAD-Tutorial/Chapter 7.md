@@ -353,13 +353,12 @@ nav_order: 7
 
 {: .code-title }
 >**顺时针驾驶的汽车模式** `cars_driving_clockwise.scad`
-》
-》{: .code}
-》```openscad
-》translate([dx,dy,0])
-》    rotate([0,0,angle - 270])
-》    car();
-》```
+>
+>```openscad
+>translate([dx,dy,0])
+>    rotate([0,0,angle - 270])
+>    car();
+>```
 
 现在您已经掌握了使用 for 循环创建复杂模式的技能，是时候将这些技能应用于更复杂的轮子设计了！
 
@@ -372,7 +371,6 @@ nav_order: 7
 {: .code-title }
 >**文件名：** `ring_of_spoked_wheel.scad`
 >
->{: .code}
 >```openscad
 >module spoked_wheel(radius=12, width=5, thickness=5, number_of_spokes=7, spoke_radius=1.5) {
 >    
@@ -392,7 +390,6 @@ nav_order: 7
 {: .code-title }
 >**文件名：** `spoked_wheel_horizontal.scad`
 >
->{: .code}
 >```openscad
 >module spoked_wheel(radius=12, width=5, thickness=5, number_of_spokes=7, spoke_radius=1.5) {
 >    
@@ -421,7 +418,6 @@ nav_order: 7
 {: .code-title }
 >**文件名：** `spoked_wheel.scad`
 >
->{: .code}
 >```openscad
 >module spoked_wheel(radius=12, width=5, thickness=5, number_of_spokes=7, spoke_radius=1.5) {
 >    
@@ -454,7 +450,6 @@ nav_order: 7
 {: .code-title }
 >**文件名：** `car_with_spoked_wheels.scad`
 >
->{: .code}
 >```openscad
 >use <vehicle_parts.scad>
 >
