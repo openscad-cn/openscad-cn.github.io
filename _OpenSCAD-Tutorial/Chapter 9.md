@@ -112,7 +112,6 @@ nav_order: 9
 {: .code-title }
 >**文件名：** `car_with_additional_variables.scad`
 >
->```openscad
 >use <vehicle_parts.scad>
 >$fa = 1;
 >$fs = 0.4;
