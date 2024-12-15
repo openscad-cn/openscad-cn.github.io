@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "第八章 从 2D 形状拉伸生成 3D 对象"
+title:  "第八章 拉伸"
 nav_order: 8
 ---
 
-# 第八章 从 2D 形状拉伸生成 3D 对象
+# 第八章 拉伸
 {: .no_toc }
 
 ## 目录
