@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "第一章"
+title:  "第一章 了解 OpenSCAD 并开始创建第一个对象"
 nav_order: 1
 ---
 
-# 第一章
+# 第一章 了解 OpenSCAD 并开始创建第一个对象
 {: .no_toc }
 
 ## 目录
