@@ -514,7 +514,7 @@ trapezoid(w1=30, w2=50, h=50)
     show_anchors();
 ```
 
-## 正N 边形
+## 正N 边形 / Regular N-Gons
 
 OpenSCAD 允许你通过将 `circle()` 与 `$fn` 参数结合使用来创建规则的 N 边形（如五边形、六边形等）。尽管这种方法简洁，但初看可能不太直观：
 
