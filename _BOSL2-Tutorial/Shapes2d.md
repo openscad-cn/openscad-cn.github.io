@@ -6,10 +6,16 @@ nav_order: 1.1
 
 # 2D Shapes Tutorial
 
-<!-- TOC -->
+{: .no_toc }
+
+## 目录
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
 
 ## Primitives / 基本形状
-There are two built-in 2D primitive shapes that OpenSCAD provides: `square()`, and `circle()`.You can still use them in the familiar ways that OpenSCAD provides:
+
 OpenSCAD 提供了两种内置的 2D 基本形状：`square()` 和 `circle()`。您仍然可以按照 OpenSCAD 提供的常规方式使用它们：
 
 ```openscad
@@ -27,49 +33,49 @@ include <BOSL2/std.scad>
 circle(d=100, $fn=8);
 ```
 
-These modules have also been enhanced in the BOSL2 library in three ways: Anchoring, spin, and
-attachability.
+这些模块在 BOSL2 库中得到了以下三种增强：锚定（Anchoring）、旋转（Spin）和可附加性（Attachability）。
 
-#### Anchoring:
-When you create a `square()`, you can specify what corner or side  will be anchored at the
-origin.  This is used in place of the `center=` argument, and is more flexible.  The `anchor=`
-argument takes a vector as a value, pointing roughly towards the side or corner you
-want to align to the origin.  For example, to align the center of the back edge to the
-origin, set the anchor to `[0,1]`:
+
+#### 锚定 / Anchoring:
+
+当你创建一个 `square()` 时，你可以指定哪个角或边锚定在原点。  
+这可以替代 `center=` 参数，并提供了更大的灵活性。  
+`anchor=` 参数接受一个向量值，指向你希望对齐到原点的边或角的大致方向。  
+例如，要将后边缘的中心对齐到原点，可以将锚点设置为 `[0,1]`：
 
 ```openscad
 include <BOSL2/std.scad>
 square([60,40], anchor=[0,1]);
 ```
 
-To align the front right corner to the origin:
+要将前右角对齐到原点：
 
 ```openscad
 include <BOSL2/std.scad>
 square([60,40], anchor=[1,-1]);
 ```
 
-To center:
+到中心:
 
 ```openscad
 include <BOSL2/std.scad>
 square([60,40], anchor=[0,0]);
 ```
 
-To make it clearer when giving vectors, there are several standard vector constants defined:
+为了在指定向量时更加清晰，定义了一些标准向量常量：
 
-Constant | Direction | Value
--------- | --------- | -----------
-`LEFT`   | X-        | `[-1, 0, 0]`
-`RIGHT`  | X+        | `[ 1, 0, 0]`
-`FRONT`/`FORWARD`/`FWD` | Y- | `[ 0,-1, 0]`
-`BACK`   | Y+        | `[ 0, 1, 0]`
-`BOTTOM`/`BOT`/`BTM`/`DOWN` | Z- | `[ 0, 0,-1]` (3D only.)
-`TOP`/`UP` | Z+      | `[ 0, 0, 1]` (3D only.)
-`CENTER`/`CTR` | Centered | `[ 0, 0, 0]`
+常量 | 方向 | 值  
+-------- | --------- | -----------  
+`LEFT`   | X-        | `[-1, 0, 0]`  
+`RIGHT`  | X+        | `[ 1, 0, 0]`  
+`FRONT`/`FORWARD`/`FWD` | Y- | `[ 0,-1, 0]`  
+`BACK`   | Y+        | `[ 0, 1, 0]`  
+`BOTTOM`/`BOT`/`BTM`/`DOWN` | Z- | `[ 0, 0,-1]`（仅适用于3D）  
+`TOP`/`UP` | Z+      | `[ 0, 0, 1]`（仅适用于3D）  
+`CENTER`/`CTR` | 居中 | `[ 0, 0, 0]`  
 
-Note that even though these are 3D vectors, you can use most of them,
-(except `UP`/`DOWN`, of course) for anchors in 2D shapes:
+请注意，即使这些是 3D 向量，你仍然可以在 2D 形状中使用大多数它们（当然，`UP` 和 `DOWN` 除外）：
+
 
 ```openscad
 include <BOSL2/std.scad>
@@ -88,16 +94,15 @@ include <BOSL2/std.scad>
 square([60,40], anchor=FRONT+RIGHT);
 ```
 
-For `circle()`, the anchor vector can point at any part of the circle perimeter:
+对于 `circle()`，锚点向量可以指向圆周的任何部分：
 
 ```openscad
 include <BOSL2/std.scad>
 circle(d=50, anchor=polar_to_xy(1,150));
 ```
 
-Note that the radius does not matter for the anchor because only the
-anchor's direction affects the result.  You can see the typical anchor
-points by giving `show_anchors()` as a child of the shape:
+请注意，锚点的半径无关紧要，因为只有锚点的方向会影响结果。  
+你可以通过将 `show_anchors()` 作为形状的子模块来查看典型的锚点位置：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -111,31 +116,34 @@ circle(d=50)
     show_anchors();
 ```
 
-#### Spin:
-The second way that `square()` and `circle()` have been enhanced is with spin.  When you create
-the shape, you can spin it in place with the `spin=` argument.  You just pass it a number of
-degrees to rotate clockwise:
+#### 旋转 / Spin:
+
+`square()` 和 `circle()` 的第二个增强功能是支持旋转（Spin）。  
+创建形状时，可以通过 `spin=` 参数使其在原地旋转。  
+只需传递一个以度数为单位的值，用于顺时针旋转：
+
 
 ```openscad
 include <BOSL2/std.scad>
 square([60,40], anchor=CENTER, spin=30);
 ```
 
-Anchoring or centering is performed before the spin:
+锚定或居中操作会在旋转之前执行：
+
 
 ```openscad
 include <BOSL2/std.scad>
 square([60,40], anchor=BACK, spin=30);
 ```
 
-For circles, spin can be useful when `$fn=` is also given:
+对于圆形，当同时指定 `$fn=` 时，旋转（spin）会非常有用：
 
 ```openscad
 include <BOSL2/std.scad>
 circle(d=50, $fn=6, spin=15);
 ```
 
-Since anchoring is performed before spin, you can use them together to spin around the anchor:
+由于锚定是在旋转之前执行的，因此你可以将两者结合使用，以围绕锚点旋转：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -143,12 +151,12 @@ circle(d=50, $fn=6, anchor=LEFT, spin=15);
 ```
 
 
-#### Attachability:
+#### 可附加性 / Attachability:
 
-The third way `square()` and `circle()` have been enhanced is that you can attach them together
-at anchoring points in various ways.  This is done by making one shape a child of the shape
-you want to attach to.  By default, just making one shape a child of the other will position
-the child shape at the center of the parent shape.
+`square()` 和 `circle()` 的第三个增强功能是可以通过锚点以多种方式将它们连接在一起。  
+这可以通过将一个形状设为你想要连接的另一个形状的子模块来实现。  
+默认情况下，只需将一个形状作为另一个形状的子模块，就会将子形状定位到父形状的中心位置。
+
 
 ```openscad
 include <BOSL2/std.scad>
@@ -162,7 +170,7 @@ square(50, center=true)
     #square([20,40], anchor=FWD);
 ```
 
-By adding the `position()` module, you can position the child at any anchorpoint on the parent:
+通过添加 `position()` 模块，你可以将子形状定位到父形状上的任意锚点位置：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -186,9 +194,8 @@ circle(d=50)
 ```
 
 
-Anchorpoints aren't just positions on the parent, though.  They also have an orientation.  In most
-cases, the orientation of an anchorpoint is outward away from the face of the wall, generally away
-from the center of the shape.  You can see this with the `show_anchors()` module:
+然而，锚点不仅仅是父形状上的位置，它们还具有方向性。在大多数情况下，锚点的方向是朝外远离墙面的，一般远离形状的中心。  你可以通过使用 `show_anchors()` 模块查看锚点的方向：
+
 
 ```openscad
 include <BOSL2/std.scad>
@@ -202,8 +209,8 @@ circle(d=50)
     show_anchors();
 ```
 
-If you want to orient the child to match the orientation of an anchorpoint, you can use the `orient()`
-module.  It does not position the child.  It only rotates it:
+如果你希望让子形状的方向与某个锚点的方向匹配，可以使用 `orient()` 模块。它不会定位子形状，只会旋转它：
+
 
 ```openscad
 include <BOSL2/std.scad>
@@ -233,7 +240,7 @@ circle(d=50)
         #square([10,40], anchor=FWD);
 ```
 
-You can use `position()` and `orient()` together to both position and orient to an anchorpoint:
+你可以将 `position()` 和 `orient()` 一起使用，以同时定位
 
 ```openscad
 include <BOSL2/std.scad>
@@ -251,7 +258,7 @@ circle(d=50)
             #square([10,40], anchor=FWD);
 ```
 
-But it's simpler to just use the `attach()` module to do both at once:
+但更简单的方法是直接使用 `attach()` 模块，一次性完成这两项操作：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -267,8 +274,8 @@ circle(d=50)
         #square([10,40], center=true);
 ```
 
-Instead of specifying the `anchor=` in the child, you can pass a second argument to `attach()`
-that tells it which side of the child to attach to the parent:
+与其在子形状中指定 `anchor=`，你可以向 `attach()` 传递第二个参数，用于指定子形状的哪一侧附加到父形状：
+
 
 ```openscad
 include <BOSL2/std.scad>
@@ -284,31 +291,25 @@ circle(d=50)
         #square([10,40], center=true);
 ```
 
+#### 矩形 / Rectangles
 
-
-#### Rectangles
-
-The BOSL2 library provides an alternative to `square()`, that support more features.  It is
-called `rect()`.  You can use it in the same way you use `square()`, but it also provides
-extended functionality. For example, it allows you to round the corners:
+BOSL2 库提供了 `square()` 的替代模块，名为 `rect()`，它支持更多功能。  
+你可以像使用 `square()` 一样使用它，但它还提供了扩展功能。  
+例如，它允许你为矩形的角添加圆角：
 
 ```openscad
 include <BOSL2/std.scad>
 rect([60,40], rounding=10);
 ```
 
-Or chamfer them:
+或者对角进行斜切：
 
 ```openscad
 include <BOSL2/std.scad>
 rect([60,40], chamfer=10);
 ```
 
-You can even specify *which* corners get rounded or chamfered.  If you pass a
-list of four size numbers to the `rounding=` or `chamfer=` arguments, it will
-give each corner its own size.  In order, it goes from the back-right (quadrant I)
-corner, counter-clockwise around to the back-left (quadrant II) corner, to the
-forward-left (quadrant III) corner, to the forward-right (quadrant IV) corner:
+你甚至可以指定**哪些**角需要圆角或斜切。如果你向 `rounding=` 或 `chamfer=` 参数传递一个包含四个数值的列表，每个角都会有自己对应的大小。顺序从右后角（第一象限）开始，逆时针依次是左后角（第二象限）、左前角（第三象限）和右前角（第四象限）：
 
 ```openscadImgOnly
 include <BOSL2/std.scad>
@@ -322,9 +323,7 @@ translate([-50,-50]) text3d("III");
 translate([ 50,-50]) text3d("IV");
 rect([90,80]);
 ```
-
-If a size is given as `0`, then there is no rounding and/or chamfering for
-that quadrant's corner:
+如果某个尺寸设置为 `0`，则该象限的角不会进行圆角或斜切处理：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -336,27 +335,21 @@ include <BOSL2/std.scad>
 rect([60,40], chamfer=[0,5,10,15]);
 ```
 
-You can give both `rounding=` and `chamfer=` arguments to mix rounding and
-chamfering, but only if you specify per corner.  If you want a rounding in
-a corner, specify a 0 chamfer for that corner, and vice versa:
+你可以同时设置 `rounding=` 和 `chamfer=` 参数，以混合使用圆角和斜切效果，但前提是需要为每个角分别指定参数。如果你希望某个角是圆角，则需要为该角的斜切设置为 0，反之亦然：
+
 
 ```openscad
 include <BOSL2/std.scad>
 rect([60,40], rounding=[5,0,10,0], chamfer=[0,5,0,15]);
 ```
 
-#### Ellipses
+#### 椭圆 / Ellipses
 
-The BOSL2 library also provides an enhanced equivalent of `circle()` called `ellipse()`.
-You can use it in the same way you use `circle()`, but it also provides extended
-functionality. For example, it allows more control over its size.
+BOSL2 库还提供了 `circle()` 的增强版本，称为 `ellipse()`。你可以像使用 `circle()` 一样使用它，但它还提供了扩展功能。例如，它允许你对尺寸进行更多的控制。
 
-Since a circle in OpenSCAD can only be approximated by a regular polygon with a number
-of straight sides, this can lead to size and shape inaccuracies.  To counter this, the
-`realign=` and `circum=` arguments are also provided.
+由于 OpenSCAD 中的圆只能用具有一定数量直边的正多边形近似表示，这可能会导致尺寸和形状的不精确。为了解决这个问题，`ellipse()` 提供了 `realign=` 和 `circum=` 参数。
 
-The `realign=` argument, if set `true`, rotates the `ellipse()` by half the angle
-between the polygon sides:
+如果将 `realign=` 参数设置为 `true`，则会将 `ellipse()` 的多边形边之间的角度旋转一半：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -364,10 +357,9 @@ ellipse(d=100, $fn=8);
 #ellipse(d=100, $fn=8, realign=true);
 ```
 
-The `circum=` argument, if true, makes it so that the polygon forming the
-`ellipse()` circumscribes the ideal circle instead of inscribing it.
+如果 `circum=` 参数为 `true`，则生成 `ellipse()` 的多边形会外接理想的圆，而不是内接。
 
-Inscribing the ideal circle:
+内接理想圆的效果：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -375,7 +367,7 @@ color("green") ellipse(d=100, $fn=360);
 ellipse(d=100, $fn=6);
 ```
 
-Circumscribing the ideal circle:
+外接理想圆的效果：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -383,9 +375,7 @@ ellipse(d=100, $fn=6, circum=true);
 color("green") ellipse(d=100, $fn=360);
 ```
 
-The `ellipse()` module, as its name suggests, can be given separate X and Y radii
-or diameters.  To do this, just give `r=` or `d=` with a list of two radii or
-diameters:
+顾名思义，`ellipse()` 模块可以分别指定 X 和 Y 方向的半径或直径。为此，只需为 `r=` 或 `d=` 提供一个包含两个半径或直径的列表：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -397,7 +387,7 @@ include <BOSL2/std.scad>
 ellipse(d=[60,40]);
 ```
 
-Like `circle()`, you can anchor, spin and attach `ellipse()` shapes:
+与 `circle()` 类似，你可以对 `ellipse()` 形状进行锚定（anchor）、旋转（spin）和附加（attach）操作：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -416,16 +406,16 @@ ellipse(d=50)
         ellipse(d=30);
 ```
 
+#### 直角三角形 / Right Triangles
 
-#### Right Triangles
-The BOSL2 library provides a simple way to make a 2D right triangle by using the `right_triangle()` module:
+BOSL2 库通过 `right_triangle()` 模块提供了一种简单的方法来创建 2D 直角三角形：
 
 ```openscad
 include <BOSL2/std.scad>
 right_triangle([40,30]);
 ```
 
-You can use `xflip()` and `yflip()` to change which quadrant the triangle is formed in:
+你可以使用 `xflip()` 和 `yflip()` 来更改三角形所在的象限：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -442,7 +432,7 @@ include <BOSL2/std.scad>
 xflip() yflip() right_triangle([40,30]);
 ```
 
-Or, alternatively, just rotate it into the correct quadrant with `spin=`:
+或者，你也可以通过 `spin=` 参数将其旋转到正确的象限：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -454,27 +444,26 @@ include <BOSL2/std.scad>
 right_triangle([40,30], spin=-90);
 ```
 
-You can also use anchoring with right triangles:
+你还可以对直角三角形使用锚定功能：
 
 ```openscad
 include <BOSL2/std.scad>
 right_triangle([40,30], anchor=FWD+RIGHT);
 ```
 
+#### 梯形 / Trapezoids
 
-#### Trapezoids
+OpenSCAD 并未提供简单的方法来创建一般的 2D 三角形、梯形或平行四边形。  
+BOSL2 库通过 `trapezoid()` 模块可以生成这些形状。
 
-OpenSCAD doesn't provide a simple way to make general 2D triangles, trapezoids, or parallelograms.
-The BOSL2 library can provide all of these shapes with the `trapezoid()` module.
-
-To make a simple triangle, just make one of the widths zero:
+要创建一个简单的三角形，只需将其中一个宽度设为零：
 
 ```openscad
 include <BOSL2/std.scad>
 trapezoid(w1=50, w2=0, h=40);
 ```
 
-To make a right triangle, you need to use the `shift=` argument, to shift the back of the trapezoid along the X axis:
+要创建一个直角三角形，你需要使用 `shift=` 参数，将梯形的后边沿 X 轴平移：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -496,29 +485,28 @@ include <BOSL2/std.scad>
 trapezoid(w1=0, w2=50, h=50, shift=25);
 ```
 
-You can make a trapezoid by specifying non-zero widths for both the front (`w1=`) and back (`w2=`):
+通过为前边（`w1=`）和后边（`w2=`）指定非零宽度，可以创建一个梯形：
 
 ```openscad
 include <BOSL2/std.scad>
 trapezoid(w1=30, w2=50, h=50);
 ```
 
-A parallelogram is just a matter of using the same width for front and back, with a shift along the X axis:
+平行四边形只需前边和后边的宽度相同，同时沿 X 轴平移即可：
 
 ```openscad
 include <BOSL2/std.scad>
 trapezoid(w1=50, w2=50, shift=20, h=50);
 ```
 
-A quadrilateral can be made by having unequal, non-zero front (`w1=`) and back (`w2=`) widths, with the back shifted along the X axis:
+通过设置不相等的非零前宽度（`w1=`）和后宽度（`w2=`），并将后边沿 X 轴平移，可以创建一个四边形：
 
 ```openscad
 include <BOSL2/std.scad>
 trapezoid(w1=50, w2=30, shift=20, h=50);
 ```
 
-You can use `anchor=` and `spin=`, just like with other attachable shapes.  However, the anchor
-point orientations are based on the side angles of the faces, and may not be what you expect:
+你可以像使用其他可附加形状一样使用 `anchor=` 和 `spin=`。然而，锚点的方向取决于各边的角度，这可能与你的预期不一致：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -528,15 +516,14 @@ trapezoid(w1=30, w2=50, h=50)
 
 #### Regular N-Gons
 
-OpenSCAD lets you make regular N-gons (pentagon, hexagon, etc) by using `circle()` with `$fn`.
-While this is concise, it may be less than obvious at first glance:
+OpenSCAD 允许你通过将 `circle()` 与 `$fn` 参数结合使用来创建规则的 N 边形（如五边形、六边形等）。尽管这种方法简洁，但初看可能不太直观：
 
 ```openscad
 include <BOSL2/std.scad>
 circle(d=50, $fn=5);
 ```
 
-The BOSL2 library has modules that are named more clearly, for common N-gons:
+对于常见的 N 边形，BOSL2 库提供了名称更直观的模块：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -558,14 +545,14 @@ include <BOSL2/std.scad>
 regular_ngon(n=7, d=50);
 ```
 
-These modules also provide you with extra functionality.  They can be sized by side length:
+这些模块还提供了额外的功能。你可以通过边长来设置它们的大小：
 
 ```openscad
 include <BOSL2/std.scad>
 pentagon(side=20);
 ```
 
-They can be sized by circumscribed circle radius/diameter:
+它们可以通过外接圆的半径或直径来设置大小：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -573,7 +560,7 @@ pentagon(ir=25);
 pentagon(id=50);
 ```
 
-They can be rotated by half a side:
+它们可以旋转半个边长的角度：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -581,7 +568,7 @@ left(30)  pentagon(d=50, realign=true);
 right(30) pentagon(d=50, realign=false);
 ```
 
-They can be rounded:
+它们可以添加圆角：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -593,8 +580,8 @@ include <BOSL2/std.scad>
 hexagon(d=50, rounding=10);
 ```
 
-They also have somewhat different attachment behavior.  A circle with a small `$fn=` will
-attach things at the ideal circle, not along the created polygon:
+它们的附加行为也有所不同。一个带有较小 `$fn=` 的圆将把对象附加在理想圆周上，而不是生成的多边形边上：
+
 
 ```openscad
 include <BOSL2/std.scad>
@@ -603,7 +590,7 @@ circle(d=50,$fn=6)
     show_anchors();
 ```
 
-While an N-gon will attach along the polygon itself:
+而 N 边形将沿着多边形本身进行附加：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -611,9 +598,8 @@ hexagon(d=50)
     show_anchors(custom=false);
 ```
 
-You can use `anchor=` and `spin=`, just like with other attachable shapes.  However, the anchor
-points are based on where the anchor vector would intersect the side of the N-gon, and may not
-be where you expect them:
+你可以像使用其他可附加形状一样使用 `anchor=` 和 `spin=`。然而，锚点基于锚点向量与 N 边形边的交点，可能并非你所期望的位置：
+
 
 ```openscad
 include <BOSL2/std.scad>
@@ -621,7 +607,7 @@ pentagon(d=50)
     show_anchors(custom=false);
 ```
 
-N-gons also have named anchor points for their sides and tips:
+N 边形还为其边和顶点提供了命名锚点：
 
 ```openscad,Med
 include <BOSL2/std.scad>
@@ -630,10 +616,11 @@ pentagon(d=30)
 ```
 
 
-#### Stars
+#### 星形 / Stars
 
-The BOSL2 library has stars as a basic supported shape.  They can have any number of points.
-You can specify a star's shape by point count, inner and outer vertex radius/diameters:
+BOSL2 库将星形作为一种基本支持的形状。  
+星形可以有任意数量的点。  
+你可以通过点的数量以及内外顶点的半径或直径来定义星形的形状：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -650,7 +637,7 @@ include <BOSL2/std.scad>
 star(n=10, id=30, d=50);
 ```
 
-Or you can specify the star shape by point count and number of points to step:
+或者，你可以通过点的数量以及步进点数来定义星形的形状：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -662,7 +649,7 @@ include <BOSL2/std.scad>
 star(n=7, step=3, d=50);
 ```
 
-If the `realign=` argument is given a true value, then the star will be rotated by half a point angle:
+如果将 `realign=` 参数设置为 `true`，星形将旋转半个点角度：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -670,7 +657,7 @@ left(30) star(n=5, step=2, d=50);
 right(30) star(n=5, step=2, d=50, realign=true);
 ```
 
-The `align_tip=` argument can be given a vector so that you can align the first point in a specific direction:
+`align_tip=` 参数可以接受一个向量，以便将第一个顶点对齐到特定方向：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -684,8 +671,7 @@ star(n=5, ir=15, or=30, align_tip=BACK+RIGHT)
     attach("tip0") color("blue") anchor_arrow2d();
 ```
 
-Similarly, the first indentation or pit can be oriented towards a specific vector with `align_pit=`:
-
+同样，可以使用 `align_pit=` 参数将第一个凹点对齐到特定方向的向量：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -699,8 +685,7 @@ star(n=5, ir=15, or=30, align_pit=BACK+RIGHT)
     attach("pit0") color("blue") anchor_arrow2d();
 ```
 
-You can use `anchor=` and `spin=`, just like with other attachable shapes.  However, the anchor
-points are based on the furthest extents of the shape, and may not be where you expect them:
+你可以像使用其他可附加形状一样使用 `anchor=` 和 `spin=`。然而，锚点是基于形状的最远范围，可能并非你所期望的位置：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -708,7 +693,7 @@ star(n=5, step=2, d=50)
     show_anchors(custom=false);
 ```
 
-Stars also have named anchor points for their pits, tips, and midpoints between tips:
+星形还为其凹点、顶点以及顶点之间的中点提供了命名锚点：
 
 ```openscad,Med
 include <BOSL2/std.scad>
@@ -716,15 +701,12 @@ star(n=5, step=2, d=40)
     show_anchors(std=false);
 ```
 
+#### 2D 水滴形 / Teardrop2D
 
-
-#### Teardrop2D
-
-Often when 3D printing, you may want to make a circular hole in a vertical wall.  If the hole is
-too big, however, the overhang at the top of the hole can cause problems with printing on an
-FDM/FFF printer.  If you don't want to use support material, you can just use the teardrop shape.
-The `teardrop2d()` module will let you make a 2D version of the teardrop shape, so that you can
-extrude it later:
+在 3D 打印时，您可能需要在垂直墙上制作一个圆形孔。  
+然而，如果孔太大，其顶部的悬垂可能会在 FDM/FFF 打印机上导致打印问题。  
+如果您不想使用支撑材料，可以使用水滴形状代替。  
+`teardrop2d()` 模块可以生成 2D 版本的水滴形状，以便之后对其进行拉伸：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -736,15 +718,14 @@ include <BOSL2/std.scad>
 teardrop2d(d=50);
 ```
 
-The default overhang angle is 45 degrees, but you can adjust that with the `ang=` argument:
+默认的悬垂角为 45 度，但您可以通过 `ang=` 参数进行调整：
 
 ```openscad
 include <BOSL2/std.scad>
 teardrop2d(d=50, ang=30);
 ```
 
-If you prefer to flatten the top of the teardrop, to encourage bridging, you can use the `cap_h=`
-argument:
+如果您希望将水滴顶部弄平以便于桥接，可以使用 `cap_h=` 参数：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -756,8 +737,7 @@ include <BOSL2/std.scad>
 teardrop2d(d=50, ang=30, cap_h=30);
 ```
 
-You can use `anchor=` and `spin=`, just like with other attachable shapes.  However, the anchor
-points are based on the furthest extents of the shape, and may not be where you expect them:
+您可以像使用其他可附加形状一样使用 `anchor=` 和 `spin=`。然而，锚点是基于形状的最远范围，可能并非您所期望的位置：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -765,18 +745,17 @@ teardrop2d(d=50, ang=30, cap_h=30)
     show_anchors();
 ```
 
+#### 粘连圆形 / Glued Circles
 
-#### Glued Circles
-
-A more unusal shape that BOSL2 provides is Glued Circles.  It's basically a pair of circles,
-connected by what looks like a gloopy glued miniscus:
+BOSL2 提供了一种更不常见的形状：粘连圆形（Glued Circles）。  
+它本质上是两圈圆形，通过类似胶水状的弯月形连接起来：
 
 ```openscad
 include <BOSL2/std.scad>
 glued_circles(d=30, spread=40);
 ```
 
-The `r=`/`d=` arguments can specify the radius or diameter of the two circles:
+`r=` / `d=` 参数可用于指定两个圆的半径或直径：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -788,7 +767,7 @@ include <BOSL2/std.scad>
 glued_circles(d=40, spread=45);
 ```
 
-The `spread=` argument specifies the distance between the centers of the two circles:
+`spread=` 参数用于指定两个圆心之间的距离：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -800,7 +779,7 @@ include <BOSL2/std.scad>
 glued_circles(d=30, spread=40);
 ```
 
-The `tangent=` argument gives the angle of the tangent of the meniscus on the two circles:
+`tangent=` 参数指定弯月形在两个圆上的切线角度：
 
 ```openscad
 include <BOSL2/std.scad>
@@ -817,7 +796,7 @@ include <BOSL2/std.scad>
 glued_circles(d=30, spread=30, tangent=-20);
 ```
 
-One useful thing you can do is to string a few `glued_circle()`s in a line then extrude them to make a ribbed wall:
+一个有用的操作是将几个 `glued_circle()` 排成一行，然后对它们进行拉伸，生成带肋的墙体：
 
 ```openscad-3D
 include <BOSL2/std.scad>
@@ -827,8 +806,7 @@ linear_extrude(height=50,convexity=16,center=true)
         glued_circles(d=s, spread=s*sqrt(2), tangent=45);
 ```
 
-You can use `anchor=` and `spin=`, just like with other attachable shapes.  However, the anchor
-points are based on the furthest extents of the shape, and may not be where you expect them:
+您可以像使用其他可附加形状一样使用 `anchor=` 和 `spin=`。然而，锚点是基于形状的最远范围，可能并非您所期望的位置：
 
 ```openscad
 include <BOSL2/std.scad>
