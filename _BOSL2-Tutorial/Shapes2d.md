@@ -11,7 +11,6 @@ nav_order: 1.1
 ## Primitives / 基本形状
 There are two built-in 2D primitive shapes that OpenSCAD provides: `square()`, and `circle()`.
 You can still use them in the familiar ways that OpenSCAD provides:
-
 OpenSCAD 提供了两种内置的 2D 基本形状：`square()` 和 `circle()`。
 您仍然可以按照 OpenSCAD 提供的常规方式使用它们：
 
