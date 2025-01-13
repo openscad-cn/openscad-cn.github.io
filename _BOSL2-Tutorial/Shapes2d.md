@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "1.1. 2D形状"
+title:  "2D形状"
 nav_order: 1.1
 ---
 
-# 2D Shapes Tutorial
+# 2D形状
 
 {: .no_toc }
 
@@ -36,7 +36,7 @@ circle(d=100, $fn=8);
 这些模块在 BOSL2 库中得到了以下三种增强：锚定（Anchoring）、旋转（Spin）和可附加性（Attachability）。
 
 
-#### 锚定 / Anchoring:
+## 锚定 / Anchoring:
 
 当你创建一个 `square()` 时，你可以指定哪个角或边锚定在原点。  
 这可以替代 `center=` 参数，并提供了更大的灵活性。  
@@ -116,7 +116,7 @@ circle(d=50)
     show_anchors();
 ```
 
-#### 旋转 / Spin:
+## 旋转 / Spin:
 
 `square()` 和 `circle()` 的第二个增强功能是支持旋转（Spin）。  
 创建形状时，可以通过 `spin=` 参数使其在原地旋转。  
@@ -151,7 +151,7 @@ circle(d=50, $fn=6, anchor=LEFT, spin=15);
 ```
 
 
-#### 可附加性 / Attachability:
+## 可附加性 / Attachability:
 
 `square()` 和 `circle()` 的第三个增强功能是可以通过锚点以多种方式将它们连接在一起。  
 这可以通过将一个形状设为你想要连接的另一个形状的子模块来实现。  
@@ -291,7 +291,7 @@ circle(d=50)
         #square([10,40], center=true);
 ```
 
-#### 矩形 / Rectangles
+## 矩形 / Rectangles
 
 BOSL2 库提供了 `square()` 的替代模块，名为 `rect()`，它支持更多功能。  
 你可以像使用 `square()` 一样使用它，但它还提供了扩展功能。  
@@ -343,7 +343,7 @@ include <BOSL2/std.scad>
 rect([60,40], rounding=[5,0,10,0], chamfer=[0,5,0,15]);
 ```
 
-#### 椭圆 / Ellipses
+## 椭圆 / Ellipses
 
 BOSL2 库还提供了 `circle()` 的增强版本，称为 `ellipse()`。你可以像使用 `circle()` 一样使用它，但它还提供了扩展功能。例如，它允许你对尺寸进行更多的控制。
 
@@ -406,7 +406,7 @@ ellipse(d=50)
         ellipse(d=30);
 ```
 
-#### 直角三角形 / Right Triangles
+## 直角三角形 / Right Triangles
 
 BOSL2 库通过 `right_triangle()` 模块提供了一种简单的方法来创建 2D 直角三角形：
 
@@ -451,7 +451,7 @@ include <BOSL2/std.scad>
 right_triangle([40,30], anchor=FWD+RIGHT);
 ```
 
-#### 梯形 / Trapezoids
+## 梯形 / Trapezoids
 
 OpenSCAD 并未提供简单的方法来创建一般的 2D 三角形、梯形或平行四边形。  
 BOSL2 库通过 `trapezoid()` 模块可以生成这些形状。
@@ -514,7 +514,7 @@ trapezoid(w1=30, w2=50, h=50)
     show_anchors();
 ```
 
-#### Regular N-Gons
+## 正N 边形
 
 OpenSCAD 允许你通过将 `circle()` 与 `$fn` 参数结合使用来创建规则的 N 边形（如五边形、六边形等）。尽管这种方法简洁，但初看可能不太直观：
 
@@ -616,7 +616,7 @@ pentagon(d=30)
 ```
 
 
-#### 星形 / Stars
+## 星形 / Stars
 
 BOSL2 库将星形作为一种基本支持的形状。  
 星形可以有任意数量的点。  
@@ -701,7 +701,7 @@ star(n=5, step=2, d=40)
     show_anchors(std=false);
 ```
 
-#### 2D 水滴形 / Teardrop2D
+## 2D 水滴形 / Teardrop2D
 
 在 3D 打印时，您可能需要在垂直墙上制作一个圆形孔。  
 然而，如果孔太大，其顶部的悬垂可能会在 FDM/FFF 打印机上导致打印问题。  
@@ -745,7 +745,7 @@ teardrop2d(d=50, ang=30, cap_h=30)
     show_anchors();
 ```
 
-#### 粘连圆形 / Glued Circles
+## 粘连圆形 / Glued Circles
 
 BOSL2 提供了一种更不常见的形状：粘连圆形（Glued Circles）。  
 它本质上是两圈圆形，通过类似胶水状的弯月形连接起来：

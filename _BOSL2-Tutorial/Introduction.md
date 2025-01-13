@@ -23,7 +23,7 @@ nav_order: 0
 #### 变换 / Transforms Tutorial
 #### 分布器 / Distributors Tutorial
 #### 变异器 / Mutators Tutorial
-#### 附件 / Attachments Tutorial
+#### 附加 / Attachments Tutorial
 
 ### 进阶教程 / Advanced Tutorials
 #### 路径与区域 / Paths and Regions Tutorial

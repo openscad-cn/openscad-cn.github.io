@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "2.3. Rounding"
+title:  "立方体圆角"
 nav_order: 2.3
 ---
 
-# Rounding the Cube
+# 立方体圆角
 
 One of the shape primitives you'll use most often in your OpenSCAD designs is the cube.  Rounding the edges of cube-like objects impacts both the visual appeal and functional aspects of the final design. The BOSL2 library provides a variety of methods for rounding edges and corners.
 

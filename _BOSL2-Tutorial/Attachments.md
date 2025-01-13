@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "1.6. 吸附"
+title:  "附加"
 nav_order: 1.6
 ---
-# Attachments Tutorial
+# 附加
 
 <!-- TOC -->
 

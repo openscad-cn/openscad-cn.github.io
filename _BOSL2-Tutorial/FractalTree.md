@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "3.1. Fractal Tree"
+title:  "分形树"
 nav_order: 3.1
 ---
-# Fractal Tree Tutorial
+# 分形树
 
 <!-- TOC -->
 

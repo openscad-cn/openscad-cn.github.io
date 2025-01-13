@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "1.4. 分布"
+title:  "分布器"
 nav_order: 1.4
 ---
-# Distributors Tutorial
+# 分布器
 
 <!-- TOC -->
 

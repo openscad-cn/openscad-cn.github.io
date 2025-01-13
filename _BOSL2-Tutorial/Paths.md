@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "2.1. Paths, Polygons and Regions"
+title:  "路径与区域"
 nav_order: 2.1
 ---
-# Paths, Polygons and Regions Tutorial
+# 路径与区域
 
 <!-- TOC -->
 

@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "2.4. Béziers"
+title:  "初学者的贝塞尔曲线"
 nav_order: 2.4
 ---
-# Béziers for Beginners
+# 初学者的贝塞尔曲线
 
 Bézier curves are parametric curves defined by polynomial equations. To work with Béziers in OpenSCAD we need to load the Bézier extension BOSL2/beziers.scad in addition to BOSL2/std.scad.
 

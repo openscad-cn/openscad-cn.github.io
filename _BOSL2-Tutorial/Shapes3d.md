@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "1.2. 3D 图形"
+title:  "3D形状"
 nav_order: 1.2
 ---
-# Basic Shapes Tutorial
+# 3D形状
 
 <!-- TOC -->
 

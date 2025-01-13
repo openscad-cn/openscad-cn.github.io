@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "2.2. VNF"
+title:  "VNF（如何分段构建多面体）"
 nav_order: 2.2
 ---
-# VNF Tutorial
+# VNF（如何分段构建多面体）
 
 <!-- TOC -->
 
