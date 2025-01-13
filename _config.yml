@@ -44,6 +44,10 @@ collections:
     output: true
     sort_by: order
     permalink: /OpenSCAD-Tutorial/:path/
+  BOSL2-Tutorial:
+    output: true
+    sort_by: order
+    permalink: /BOSL2-Tutorial/:path/
 
 just_the_docs:
   # Define which collections are used in just-the-docs
@@ -52,6 +56,9 @@ just_the_docs:
     OpenSCAD-Tutorial:
       # Give the collection a name
       name: OpenSCAD教程
+    BOSL2-Tutorial:
+      # Give the collection a name
+      name: BOSL2教程
 
 callouts_level: quiet # or loud
 callouts:
