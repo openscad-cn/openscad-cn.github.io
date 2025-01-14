@@ -5,396 +5,381 @@ nav_order: 1.2
 ---
 # 3D形状
 
-<!-- TOC -->
+{: .no_toc }
 
-## Primitives
-There are 3 built-in 3D primitive shapes that OpenSCAD provides: `cube()`, `cylinder()`,
-and `sphere()`.  The BOSL2 library extends and provides alternative to these shapes so
-that they support more features, and more ways to simply reorient them.
+## 目录
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+## 基本形状 / Primitives
+
+OpenSCAD 提供了三种内置的 3D 基本形状：`cube()`、`cylinder()` 和 `sphere()`。  
+BOSL2 库对这些形状进行了扩展，并提供了替代方案，使其支持更多功能以及更简单的重新定位方式。
 
 
-### 3D Cubes
-BOSL2 overrides the built-in `cube()` module.  It still can be used as you expect from the built-in:
 
-```openscad-3D
+## 3D 立方体 / 3D Cubes
+
+BOSL2 重写了内置的 `cube()` 模块。你仍然可以按照内置模块的方式使用它：
+
+
+```openscad
 include <BOSL2/std.scad>
 cube(100);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube(100, center=true);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube([50,40,20], center=true);
 ```
 
-It is also enhanced to allow you to anchor, spin, orient, and attach it.
+它还被增强，允许你对其进行锚定（anchor）、旋转（spin）、定向（orient）和附加（attach）。
 
-You can use `anchor=` similarly to how you use it with `rect()` or `oval()`,
-except you can also anchor vertically in 3D, allowing anchoring to faces, edges,
-and corners:
+你可以像在 `rect()` 或 `oval()` 中使用 `anchor=` 一样使用它，不同之处在于，你还可以在 3D 中垂直锚定，从而支持锚定到面、边和角：
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 cube([50,40,20], anchor=BOTTOM);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube([50,40,20], anchor=TOP+BACK);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube([50,40,20], anchor=TOP+FRONT+LEFT);
 ```
 
-You can use `spin=` to rotate around the Z axis **after** anchoring:
+你可以使用 `spin=` 参数在锚定后围绕 Z 轴旋转：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube([50,40,20], anchor=FRONT, spin=30);
 ```
 
-3D objects also can be given an `orient=` argument as a vector, pointing
-to where the top of the shape should be rotated towards.
+3D 对象还可以通过 `orient=` 参数指定一个向量，用于指向形状顶部应该旋转到的位置。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube([50,40,20], orient=UP+BACK+RIGHT);
 ```
 
-If you use `anchor=`, `spin=`, and `orient=` together, the anchor is performed
-first, then the spin, then the orient:
+如果同时使用 `anchor=`、`spin=` 和 `orient=`，操作顺序是：先执行锚定（anchor），然后旋转（spin），最后定向（orient）：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube([50,40,20], anchor=FRONT);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube([50,40,20], anchor=FRONT, spin=45);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube([50,40,20], anchor=FRONT, spin=45, orient=UP+FWD+RIGHT);
 ```
 
-BOSL2 provides a `cuboid()` module that expands on `cube()`, by providing
-rounding and chamfering of edges.  You can use it similarly to `cube()`,
-except that `cuboid()` centers by default.
+BOSL2 提供了一个 `cuboid()` 模块，在 `cube()` 的基础上进行了扩展，增加了边缘圆角和斜切功能。你可以像使用 `cube()` 一样使用它，不同的是 `cuboid()` 默认是居中的。
 
-You can round the edges with the `rounding=` argument:
+你可以通过 `rounding=` 参数为边缘添加圆角：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=20);
 ```
 
-Similarly, you can chamfer the edges with the `chamfer=` argument:
+同样地，你可以通过 `chamfer=` 参数对边缘进行斜切：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], chamfer=10);
 ```
 
-You can round only some edges, by using the `edges=` arguments.  It can be
-given a few types of arguments. If you gave it a vector pointed at a face,
-it will only round the edges surrounding that face:
+你可以通过使用 `edges=` 参数仅对某些边进行圆角处理。该参数可以接受多种类型的值。如果传递的是指向某个面的向量，那么它将只对该面周围的边进行圆角处理：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=20, edges=TOP);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=20, edges=RIGHT);
 ```
 
-If you give `edges=` a vector pointing at a corner, it will round all edges
-that meet at that corner:
+如果你为 `edges=` 提供一个指向角的向量，它将对该角处交汇的所有边进行圆角处理：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=20, edges=RIGHT+FRONT+TOP);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=20, edges=LEFT+FRONT+TOP);
 ```
 
-If you give `edges=` a vector pointing at an edge, it will round only that edge:
+如果你为 `edges=` 提供一个指向某条边的向量，它将仅对那条边进行圆角处理：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=10, edges=FRONT+TOP);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=10, edges=RIGHT+FRONT);
 ```
 
-If you give the string "X", "Y", or "Z", then all edges aligned with the specified
-axis will be rounded:
+如果你传递字符串 "X"、"Y" 或 "Z" 给 `edges=`，则所有与指定轴对齐的边都将被圆角处理：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=10, edges="X");
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=10, edges="Y");
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=10, edges="Z");
 ```
 
-If you give a list of edge specs, then all edges referenced in the list will
-be rounded:
+如果你提供一个边规格的列表给 `edges=`，则列表中引用的所有边都会被圆角处理：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=10, edges=[TOP,"Z",BOTTOM+RIGHT]);
 ```
 
-The default value for `edges=` is `EDGES_ALL`, which is all edges.  You can also
-give an `except_edges=` argument that specifies edges to NOT round:
+`edges=` 的默认值是 `EDGES_ALL`，即对所有边进行圆角处理。你还可以使用 `except_edges=` 参数，指定不需要进行圆角处理的边：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=10, except_edges=BOTTOM+RIGHT);
 ```
 
-You can give the `except_edges=` argument any type of argument that you can
-give to `edges=`:
+你可以为 `except_edges=` 参数提供任何 `edges=` 参数支持的类型：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=10, except_edges=[BOTTOM,"Z",TOP+RIGHT]);
 ```
 
-You can give both `edges=` and `except_edges=`, to simplify edge specs:
+你可以同时使用 `edges=` 和 `except_edges=`，以简化边的规格定义：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=10, edges=[TOP,FRONT], except_edges=TOP+FRONT);
 ```
 
-You can specify what edges to chamfer similarly:
+你也可以用类似的方法指定需要斜切的边：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], chamfer=10, edges=[TOP,FRONT], except_edges=TOP+FRONT);
 ```
 
+## 3D 圆柱 / 3D Cylinder
 
-### 3D Cylinder
-BOSL2 overrides the built-in `cylinder()` module.  It still can be used as you
-expect from the built-in:
+BOSL2 重写了内置的 `cylinder()` 模块。 你仍然可以按照内置模块的方式使用它：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cylinder(r=50,h=50);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cylinder(r=50,h=50,center=true);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cylinder(d=100,h=50,center=true);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cylinder(d1=100,d2=80,h=50,center=true);
 ```
 
-You can also anchor, spin, orient, and attach like the `cuboid()` module:
+你还可以像使用 `cuboid()` 模块一样，对其进行锚定（anchor）、旋转（spin）、定向（orient）和附加（attach）：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cylinder(r=50, h=50, anchor=TOP+FRONT);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cylinder(r=50, h=50, anchor=BOTTOM+LEFT);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cylinder(r=50, h=50, anchor=BOTTOM+LEFT, spin=30);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cylinder(r=50, h=50, anchor=BOTTOM, orient=UP+BACK+RIGHT);
 ```
 
+BOSL2 提供了一个 `cyl()` 模块，在 `cylinder()` 的基础上进行了扩展，增加了边缘圆角和斜切功能。你可以像使用 `cylinder()` 一样使用它，不同的是 `cyl()` 默认将圆柱居中。
 
-BOSL2 provides a `cyl()` module that expands on `cylinder()`, by providing
-rounding and chamfering of edges.  You can use it similarly to `cylinder()`,
-except that `cyl()` centers the cylinder by default.
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cyl(r=60, l=100);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cyl(d=100, l=100);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cyl(d=100, l=100, anchor=TOP);
 ```
 
-You can round the edges with the `rounding=` argument:
+你可以通过 `rounding=` 参数对边缘进行圆角处理：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cyl(d=100, l=100, rounding=20);
 ```
 
-Similarly, you can chamfer the edges with the `chamfer=` argument:
+同样地，你可以通过 `chamfer=` 参数对边缘进行斜切处理：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cyl(d=100, l=100, chamfer=10);
 ```
 
-You can specify rounding and chamfering for each end individually:
+你可以分别为圆柱的每个端面单独指定圆角和斜切：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cyl(d=100, l=100, rounding1=20);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cyl(d=100, l=100, rounding2=20);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cyl(d=100, l=100, chamfer1=10);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cyl(d=100, l=100, chamfer2=10);
 ```
 
-You can even mix and match rounding and chamfering:
+你甚至可以将圆角和斜切混合使用：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cyl(d=100, l=100, rounding1=20, chamfer2=10);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cyl(d=100, l=100, rounding2=20, chamfer1=10);
 ```
 
 
-### 3D Spheres
-BOSL2 overrides the built-in `sphere()` module.  It still can be used as you
-expect from the built-in:
+## 3D 球体 / 3D Spheres
 
-```openscad-3D
+BOSL2 重写了内置的 `sphere()` 模块。  你仍然可以按照内置模块的方式使用它：
+
+
+```openscad
 include <BOSL2/std.scad>
 sphere(r=50);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 sphere(d=100);
 ```
 
-You can anchor, spin, and orient `sphere()`s, much like you can with `cylinder()`
-and `cube()`:
+你可以像使用 `cylinder()` 和 `cube()` 一样，对 `sphere()` 进行锚定（anchor）、旋转（spin）和定向（orient）：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 sphere(d=100, anchor=FRONT);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 sphere(d=100, anchor=FRONT, spin=30);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 sphere(d=100, anchor=BOTTOM, orient=RIGHT+TOP);
 ```
 
-BOSL2 also provides `spheroid()`, which enhances `sphere()` with a few features
-like the `circum=` and `style=` arguments:
+BOSL2 还提供了 `spheroid()` 模块，它在 `sphere()` 的基础上增加了一些功能，如 `circum=` 和 `style=` 参数：
 
-You can use the `circum=true` argument to force the sphere to circumscribe the
-ideal sphere, as opposed to the default inscribing:
+你可以使用 `circum=true` 参数强制让球体外接理想球体，而不是默认的内接：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 spheroid(d=100, circum=true);
 ```
 
-The `style=` argument can choose the way that the sphere will be constructed:
-The "orig" style matches the `sphere()` built-in's construction. 
+`style=` 参数可以选择球体的构造方式："orig" 样式与内置的 `sphere()` 构造方式一致。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 spheroid(d=100, style="orig", $fn=20);
 ```
 
-The "aligned" style will ensure that there is a vertex at each axis extrema,
-so long as `$fn` is a multiple of 4.
+"aligned" 样式会确保在每个坐标轴的极值点都有一个顶点，前提是 `$fn` 是 4 的倍数。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 spheroid(d=100, style="aligned", $fn=20);
 ```
 
-The "stagger" style will stagger the triangulation of the vertical rows:
+"stagger" 样式会使垂直行的三角化呈交错排列：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 spheroid(d=100, style="stagger", $fn=20);
 ```
 
-The "icosa" style will make for roughly equal-sized triangles for the entire
-sphere surface, based on subdividing an icosahedron.  This style will round the
-effective `$fn` to a multiple of 5 when constructing the spheroid:
+"icosa" 样式通过细分二十面体来生成整个球体表面近似等大的三角形。在构建球体时，此样式会将有效的 `$fn` 调整为 5 的倍数：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 spheroid(d=100, style="icosa", $fn=20);
 ```
 
-The "octa" style will also make for roughly equal-sized triangles for the entire
-sphere surface, but based on subdividing an octahedron.  This is useful in that it
-guarantees vertices at the axis extrema.  This style will round the effective `$fn`
-to a multiple of 4 when constructing the spheroid:
+"octa" 样式同样会为整个球体表面生成近似等大的三角形，但它是通过细分八面体实现的。这一样式的好处是能确保顶点位于坐标轴的极值点。在构建球体时，此样式会将有效的 `$fn` 调整为 4 的倍数：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 spheroid(d=100, style="octa", $fn=20);
 ```
