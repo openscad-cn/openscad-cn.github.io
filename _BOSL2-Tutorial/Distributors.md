@@ -55,7 +55,7 @@ ycopies(20, n=5) sphere(d=10);
 
 同样地，`zcopies()` 会沿 Z 轴生成一排均匀间隔的形状副本。例如，要沿 Z 轴生成 5 个球体，每个球体间隔 20 个单位，可以这样写：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 zcopies(20, n=5) sphere(d=10);
 ```
@@ -72,7 +72,7 @@ include <BOSL2/std.scad>
 ycopies(20) sphere(d=10);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 zcopies(20) sphere(d=10);
 ```
@@ -89,7 +89,7 @@ include <BOSL2/std.scad>
 ycopies(l=100, n=5) sphere(d=10);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 zcopies(l=100, n=5) sphere(d=10);
 ```
@@ -110,21 +110,21 @@ ycopies(20, n=5, sp=[0,0,0]) sphere(d=10);
 
 对于 `zcopies()`，副本的排列将从起始点向上延伸：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 zcopies(20, n=5, sp=[0,0,0]) sphere(d=10);
 ```
 
 如果你需要沿任意直线分布副本，可以使用 `line_copies()` 命令。你可以通过 `spacing=` 参数同时指定直线的方向向量和副本的间隔：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 line_copies(spacing=(BACK+RIGHT)*20, n=5) sphere(d=10);
 ```
 
 通过 `p1=` 参数，你可以指定直线的起点：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 line_copies(spacing=(BACK+RIGHT)*20, n=5, p1=[0,0,0]) sphere(d=10);
 ```
@@ -208,7 +208,7 @@ grid_copies(n=[4,5], size=[100,80]) sphere(d=10);
 
 最后，`grid_copies()` 命令还允许你提供一个多边形或区域形状，用于填充项目。只有网格中中心点位于该多边形或区域内的项目才会被创建。例如，要用项目填充一个星形区域，可以这样实现：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 poly = [for (i=[0:11]) polar_to_xy(50*(i%2+1), i*360/12-90)];
 grid_copies(5, stagger=true, inside=poly) {
@@ -217,9 +217,11 @@ grid_copies(5, stagger=true, inside=poly) {
 ```
 
 
-### Rotational Distributors
-You can make six copies of a cone, rotated around a center:
-```openscad-3D
+### 旋转分布器/Rotational Distributors
+
+您可以围绕中心旋转一个锥体，并创建六个副本：
+
+```openscad
 include <BOSL2/std.scad>
 zrot_copies(n=6) yrot(90) cylinder(h=50,d1=0,d2=20);
 ```
