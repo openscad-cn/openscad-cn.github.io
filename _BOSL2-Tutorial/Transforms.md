@@ -5,20 +5,26 @@ nav_order: 1.3
 ---
 # 变换
 
-<!-- TOC -->
+{: .no_toc }
 
-## Translation
-The `translate()` command is very simple:
+## 目录
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+## 平移 / Translation
+
+`translate()` 命令非常简单：
+
 ```openscad
 include <BOSL2/std.scad>
 #sphere(d=20);
 translate([0,0,30]) sphere(d=20);
 ```
 
-But at a glance, or when the formula to calculate the move is complex, it can be difficult to see
-just what axis is being moved along, and in which direction.  It's also a bit verbose for such a
-frequently used command.  For these reasons, BOSL2 provides you with shortcuts for each direction.
-These shortcuts are `up()`, `down()`, `fwd()`, `back()`, `left()`, and `right()`:
+但是，在快速浏览时或当用于计算移动的公式较为复杂时，很难看出沿哪个轴移动以及移动的方向。此外，对于如此常用的命令来说，它也显得有些繁琐。因此，BOSL2 为每个方向提供了快捷命令：`up()`、`down()`、`fwd()`、`back()`、`left()` 和 `right()`：
+
 ```openscad
 include <BOSL2/std.scad>
 #sphere(d=20);
@@ -55,15 +61,17 @@ include <BOSL2/std.scad>
 right(30) sphere(d=20);
 ```
 
-There is also a more generic `move()` command that can work just like `translate()`:
+还有一个更通用的命令 `move()`，它的作用与 `translate()` 相同：
 ```openscad
 include <BOSL2/std.scad>
 #sphere(d=20);
 move([30,-10]) sphere(d=20);
 ```
 
-## Scaling
-The `scale()` command is also fairly simple:
+## 缩放 / Scaling
+
+`scale()` 命令也相当简单：
+
 ```openscad
 include <BOSL2/std.scad>
 scale(2) cube(10, center=true);
@@ -74,8 +82,8 @@ include <BOSL2/std.scad>
 scale([1,2,3]) cube(10, center=true);
 ```
 
-If you want to only change the scaling on one axis, though, BOSL2 provides clearer
-commands to do just that; `xscale()`, `yscale()`, and `zscale()`:
+如果你只想更改某个轴上的缩放比例，BOSL2 提供了更直观的命令来实现：`xscale()`、`yscale()` 和 `zscale()`：
+
 ```openscad
 include <BOSL2/std.scad>
 xscale(2) cube(10, center=true);
@@ -90,15 +98,17 @@ zscale(2) cube(10, center=true);
 ```
 
 
-## Rotation
-The `rotate()` command is fairly straightforward:
+## 旋转 / Rotation
+
+`rotate()` 命令非常直观：
+
 ```openscad
 include <BOSL2/std.scad>
 rotate([0,30,0]) cube(20, center=true);
 ```
 
-It is also a bit verbose, and can, at a glance, be difficult to tell just how it is rotating.
-BOSL2 provides shortcuts for rotating around each axis, for clarity; `xrot()`, `yrot()`, and `zrot()`:
+它也显得有些冗长，并且在快速浏览时可能难以判断旋转的具体方向。为了更清晰，BOSL2 提供了用于绕各轴旋转的快捷命令：`xrot()`、`yrot()` 和 `zrot()`：
+
 ```openscad
 include <BOSL2/std.scad>
 xrot(30) cube(20, center=true);
@@ -114,14 +124,15 @@ include <BOSL2/std.scad>
 zrot(30) cube(20, center=true);
 ```
 
-The `rot()` command is a more generic rotation command, and shorter to type than `rotate()`:
+`rot()` 是一个更通用的旋转命令，比 `rotate()` 更简短易用：
+
 ```openscad
 include <BOSL2/std.scad>
 rot([0,30,15]) cube(20, center=true);
 ```
 
-All of the rotation shortcuts can take a `cp=` argument, that lets you specify a
-centerpoint to rotate around:
+所有旋转快捷命令都可以接受一个 `cp=` 参数，用于指定旋转的中心点：
+
 ```openscad
 include <BOSL2/std.scad>
 cp = [0,0,40];
@@ -146,43 +157,46 @@ color("blue") move(cp) sphere(d=3);
 zrot(45, cp=cp) cube(20, center=true);
 ```
 
-You can also do a new trick with it.  You can rotate from pointing in one direction, towards another.
-You give these directions using vectors:
+你还可以使用一个新技巧：从一个方向旋转到另一个方向。你可以使用向量来指定这些方向：
+
 ```openscad
 include <BOSL2/std.scad>
 #cylinder(d=10, h=50);
 rot(from=[0,0,1], to=[1,0,1]) cylinder(d=10, h=50);
 ```
 
-There are several direction vectors constants and aliases you can use for clarity:
+以下是一些可用的方向向量常量和别名，以便更清晰地表示方向：
 
-Constant                       | Value        | Direction
------------------------------- | ------------ | --------------
-`CENTER`, `CTR`                | `[ 0, 0, 0]` | Centered
-`LEFT`                         | `[-1, 0, 0]` | Towards X-
-`RIGHT`                        | `[ 1, 0, 0]` | Towards X+
-`FWD`, `FORWARD`, `FRONT`      | `[ 0,-1, 0]` | Towards Y-
-`BACK`                         | `[ 0, 1, 0]` | Towards Y+
-`DOWN`, `BOTTOM`, `BOT`        | `[ 0, 0,-1]` | Towards Z-
-`UP`, `TOP`                    | `[ 0, 0, 1]` | Towards Z+
+常量                       | 值          | 方向  
+-------------------------- | ----------- | --------------  
+`CENTER`, `CTR`            | `[ 0, 0, 0]` | 居中  
+`LEFT`                     | `[-1, 0, 0]` | 指向 X-  
+`RIGHT`                    | `[ 1, 0, 0]` | 指向 X+  
+`FWD`, `FORWARD`, `FRONT`  | `[ 0,-1, 0]` | 指向 Y-  
+`BACK`                     | `[ 0, 1, 0]` | 指向 Y+  
+`DOWN`, `BOTTOM`, `BOT`    | `[ 0, 0,-1]` | 指向 Z-  
+`UP`, `TOP`                | `[ 0, 0, 1]` | 指向 Z+  
 
-This lets you rewrite the above vector rotation more clearly as:
+这使你可以更清晰地重写上述的向量旋转操作：
+
 ```openscad
 include <BOSL2/std.scad>
 #cylinder(d=10, h=50);
 rot(from=UP, to=UP+RIGHT) cylinder(d=10, h=50);
 ```
 
+## 镜像 / Mirroring
 
-## Mirroring
-The standard `mirror()` command works like this:
+标准的 `mirror()` 命令的用法如下：
+
 ```openscad
 include <BOSL2/std.scad>
 #yrot(60) cylinder(h=50, d1=20, d2=10);
 mirror([1,0,0]) yrot(60) cylinder(h=50, d1=20, d2=10);
 ```
 
-BOSL2 provides shortcuts for mirroring across the standard axes; `xflip()`, `yflip()`, and `zflip()`:
+BOSL2 提供了绕标准轴镜像的快捷命令：`xflip()`、`yflip()` 和 `zflip()`：
+
 ```openscad
 include <BOSL2/std.scad>
 #yrot(60) cylinder(h=50, d1=20, d2=10);
@@ -201,7 +215,8 @@ include <BOSL2/std.scad>
 zflip() cylinder(h=50, d1=20, d2=10);
 ```
 
-All of the flip commands can offset where the mirroring is performed:
+所有镜像命令都可以通过偏移来指定镜像操作的位置：
+
 ```openscad
 include <BOSL2/std.scad>
 #zrot(30) cube(20, center=true);
@@ -224,16 +239,10 @@ color("blue",0.25) down(20) cube([40,40,0.1], center=true);
 ```
 
 
-## Skewing
-One transform that OpenSCAD does not perform natively is skewing.
-BOSL2 provides the `skew()` command for that.  You give it multipliers
-for the skews you want to perform.  The arguments used all start with `s`,
-followed by the axis you want to skew along, followed by the axis that
-the skewing will increase along.  For example, to skew along the X axis as
-you get farther along the Y axis, use the `sxy=` argument.  If you give it
-a multiplier of `0.5`, then for each unit further along the Y axis you get,
-you will add `0.5` units of skew to the X axis.  Giving a negative multiplier
-reverses the direction it skews:
+## 倾斜 / Skewing
+
+OpenSCAD 原生并不支持倾斜变换。BOSL2 提供了 `skew()` 命令来实现这一功能。你可以为所需的倾斜操作提供倍率参数。这些参数的命名规则是以 `s` 开头，后接倾斜所在的轴，然后是倾斜随之增加的轴。例如，如果想沿着 X 轴倾斜，随着 Y 轴的距离增加，使用 `sxy=` 参数。如果设置倍率为 `0.5`，那么每沿 Y 轴增加一个单位，X 轴就会增加 `0.5` 单位的倾斜。如果给出负倍率，倾斜方向将会反转：
+
 ```openscad
 include <BOSL2/std.scad>
 skew(sxy=0.5) cube(10,center=false);
