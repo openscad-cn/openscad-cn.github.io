@@ -5,123 +5,131 @@ nav_order: 1.5
 ---
 # 变异器
 
-<!-- TOC -->
+{: .no_toc }
 
-## 3D Space Halving
-Sometimes you want to take a 3D shape like a sphere, and cut it in half.
-The BOSL2 library provides a number of ways to do this:
+## 目录
+{: .no_toc .text-delta }
 
-```openscad-3D
+1. TOC
+{:toc}
+
+## 3D 空间分割/3D Space Halving
+
+有时您可能希望将一个3D形状（如球体）切成两半。  
+BOSL2库提供了多种方法来实现这一点：
+
+
+```openscad
 include <BOSL2/std.scad>
 left_half()
   sphere(d=100);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 right_half()
   sphere(d=100);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 front_half()
   sphere(d=100);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 back_half()
   sphere(d=100);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 bottom_half()
   sphere(d=100);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 top_half()
   sphere(d=100);
 ```
 
-You can use the `half_of()` module if you want to split space in a way not aligned with an axis:
+您可以使用 `half_of()` 模块，如果您希望以非轴对齐的方式分割空间：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 half_of([-1,0,-1])
   sphere(d=100);
 ```
 
-The plane of dissection can be shifted along the axis of any of these operators:
+这些操作符的轴方向上可以移动分割平面：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 left_half(x=20)
   sphere(d=100);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 back_half(y=-20)
   sphere(d=100);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 bottom_half(z=20)
   sphere(d=100);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 half_of([-1,0,-1], cp=[20,0,20])
   sphere(d=100);
 ```
 
-By default, these operators can be applied to objects that fit in a cube 1000 on a side. If you need
-to apply these halving operators to objects larger than this, you can give the size in the `s=`
-argument:
+默认情况下，这些操作符可以应用于边长为1000的立方体内的对象。如果需要将这些分割操作符应用于更大的对象，可以通过 `s=` 参数指定大小：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 bottom_half(s=2000)
   sphere(d=1500);
 ```
 
-## 2D Plane Halving
-To cut 2D shapes in half, you will need to add the `planar=true` argument:
+## 2D 平面分割/2D Plane Halving
 
-```openscad-3D
+要将2D形状切成两半，您需要添加 `planar=true` 参数：
+
+```openscad
 include <BOSL2/std.scad>
 left_half(planar=true)
   circle(d=100);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 right_half(planar=true)
   circle(d=100);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 front_half(planar=true)
   circle(d=100);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 back_half(planar=true)
   circle(d=100);
 ```
 
-## Chained Mutators
-If you have a set of shapes that you want to do pair-wise hulling of, you can use `chain_hull()`:
+## 链式变换器/Chained Mutators
 
-```openscad-3D
+如果您有一组形状需要进行两两包络操作，可以使用 `chain_hull()`：
+
+```openscad
 include <BOSL2/std.scad>
 chain_hull() {
   cube(5, center=true);
@@ -131,41 +139,41 @@ chain_hull() {
 }
 ```
 
-## Extrusion Mutators
-The OpenSCAD `linear_extrude()` module can take a 2D shape and extrude it vertically in a line:
+## 拉伸变换器/Extrusion Mutators
 
-```openscad-3D
+OpenSCAD 的 `linear_extrude()` 模块可以将2D形状沿垂直方向拉伸成一条直线：
+
+```openscad
 include <BOSL2/std.scad>
 linear_extrude(height=30)
   zrot(45)
     square(40,center=true);
 ```
 
-The `rotate_extrude()` module can take a 2D shape and rotate it around the Z axis.
+`rotate_extrude()` 模块可以将2D形状绕Z轴旋转。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 rotate_extrude()
   left(50) zrot(45)
     square(40,center=true);
 ```
 
-In a similar manner, the BOSL2 `cylindrical_extrude()` module can take a 2d shape and extrude it
-out radially from the center of a cylinder:
+类似地，BOSL2 的 `cylindrical_extrude()` 模块可以将2D形状从圆柱的中心向外径向拉伸：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cylindrical_extrude(or=40, ir=35)
   text(text="Hello World!", size=10, halign="center", valign="center");
 ```
 
 
-## Offset Mutators
+## 偏移变换器/Offset Mutators
 
-### Minkowski Difference
-Openscad provides the `minkowski()` module to trace a shape over the entire surface of another shape:
+### Minkowski 差集/Minkowski Difference
+OpenSCAD 提供了 `minkowski()` 模块，用于在另一个形状的整个表面上追踪一个形状：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 minkowski() {
   union() {
@@ -177,10 +185,9 @@ minkowski() {
 }
 ```
 
-However, it doesn't provide the inverse of this operation; to remove a shape from the entire surface
-of another object.  For this, the BOSL2 library provides the `minkowski_difference()` module:
+然而，它并不提供该操作的逆操作，即从另一个对象的整个表面移除一个形状。对此，BOSL2 库提供了 `minkowski_difference()` 模块：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 minkowski_difference() {
   union() {
@@ -192,9 +199,9 @@ minkowski_difference() {
 }
 ```
 
-To perform a `minkowski_difference()` on 2D shapes, you need to supply the `planar=true` argument:
+要对2D形状执行 `minkowski_difference()` 操作，您需要提供 `planar=true` 参数：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 minkowski_difference(planar=true) {
   union() {
@@ -205,40 +212,43 @@ minkowski_difference(planar=true) {
 }
 ```
 
-### Round2d
-The `round2d()` module lets you take a 2D shape and round inside and outside corners.  The inner concave corners are rounded to the radius `ir=`, while the outer convex corners are rounded to the radius `or=`:
+### 2D圆角/Round2d
 
-```openscad-2D
+`round2d()` 模块允许您对2D形状的内外角进行圆角处理。内侧凹角通过半径 `ir=` 进行圆角处理，而外侧凸角通过半径 `or=` 进行圆角处理：
+
+
+```openscad
 include <BOSL2/std.scad>
 round2d(or=8)
   star(6, step=2, d=100);
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 round2d(ir=12)
   star(6, step=2, d=100);
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 round2d(or=8,ir=12)
   star(6, step=2, d=100);
 ```
 
-You can use `r=` to effectively set both `ir=` and `or=` to the same value:
+您可以使用 `r=` 来同时将 `ir=` 和 `or=` 设置为相同的值：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 round2d(r=8)
   star(6, step=2, d=100);
 ```
 
-### Shell2d
-With the `shell2d()` module, you can take an arbitrary shape, and get the shell outline of it.
-With a positive thickness, the shell is offset outwards from the original shape:
+### 2D外壳/Shell2d
 
-```openscad-2D
+使用 `shell2d()` 模块，您可以获取任意形状的外壳轮廓。对于正厚度，外壳会从原始形状向外偏移：
+
+
+```openscad
 include <BOSL2/std.scad>
 shell2d(thickness=5)
   star(5,step=2,d=100);
@@ -246,9 +256,9 @@ color("blue")
   stroke(star(5,step=2,d=100),closed=true);
 ```
 
-With a negative thickness, the shell if inset from the original shape:
+对于负厚度，外壳将从原始形状向内偏移：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 shell2d(thickness=-5)
   star(5,step=2,d=100);
@@ -256,9 +266,9 @@ color("blue")
   stroke(star(5,step=2,d=100),closed=true);
 ```
 
-You can give a pair of thickness values if you want it both inset and outset from the original shape:
+如果您希望外壳同时向内和向外偏移，可以提供一对厚度值：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 shell2d(thickness=[-5,5])
   star(5,step=2,d=100);
@@ -266,55 +276,55 @@ color("blue")
   stroke(star(5,step=2,d=100),closed=true);
 ```
 
-You can add rounding to the outside by passing a radius to the `or=` argument.
+您可以通过向 `or=` 参数传递一个半径值来为外部添加圆角。
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 shell2d(thickness=-5,or=5)
   star(5,step=2,d=100);
 ```
 
-If you need to pass different radii for the convex and concave corners of the outside, you can pass them as `or=[CONVEX,CONCAVE]`:
+如果您需要为外部的凸角和凹角传递不同的半径，可以将它们作为 `or=[CONVEX,CONCAVE]` 传递：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 shell2d(thickness=-5,or=[5,10])
   star(5,step=2,d=100);
 ```
 
-A radius of 0 can be used to specify no rounding:
+半径为 0 可用于指定不进行圆角处理：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 shell2d(thickness=-5,or=[5,0])
   star(5,step=2,d=100);
 ```
 
-You can add rounding to the inside by passing a radius to the `ir=` argument.
+您可以通过向 `ir=` 参数传递一个半径值来为内部添加圆角。
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 shell2d(thickness=-5,ir=5)
   star(5,step=2,d=100);
 ```
 
-If you need to pass different radii for the convex and concave corners of the inside, you can pass them as `ir=[CONVEX,CONCAVE]`:
+如果您需要为内部的凸角和凹角传递不同的半径，可以将它们作为 `ir=[CONVEX,CONCAVE]` 传递：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 shell2d(thickness=-5,ir=[8,3])
   star(5,step=2,d=100);
 ```
 
-You can use `or=` and `ir=` together to get nice combined rounding effects:
+您可以同时使用 `or=` 和 `ir=` 来获得良好的组合圆角效果：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 shell2d(thickness=-5,or=[7,2],ir=[7,2])
   star(5,step=2,d=100);
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 shell2d(thickness=-5,or=[5,0],ir=[5,0])
   star(5,step=2,d=100);
@@ -326,12 +336,12 @@ shell2d(thickness=-5,or=[5,0],ir=[5,0])
 (To be Written)
 
 
-## Color Manipulators
-The built-in OpenSCAD `color()` module can let you set the RGB color of an object, but it's often
-easier to select colors using other color schemes.  You can use the HSL or Hue-Saturation-Lightness
-color scheme with the `hsl()` module:
+## 颜色操作器/Color Manipulators
 
-```openscad-3D
+内置的 OpenSCAD `color()` 模块允许您设置对象的 RGB 颜色，但使用其他颜色模式通常更简单。  
+您可以使用 `hsl()` 模块通过 HSL（色相-饱和度-亮度）颜色模式选择颜色：
+
+```openscad
 include <BOSL2/std.scad>
 n = 10; size = 100/n;
 for (a=count(n), b=count(n), c=count(n)) {
@@ -342,9 +352,9 @@ for (a=count(n), b=count(n), c=count(n)) {
 }
 ```
 
-You can use the HSV or Hue-Saturation-Value color scheme with the `hsv()` module:
+您可以使用 `hsv()` 模块通过 HSV（色相-饱和度-明度）颜色模式选择颜色：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 n = 10; size = 100/n;
 for (a=count(n), b=count(n), c=count(n)) {
@@ -354,5 +364,3 @@ for (a=count(n), b=count(n), c=count(n)) {
   }
 }
 ```
-
-
