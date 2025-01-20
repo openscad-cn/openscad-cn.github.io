@@ -5,359 +5,312 @@ nav_order: 1.6
 ---
 # 附加
 
-<!-- TOC -->
+{: .no_toc }
 
-## Attachables
-BOSL2 introduces the concept of attachables.  You can do the following
-things with attachable shapes:
+## 目录
+{: .no_toc .text-delta }
 
-* Control where the shape appears and how it is oriented by anchoring and specifying orientation and spin
-* Position or attach shapes relative to parent objects
-* Tag objects and then control boolean operations based on their tags.
-* Change the color of objects so that child objects are different colors than their parents
+1. TOC
+{:toc}
 
-The various attachment features may seem complex at first, but 
-attachability is one of the most important features of the BOSL2
-library.  It enables you to position objects relative to other objects
-in your model instead of having to keep track of absolute positions.
-It makes models simpler, more intuitive, and easier to maintain.
+## 可附加对象/Attachables
 
-Almost all objects defined by BOSL2 are attachable.  In addition,
-BOSL2 overrides the built-in definitions for `cube()`, `cylinder()`,
-`sphere()`, `square()`, `circle()` and `text()` and makes them attachable as
-well.  However, some basic OpenSCAD built-in definitions are not
-attachable and will not work with the features described in this
-tutorial.  The non-attachables are `polyhedron()`, `linear_extrude()`,
-`rotate_extrude()`, `surface()`, `projection()` and `polygon()`.
-Some of these have attachable alternatives: `vnf_polyhedron()`,
-`linear_sweep()`, `rotate_sweep()`, and `region()`.  
+BOSL2 引入了可附加对象的概念。您可以对可附加形状执行以下操作：
 
+* 通过锚定和指定方向及旋转来控制形状的位置和方向
+* 相对于父对象定位或附加形状
+* 标记对象并根据其标记控制布尔运算
+* 更改对象的颜色，使子对象的颜色与其父对象不同
 
-## Anchoring
-Anchoring allows you to align a specified part of an object or point
-on an object with the origin.  The alignment point can be the center
-of a side, the center of an edge, a corner, or some other
-distinguished point on the object.  This is done by passing a vector
-or text string into the `anchor=` argument.  For roughly cubical
-or prismoidal shapes, that vector points in the general direction of the side, edge, or
-corner that will be aligned to.  For example, a vector of [1,0,-1] refers to the lower-right
-edge of the shape.  Each vector component should be -1, 0, or 1:
+各种附加功能起初可能看起来很复杂，但附加性是 BOSL2 库最重要的功能之一。  
+它使您能够将对象相对于模型中的其他对象进行定位，而无需跟踪绝对位置。  
+这使得模型更简单、更直观且更易于维护。
 
-```openscad-3D
+BOSL2 定义的几乎所有对象都是可附加的。此外，BOSL2 覆盖了内置的 `cube()`、`cylinder()`、`sphere()`、`square()`、`circle()` 和 `text()` 定义，并使它们也变得可附加。  
+然而，一些基本的 OpenSCAD 内置定义是不可附加的，无法使用本教程中描述的功能。这些不可附加的对象包括：`polyhedron()`、`linear_extrude()`、`rotate_extrude()`、`surface()`、`projection()` 和 `polygon()`。  
+其中一些具有可附加的替代方案，例如：`vnf_polyhedron()`、`linear_sweep()`、`rotate_sweep()` 和 `region()`。
+
+## 锚定/Anchoring
+
+锚定允许您将对象的指定部分或点与原点对齐。  
+对齐点可以是侧面的中心、边的中心、角点或对象上的其他特定点。  
+通过将一个向量或文本字符串传递给 `anchor=` 参数即可完成此操作。  
+对于大致立方或棱柱形的形状，该向量指向将对齐的侧面、边或角的大致方向。例如，向量 `[1,0,-1]` 指代形状的右下边。  
+每个向量分量的值应为 -1、0 或 1：
+
+```openscad
 include <BOSL2/std.scad>
 // Anchor at upper-front-left corner
 cube([40,30,50], anchor=[-1,-1,1]);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 // Anchor at upper-right edge
 cube([40,30,50], anchor=[1,0,1]);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 // Anchor at bottom face
 cube([40,30,50], anchor=[0,0,-1]);
 ```
 
-Since manually written vectors are not very intuitive, BOSL2 defines some standard directional
-vector constants that can be added together:
+由于手动编写向量并不直观，BOSL2 定义了一些可以组合的标准方向向量常量：
 
-Constant | Direction | Value
+常量 | 方向 | 值
 -------- | --------- | -----------
 `LEFT`   | X-        | `[-1, 0, 0]`
 `RIGHT`  | X+        | `[ 1, 0, 0]`
 `FRONT`/`FORWARD`/`FWD` | Y− | `[ 0, −1, 0]`
 `BACK`   | Y+        | `[ 0, 1, 0]`
-`BOTTOM`/`BOT`/`DOWN` | Z− (Y− in 2D) | `[ 0, 0, −1]` (`[0, −1]` in 2D.)
-`TOP`/`UP` | Z+ (Y+ in 2D)      | `[ 0, 0, 1]` (`[0, 1]` in 2D.)
-`CENTER`/`CTR` | Centered | `[ 0, 0, 0]`
+`BOTTOM`/`BOT`/`DOWN` | Z−（2D 中为 Y−）| `[ 0, 0, −1]`（2D 中为 `[0, −1]`）
+`TOP`/`UP` | Z+（2D 中为 Y+）| `[ 0, 0, 1]`（2D 中为 `[0, 1]`）
+`CENTER`/`CTR` | 居中 | `[ 0, 0, 0]`
 
-If you want a vector pointing towards the bottom−left edge, just add the `BOTTOM` and `LEFT` vector
-constants together like `BOTTOM + LEFT`.  This will result in a vector of `[−1,0,−1]`.  You can pass
-that to the `anchor=` argument for a clearly understandable anchoring:  
+如果您需要一个指向左下边缘的向量，只需将 `BOTTOM` 和 `LEFT` 向量常量相加，例如 `BOTTOM + LEFT`。  
+这将得到一个向量 `[−1,0,−1]`。您可以将其传递给 `anchor=` 参数，以实现清晰可理解的锚定：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube([40,30,50], anchor=BACK+TOP);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube([40,30,50], anchor=FRONT);
 ```
 
 ---
 
-For cylindrical type attachables, the Z component of the vector will be −1, 0, or 1, referring
-to the bottom rim, the middle side, or the top rim of the cylindrical or conical shape.
-The X and Y components can be any value, pointing towards the circular perimeter of the cone.
-These combined let you point at any place on the bottom or top rims, or at an arbitrary
-side wall. 
+对于圆柱类型的可附加对象，向量的 Z 分量将为 −1、0 或 1，分别指代圆柱或圆锥形状的底边、中间侧面或顶边。  
+X 和 Y 分量可以是任意值，指向圆锥的圆周边缘。  
+通过组合这些分量，您可以指向底边或顶边的任意位置，或指向任意侧壁。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cylinder(r1=25, r2=15, h=60, anchor=TOP+LEFT);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cylinder(r1=25, r2=15, h=60, anchor=BOTTOM+FRONT);
 ```
 
-Here we convert a 30 deg angle into an anchor using [cylindrical_to_xyz()](https://github.com/BelfrySCAD/BOSL2/wiki/coords.scad#function-cylindrical_to_xyz)
+这里我们使用 [cylindrical_to_xyz()](https://github.com/BelfrySCAD/BOSL2/wiki/coords.scad#function-cylindrical_to_xyz) 将30度角转换为一个锚点。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cylinder(r1=25, r2=15, h=60, anchor=cylindrical_to_xyz(1,30,1));
 ```
 
 ---
 
-For Spherical type attachables, you can pass a vector that points at any arbitrary place on
-the surface of the sphere:
+对于球形类型的可附加对象，您可以传递一个指向球体表面任意位置的向量：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 sphere(r=50, anchor=TOP);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 sphere(r=50, anchor=TOP+FRONT);
 ```
 
-Here the [spherical_to_xyz()](https://github.com/BelfrySCAD/BOSL2/wiki/coords.scad#function-spherical_to_xyz) function converts spherical coordinates into
-a vector you can use as an anchor:
+这里 [spherical_to_xyz()](https://github.com/BelfrySCAD/BOSL2/wiki/coords.scad#function-spherical_to_xyz) 函数将球坐标转换为一个可用作锚点的向量：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 sphere(r=50, anchor=spherical_to_xyz(1,-30,60));
 ```
 
 ---
 
-Some attachable shapes may provide specific named anchors for shape-specific anchoring.  These
-will be given as strings and will be specific to that type of
-attachable.  When named anchors are supported, they are listed in a
-"Named Anchors" section of the documentation for the module.  The
-`teardrop()` attachable, for example, has a named anchor called "cap" and in 2D the
-`star()` attachable has anchors labeled by tip number: 
+某些可附加形状可能会提供特定的命名锚点，用于形状特定的锚定。这些锚点将以字符串形式提供，并特定于该类型的可附加对象。当支持命名锚点时，它们会列在模块文档的“Named Anchors”部分中。例如，`teardrop()` 可附加对象具有一个名为 "cap" 的命名锚点，而在2D中，`star()` 可附加对象的锚点以顶点编号标记：
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 teardrop(d=100, l=20, anchor="cap");
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 star(n=7, od=30, id=20, anchor="tip2");
 ```
 
 ---
 
-Some shapes, for backwards compatibility reasons, can take a `center=` argument.  This just
-overrides the `anchor=` argument.  A `center=true` argument is the same as `anchor=CENTER`.
-A `center=false` argument chooses the anchor to match the behavior of
-the builtin version:  for a cube it is the same as `anchor=[-1,-1,-1]` but for a
-cylinder, it is the same as `anchor=BOTTOM`.
+出于向后兼容的原因，某些形状可以接受一个 `center=` 参数。这仅覆盖 `anchor=` 参数。`center=true` 参数等同于 `anchor=CENTER`。`center=false` 参数选择锚点以匹配内置版本的行为：对于立方体，等同于 `anchor=[-1,-1,-1]`；而对于圆柱体，等同于 `anchor=BOTTOM`。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube([50,40,30],center=true);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube([50,40,30],center=false);
 ```
 
 ---
 
-Most 2D shapes provided by BOSL2 are also anchorable.  The built-in `square()` and `circle()`
-modules have been overridden to make them attachable..  The `anchor=` options for 2D
-shapes treat 2D vectors as expected.  Special handling occurs with 3D
-vectors:  if the Y coordinate is zero and the Z coordinate is nonzero,
-then the Z coordinate is used to replace the Y coordinate.  This is
-done so that you can use the TOP and BOTTOM names as anchor for 2D
-shapes.  
+BOSL2 提供的大多数2D形状也支持锚定。内置的 `square()` 和 `circle()` 模块已被重写，使它们成为可附加对象。2D 形状的 `anchor=` 选项会按照预期处理2D向量。对于3D向量会进行特殊处理：如果 Y 坐标为零而 Z 坐标不为零，则会使用 Z 坐标替换 Y 坐标。这样处理的目的是使您可以使用 TOP 和 BOTTOM 作为2D形状的锚点。
 
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 square([40,30], anchor=BACK+LEFT);
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 circle(d=50, anchor=BACK);
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 hexagon(d=50, anchor=LEFT);
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 ellipse(d=[50,30], anchor=FRONT);
+```
 
-This final 2D example shows using the 3D anchor, TOP, with a 2D
-object.  Also notice how the pentagon anchors to its most extreme point on
-the Y+ axis.  
+以下2D示例展示了如何在2D对象中使用3D锚点 TOP。同时注意五边形如何锚定到其 Y+ 轴上最突出的点。
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 pentagon(d=50, anchor=TOP);
 ```
 
 
-## Spin
-You can spin attachable objects around the origin using the `spin=`
-argument.  The spin applies **after** anchoring, so depending on how
-you anchor an object, its spin may not be about its center.  This
-means that spin can have an effect even on rotationally symmetric
-objects like spheres and cylinders.  You specify the spin in degrees.
-A positive number will result in a counter-clockwise spin around the Z
-axis (as seen from above), and a negative number will make a clockwise
-spin:
+## 旋转/Spin
 
-```openscad-3D
+您可以使用 `spin=` 参数围绕原点旋转可附加对象。旋转在**锚定之后**应用，因此取决于您如何锚定对象，其旋转可能不是围绕其中心进行的。这意味着即使是像球体和圆柱体这样具有旋转对称性的对象，旋转也可能产生影响。您可以用角度指定旋转：正数表示围绕 Z 轴逆时针旋转（从上方看），负数表示顺时针旋转。
+
+
+```openscad
 include <BOSL2/std.scad>
 cube([20,20,40], center=true, spin=45);
 ```
 
-This example shows a cylinder which has been anchored at its FRONT,
-with a rotated copy in gray.  The rotation is performed around the
-origin, but the cylinder is off the origin, so the rotation **does**
-have an effect on the cylinder, even though the cylinder has
-rotational symmetry.
+此示例展示了一个锚定在 FRONT 的圆柱，以及一个灰色的旋转副本。旋转是围绕原点进行的，但圆柱偏离了原点，因此即使圆柱具有旋转对称性，旋转**确实**对其产生了影响。
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 cylinder(h=40,d=20,anchor=FRONT+BOT);
 %cylinder(h=40.2,d=20,anchor=FRONT+BOT,spin=40);
 ```
 
+您也可以对 BOSL2 提供的 2D 形状应用旋转，但只能使用标量角度：
 
-
-You can also apply spin to 2D shapes from BOSL2, though only by scalar angle:
-
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 square([40,30], spin=30);
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 ellipse(d=[40,30], spin=30);
 ```
 
+## 方向/Orientation
 
-## Orientation
-Another way to specify a rotation for an attachable shape, is to pass a 3D vector via the
-`orient=` argument.  This lets you specify what direction to tilt the top of the shape towards.
-For example, you can make a cone that is tilted up and to the right like this:
+另一种为可附加形状指定旋转的方法是通过 `orient=` 参数传递一个3D向量。  这允许您指定形状顶部的倾斜方向。例如，您可以制作一个向上并向右倾斜的圆锥，如下所示：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cylinder(h=100, r1=50, r2=20, orient=UP+RIGHT);
 ```
 
-More precisely, the Z direction of the shape is rotated to align with
-the vector you specify.  Two dimensional attachables, which have no Z vector,
-do not accept the `orient=` argument.  
+更准确地说，形状的 Z 方向将旋转以与您指定的向量对齐。对于没有 Z 向量的二维可附加对象，它们不接受 `orient=` 参数。
+
+## 混合使用锚定、旋转和方向/Mixing Anchoring, Spin, and Orientation
+
+当同时指定 `anchor=`、`spin=` 和 `orient=` 时，它们的应用顺序是先锚定，再旋转，最后设置方向。 例如，这里是一个立方体：
 
 
-## Mixing Anchoring, Spin, and Orientation
-When giving `anchor=`, `spin=`, and `orient=`, they are applied anchoring first, spin second,
-then orient last.  For example, here's a cube:
-
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube([20,20,50]);
 ```
 
-You can center it with an `anchor=CENTER` argument:
+您可以通过 `anchor=CENTER` 参数使其居中：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube([20,20,50], anchor=CENTER);
 ```
 
-Add a 45 degree spin:
+添加 45 度旋转：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube([20,20,50], anchor=CENTER, spin=45);
 ```
 
-Now tilt the top up and forward:
+现在将顶部向上和向前倾斜：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube([20,20,50], anchor=CENTER, spin=45, orient=UP+FWD);
 ```
 
-For 2D shapes, you can mix `anchor=` with `spin=`, but not with `orient=`.
+对于 2D 形状，您可以混合使用 `anchor=` 和 `spin=`，但不能与 `orient=` 一起使用。
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 square([40,30], anchor=BACK+LEFT, spin=30);
 ```
 
-## Positioning Children
+## 子对象定位/Positioning Children
 
-Positioning is a powerful method for placing an object relative to
-another object.  You do this by making the second object a child of
-the first object.  By default, the child's anchor point will be
-aligned with the center of the parent.  The default anchor for `cyl()`
-is CENTER, and in this case, the cylinder is centered on the cube's center
+定位是一种强大的方法，用于将一个对象相对于另一个对象放置。  
+您可以通过将第二个对象作为第一个对象的子对象来实现这一点。  
+默认情况下，子对象的锚点将与父对象的中心对齐。  
+对于 `cyl()` 的默认锚点是 CENTER，在这种情况下，圆柱体的中心与立方体的中心对齐。
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 up(13) cube(50)
     cyl(d=25,l=95);
 ```
 
-With `cylinder()` the default anchor is BOTTOM.  It's hard to tell,
-but the cylinder's bottom is placed at the center of the cube.  
+对于 `cylinder()`，默认锚点是 BOTTOM。虽然不容易看出，但圆柱体的底部放置在立方体的中心。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube(50)
     cylinder(d=25,h=75);
 ```
 
-If you explicitly anchor the child object then the anchor you choose will be aligned
-with the center point of the parent object.  In this example the right
-side of the cylinder is aligned with the center of the cube.  
+如果您显式地为子对象设置锚点，则所选的锚点将与父对象的中心对齐。在此示例中，圆柱体的右侧与立方体的中心对齐。
 
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube(50,anchor=FRONT)     
     cylinder(d=25,h=95,anchor=RIGHT);
 ```
 
-The `position()` module enables you to specify where on the parent to
-position the child object.  You give `position()` an anchor point on
-the parent, and the child's anchor point is aligned with the specified
-parent anchor point.  In this example the LEFT anchor of the cylinder is positioned on the
-RIGHT anchor of the cube.  
+`position()` 模块使您能够指定子对象在父对象上的放置位置。您可以为 `position()` 提供父对象的一个锚点，然后子对象的锚点将与指定的父锚点对齐。在此示例中，圆柱体的 LEFT 锚点被放置在立方体的 RIGHT 锚点上。
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 cube(50,anchor=FRONT)     
     position(RIGHT) cylinder(d=25,h=75,anchor=LEFT);
 ```
 
-Using this mechanism you can position objects relative to other
-objects which are in turn positioned relative to other objects without
-having to keep track of the transformation math.
+通过这种机制，您可以将对象相对于其他对象进行定位，而这些对象又相对于其他对象定位，无需跟踪复杂的变换数学计算。
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 cube([50,50,30],center=true)
     position(TOP+RIGHT) cube([25,40,10], anchor=RIGHT+BOT)
@@ -365,50 +318,38 @@ cube([50,50,30],center=true)
          cylinder(h=10,r=3);
 ```
 
-The positioning mechanism is not magical: it simply applies a
-`translate()` operation to the child.  You can still apply your own
-additional translations or other transformations if you wish.  For
-example, you can position an object 5 units from the right edge:
+定位机制并不是神奇的：它只是对子对象应用了一个 `translate()` 操作。如果需要，您仍然可以添加自己的额外平移或其他变换。例如，您可以将对象定位在距离右边缘 5 个单位的位置：
 
-```openscad-3D
+
+```openscad
 include<BOSL2/std.scad>
 cube([50,50,20],center=true)
     position(TOP+RIGHT) left(5) cube([4,50,10], anchor=RIGHT+BOT);
 ```
 
+在 2D 中，对象定位的工作方式相同。
 
-
-Positioning objects works the same way in 2D.
-
-```openscad-2D
+```openscad
 include<BOSL2/std.scad>
 square(10)
     position(RIGHT) square(3,anchor=LEFT);
 ```
 
-## Using position() with orient()
+## 在 position() 中使用 orient()/Using position() with orient()
 
-When positioning an object near an edge or corner you may wish to
-orient the object relative to some face other than the TOP face that
-meets at that edge or corner.  You can always apply `rot()` to 
-change the orientation of the child object, but in order to do this,
-you need to figure out the correct rotation.  The `orient()` module provides a
-mechanism for re-orienting the child() that eases this burden: 
-it can orient the child relative to the parent anchor directions.  This is different
-than giving an `orient=` argument to the child, because that orients
-relative to the parent's global coordinate system by just using the vector
-directly, instead of orienting to the parent's anchor, which takes
-account of face orientation.  A series of three
-examples shows the different results.  In the first example, we use
-only `position()`.  The child cube is erected pointing upwards, in the
-Z direction.  In the second example we use `orient=RIGHT` in the child
-and the result is that the child object points in the X+ direction,
-without regard for the shape of the parent object.  In the final
-example we apply `orient(RIGHT)` and the child is oriented
-relative to the slanted right face of the parent using the parent
-RIGHT anchor.   
+当将对象定位在边缘或角落附近时，您可能希望相对于该边缘或角落所在的面（而不是 TOP 面）对对象进行方向调整。  
+您始终可以使用 `rot()` 更改子对象的方向，但为了做到这一点，您需要计算出正确的旋转角度。  
+`orient()` 模块提供了一种重新定位子对象方向的机制，从而简化了这一过程：  
+它可以根据父锚点的方向调整子对象的方向。  
+这与为子对象提供 `orient=` 参数不同，因为后者是直接使用向量相对于父对象的全局坐标系进行方向调整，而不是基于父锚点的方向（考虑了面的方向）进行调整。  
 
-```openscad-3D
+以下三个示例展示了不同的结果：
+- 在第一个示例中，仅使用 `position()`。子立方体竖立在 Z 方向上。
+- 在第二个示例中，对子对象使用了 `orient=RIGHT`，结果是子对象指向 X+ 方向，而不考虑父对象的形状。
+- 在最后一个示例中，使用 `orient(RIGHT)`，子对象根据父对象的 RIGHT 锚点，相对于父对象的倾斜右面调整了方向。
+
+
+```openscad
 include<BOSL2/std.scad>
 prismoid([50,50],[30,30],h=40)
   position(RIGHT+TOP)
@@ -416,7 +357,7 @@ prismoid([50,50],[30,30],h=40)
 ```
 
 
-```openscad-3D
+```openscad
 include<BOSL2/std.scad>
 prismoid([50,50],[30,30],h=40)
   position(RIGHT+TOP)
@@ -424,7 +365,7 @@ prismoid([50,50],[30,30],h=40)
 ```
 
 
-```openscad-3D
+```openscad
 include<BOSL2/std.scad>
 prismoid([50,50],[30,30],h=40)
   position(RIGHT+TOP)
@@ -432,17 +373,11 @@ prismoid([50,50],[30,30],h=40)
         cube([15,15,25],anchor=BACK+BOT);
 ```
 
-You may have noticed that the children in the above three examples
-have different anchors.  Why is that?  The first and second examples
-differ because anchoring up and anchoring to the right require
-anchoring on opposite sides of the child.  But the third case differs
-because the spin has changed.  The examples below show the same models
-but with arrows replacing the child cube.  The red flags on the arrows
-mark the zero spin direction.  Examine the red flags to see how the spin
-changes.  The Y+ direction of the child will point towards that red
-flag.  
+您可能已经注意到，上述三个示例中的子对象具有不同的锚点。这是为什么呢？第一个和第二个示例的区别在于，向上锚定和向右锚定需要锚定在子对象的相对两侧。而第三种情况的不同之处在于旋转（spin）发生了变化。  
 
-```openscad-3D
+下面的示例展示了相同的模型，但用箭头代替了子立方体。箭头上的红旗标记了零旋转方向。观察红旗可以看到旋转方向的变化。子对象的 Y+ 方向将指向那个红旗。
+
+```openscad
 include<BOSL2/std.scad>
 prismoid([50,50],[30,30],h=40)
   position(RIGHT+TOP)
@@ -450,14 +385,14 @@ prismoid([50,50],[30,30],h=40)
 ```
 
 
-```openscad-3D
+```openscad
 include<BOSL2/std.scad>
 prismoid([50,50],[30,30],h=40)
   position(RIGHT+TOP)
      anchor_arrow(40, orient=RIGHT);
 ```
 
-```openscad-3D
+```openscad
 include<BOSL2/std.scad>
 prismoid([50,50],[30,30],h=40)
   position(RIGHT+TOP)
@@ -466,94 +401,81 @@ prismoid([50,50],[30,30],h=40)
 ```
 
 
-## Aligning children with align()
+## 使用 align() 对齐子对象/Aligning children with align()
 
-You may have noticed that with position() and orient(), specifying the
-child anchors to position objects flush with their parent can be
-annoying, or sometimes even tricky.  You can simplify this task by
-using the align() module.  This module positions children on faces
-of a parent and aligns to edges or corners, while picking the correct anchor points on
-the children so that the children line up correctly with the parent.  
+您可能已经注意到，在使用 `position()` 和 `orient()` 时，为了让子对象与父对象齐平，指定子对象的锚点可能会很麻烦，有时甚至很棘手。  
+您可以通过使用 `align()` 模块来简化此任务。  
+该模块将子对象放置在父对象的表面上，并与边缘或角落对齐，同时选择子对象上的正确锚点，使其与父对象正确对齐。
 
-In the simplest case, if you want to place a child on the RIGHT side
-of its parent, you need to anchor the child to its LEFT anchor:
+最简单的情况下，如果您希望将子对象放置在父对象的 RIGHT 一侧，则需要将子对象锚定到其 LEFT 锚点：
 
-```openscad-3D
+
+```openscad
 include<BOSL2/std.scad>
 cuboid([50,40,15])
     position(RIGHT)
         color("lightblue")cuboid(5,anchor=LEFT);
 ```
 
-When you use align() it automatically determines the correct anchor to
-use for the child and this anchor overrides any anchor specified to
-the child:  any anchor you specify for the child is ignored.
+当您使用 `align()` 时，它会自动为子对象确定正确的锚点，并覆盖为子对象指定的任何锚点：您为子对象指定的任何锚点都会被忽略。
 
-```openscad-3D
+```openscad
 include<BOSL2/std.scad>
 cuboid([50,40,15])
     align(RIGHT)
         color("lightblue")cuboid(5);
 ```
 
-To place the child on top of the parent in the corner you can do use
-align as shown below instead of specifying the RIGHT+FRONT+BOT anchor
-with position(): 
+要将子对象放置在父对象顶部的角落，您可以使用如下所示的 `align()`，而不是通过 `position()` 指定 `RIGHT+FRONT+BOT` 锚点：
 
-```openscad-3D
+
+```openscad
 include<BOSL2/std.scad>
 cuboid([50,40,15])
     align(TOP,RIGHT+FRONT)
         color("lightblue")prismoid([10,5],[7,4],height=4);
 ```
 
-Both position() and align() can accept a list of anchor locations and
-makes several copies of the children, but
-if you want the children positioned flush, each copy 
-requires a different anchor, so it is impossible to do this with a
-single call to position(), but easily done using align():
+`position()` 和 `align()` 都可以接受一个锚点位置的列表并生成子对象的多个副本，但如果您希望这些子对象齐平放置，则每个副本需要不同的锚点，因此无法通过单次调用 `position()` 实现，但使用 `align()` 则可以轻松完成：
 
-```openscad-3D
+
+```openscad
 include<BOSL2/std.scad>
 cuboid([50,40,15])
     align(TOP,[RIGHT,LEFT])
         color("lightblue")prismoid([10,5],[7,4],height=4);
 ```
 
-If you want the children close to the edge but not actually flush you
-can use the `inset=` parameter of align to achieve this:
+如果您希望子对象靠近边缘但不完全齐平，可以使用 `align` 的 `inset=` 参数来实现：
 
-```openscad-3D
+```openscad
 include<BOSL2/std.scad>
 cuboid([50,40,15])
     align(TOP,[FWD,RIGHT,LEFT,BACK],inset=3)
         color("lightblue")prismoid([10,5],[7,4],height=4);
 ```
 
-If you spin the children then align will still do the right thing
+如果您旋转了子对象，`align` 仍然会正确对齐。
 
-```openscad-3D
+```openscad
 include<BOSL2/std.scad>
 cuboid([50,40,15])
     align(TOP,[RIGHT,LEFT])
         color("lightblue")prismoid([10,5],[7,4],height=4,spin=90);
 ```
 
-If you orient the object DOWN it will be attached from its top anchor,
-correctly aligned.  
+如果您将对象方向设置为 DOWN，它将从顶部锚点附加，并正确对齐。
 
-```openscad-3D
+```openscad
 include<BOSL2/std.scad>
 cuboid([50,40,15])
     align(TOP,RIGHT)
         color("lightblue")prismoid([10,5],[7,4],height=4,orient=DOWN);
 ```
 
-Note that align() never changes the orientation of the children.  If
-you put the blue prismoid on the right side the anchors line up but
-the edges of the child and parent don't.
+请注意，`align()` 从不会更改子对象的方向。如果您将蓝色棱柱体放在右侧，锚点会对齐，但子对象和父对象的边缘不会对齐。
 
-```openscad-3D
+```openscad
 include<BOSL2/std.scad>
 prismoid(50,30,25){
   align(RIGHT,TOP)
@@ -561,207 +483,165 @@ prismoid(50,30,25){
 }
 ```
 
-If you apply spin that is not a multiple of 90 degrees then alignment
-will line up the corner
+如果您应用的旋转角度不是 90 度的倍数，则对齐将对准角落。
 
-```openscad-3D
+```openscad
 include<BOSL2/std.scad>
 cuboid([50,40,15])
     align(TOP,RIGHT)
         color("lightblue")cuboid(8,spin=33);
 ```
 
-You can also attach objects to a cylinder.  If you use the usual cubic
-anchors then a cube will attach on a face as shown here:
+您还可以将对象附加到圆柱体上。如果您使用常规的立方锚点，那么立方体将如图所示附加到一个面上：
 
-```openscad-3D
+```openscad
 include<BOSL2/std.scad>
 cyl(h=20,d=10,$fn=128)
   align(RIGHT,TOP)
     color("lightblue")cuboid(5);
 ```
 
-But with a cylinder you can choose an arbitrary horizontal angle for
-the anchor.  If you do this, similar to the case of arbitrary spin,
-the cube will attach on the nearest corner.
+但对于圆柱体，您可以为锚点选择任意水平角度。如果这样做，与任意旋转的情况类似，立方体将附加到最近的角落。
 
-```openscad-3D
+```openscad
 include<BOSL2/std.scad>
 cyl(h=20,d=10,$fn=128)
   align([1,.3],TOP)
     color("lightblue")cuboid(5);
 ```
 
-## Attachment overview
+## 附加概述/Attachment Overview
 
-Attachables get their name from their ability to be attached to each
-other.  Unlike with positioning, attaching changes the orientation of
-the child object.  Think of it like sticking two objects together:
-when you attach an object, it appears on the parent
-relative to the local coordinate system of the parent at the anchor point.  To understand
-what this means, imagine the perspective of an ant walking on a
-sphere.  The meaning of UP varies depending on where on the sphere the
-ant is standing.  If you **attach** a cylinder to the sphere then the cylinder will
-be "up" from the ant's perspective.   The first example shows a
-cylinder placed with `position()` so it points up in the global parent
-coordinate system.  The second example shows how `attach()` points the
-cylinder UP from the perspective of an ant standing at the anchor
-point on the sphere.  
+可附加对象因其可以彼此附加的能力而得名。与定位不同，附加会改变子对象的方向。可以将其想象为将两个对象粘在一起：当您附加一个对象时，它会出现在父对象上，并相对于父对象锚点处的局部坐标系进行定位。  
 
-```openscad-3D
+为了理解这意味着什么，可以想象一只蚂蚁在球体上行走的视角。“UP”的含义会因蚂蚁在球体上的位置而变化。如果您将一个圆柱体**附加**到球体上，那么从蚂蚁的视角看，圆柱体的“UP”方向就是朝上的。  
+
+第一个示例展示了使用 `position()` 放置的圆柱体，它在全局父坐标系中向上指向。第二个示例展示了 `attach()` 如何使圆柱体从球体锚点处蚂蚁的视角看“UP”方向指向上方。
+
+
+```openscad
 include<BOSL2/std.scad>
 sphere(40)
     position(RIGHT+TOP) cylinder(r=8,h=20);
 ```
 
 
-```openscad-3D
+```openscad
 include<BOSL2/std.scad>
 sphere(40)
     attach(RIGHT+TOP) cylinder(r=8,h=20);
 ```
 
-In the example above, the cylinder's center point is attached to the
-sphere, pointing "up" from the perspective of the sphere's surface.
-For a sphere, a surface normal is defined everywhere that specifies
-what "up" means.  But for other objects, it may not be so obvious.
-Usually at edges and corners the direction is the average of the
-direction of the faces that meet there.
+在上述示例中，圆柱体的中心点被附加到球体上，并从球体表面的视角指向“上方”。对于球体而言，表面法线在每个点都被定义，指定了“UP”的方向。但对于其他对象来说，这可能并不那么明显。通常在边缘和角落，方向是相交面的方向的平均值。
 
-When you specify an anchor you are actually specifying both an anchor
-point but also an anchor direction.  If you want to visualize this
-direction you can use anchor arrows.  
+当您指定锚点时，实际上是在指定锚点的位置和方向。如果您希望可视化此方向，可以使用锚点箭头。
 
+## 锚点方向和锚点箭头/Anchor Directions and Anchor Arrows
 
-## Anchor Directions and Anchor Arrows
-For the ant on the sphere it is obvious which direction is UP; that
-direction corresponds to the Z+ axis.  The location of the X and Y
-axes is less clear and in fact it may be arbitrary.  One way that is
-useful to show the position and orientation of an anchor point is by
-attaching an anchor arrow to that anchor.  As noted before, the small
-red flag points in the direction of the anchor's Y+ axis when the spin
-is zero.
+对于球体上的蚂蚁来说，显然“UP”方向是指向 Z+ 轴的方向。但 X 和 Y 轴的位置则不太明确，实际上它们可能是任意的。一种有用的方法是通过将锚点箭头附加到该锚点来显示锚点的位置和方向。如前所述，当旋转为零时，小红旗指向锚点的 Y+ 轴方向。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube(18, center=true)
     attach(LEFT+TOP)
         anchor_arrow();
 ```
 
-For large objects, you can change the size of the arrow with the `s=` argument.
+对于较大的对象，您可以使用 `s=` 参数更改箭头的大小。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 sphere(d=100)
     attach(LEFT+TOP)
         anchor_arrow(s=50);
 ```
 
-To show all the standard cardinal anchor points, you can use the [show_anchors()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-show_anchors) module.
+要显示所有标准的基准锚点，您可以使用 [show_anchors()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-show_anchors) 模块。
 
-```openscad-3D;Big
+```openscad
 include <BOSL2/std.scad>
 cube(20, center=true)
     show_anchors();
 ```
 
-```openscad-3D;Big
+```openscad
 include <BOSL2/std.scad>
 cylinder(h=25, d=25, center=true)
     show_anchors();
 ```
 
-```openscad-3D;Big
+```openscad
 include <BOSL2/std.scad>
 sphere(d=40)
     show_anchors();
 ```
 
-For large objects, you can again change the size of the arrows with the `s=` argument.
+对于较大的对象，您可以再次使用 `s=` 参数更改箭头的大小。
 
-```openscad-3D;Big
+```openscad
 include <BOSL2/std.scad>
 prismoid(150,60,100)
     show_anchors(s=45);
 ```
 
 
-## Parent-Child Anchor Attachment (Double Argument Attachment)
+## 父子锚点附加（双参数附加）/Parent-Child Anchor Attachment (Double Argument Attachment)
 
-The `attach()` module has two different modes of operation,
-parent-child anchor attachment and parent anchor attachment.  These
-are also called double argument attachment and single argument
-attachment.  The parent-child anchor attachment, with two arguments,
-is usually easier to use and is more powerful because it supports
-alignment.  When you use parent-child anchor attachment you give a
-parent anchor and a child anchor.  Imagine pointing the anchor arrows
-on the two objects directly at each other and pushing them together in
-the direction of the arrows until they touch.  In many of the examples
-below we show first the two objects with their anchor arrows and then
-the result of the attach operation using those anchors.
+`attach()` 模块有两种不同的操作模式，父子锚点附加和父锚点附加。这两种模式也被称为双参数附加和单参数附加。父子锚点附加（双参数附加）通常更易于使用，且功能更强大，因为它支持对齐。当您使用父子锚点附加时，您需要提供一个父锚点和一个子锚点。可以想象将两个对象的锚点箭头直接对准彼此，并在箭头的方向上将它们推到一起，直到它们接触。在下面的许多示例中，我们首先展示两个对象及其锚点箭头，然后展示使用这些锚点进行附加操作后的结果。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube(50,anchor=BOT) attach(TOP,BOT) anchor_arrow(30);
 right(60)cylinder(d1=30,d2=15,h=25) attach(BOT,BOT) anchor_arrow(30);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube(50,anchor=BOT)
   attach(TOP,BOT) cylinder(d1=30,d2=15,h=25);
 ```
 
-This example produces the same result as using `align()`, but if the
-parent anchor is not horizontal, then the child is reoriented:
+此示例产生的结果与使用 `align()` 相同，但如果父锚点不是水平的，则子对象会被重新定向：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 prismoid([50,50],[35,35],h=50,anchor=BOT) attach(RIGHT,BOT) anchor_arrow(30);
 right(60)cylinder(d1=30,d2=15,h=25) attach(BOT,BOT) anchor_arrow(30);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 prismoid([50,50],[35,35],h=50,anchor=BOT)
   attach(RIGHT,BOT) cylinder(d1=30,d2=15,h=25);
 ```
 
-In this case we attach the curved side of the cone to a cube by lining
-up the anchor arrows:
+在这种情况下，我们通过对齐锚点箭头将圆锥的弯曲面附加到立方体上：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube(50,center=true) attach(RIGHT,BOT) anchor_arrow(30);
 right(80)cylinder(d1=30,d2=15,h=25) attach(LEFT,BOT) anchor_arrow(30);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube(50,center=true)
   attach(RIGHT,LEFT) cylinder(d1=30,d2=15,h=25);
 ```
 
-Note that this form of attachent overrides any anchor or orientation
-specified in the child: **with parent-child anchor attachment the
-`anchor=` and `orient=` parameters to the child are ignored.**
+请注意，这种附加形式会覆盖子对象中指定的任何锚点或方向：  
+**在父子锚点附加中，`anchor=` 和 `orient=` 参数会被忽略。**
 
-When you specify attachment using a pair of anchors, the attached
-child can spin around the parent anchor while still being attached at
-the designated anchors: specifying the anchors leaves one unspecified
-degree of freedom.  As noted earlier, this ambiguity is resolved by anchors having a
-defined spin which specifies where the Y+ axis is located.
-The way that BOSL2 positions objects can be understood by viewing the
-anchor arrows as shown above, or you can remember these rules:
-1. When attaching to the TOP or BOTTOM: the FRONT of the child points to the front if possible;  otherwise the TOP of the child points BACK.
-2. When attaching to other faces, if possible the child's UP anchor will point UP; otherwise, the BACK of the child points up (so the FRONT is pointed down).  
+当您使用一对锚点指定附加时，附加的子对象可以围绕父锚点旋转，同时仍然保持在指定的锚点上：  
+指定锚点时会留下一个未指定的自由度。如前所述，这种模糊性通过锚点具有定义的旋转角度来解决，该角度指定了 Y+ 轴的位置。  
+通过查看上面显示的锚点箭头，您可以理解 BOSL2 如何定位对象，或者您可以记住以下规则：
+1. 当附加到 TOP 或 BOTTOM 时：如果可能，子对象的 FRONT 会指向前方；否则，子对象的 TOP 会指向后方。
+2. 当附加到其他面时，如果可能，子对象的 UP 锚点会指向 UP；否则，子对象的 BACK 会指向上方（即 FRONT 会指向下方）。
 
-To show how this works we use this prismoid where the blue arrow is
-pointing to the front and the green arrow points up.  Also note that
-the front left edge is the only right angle.  
+为了展示这一点，我们使用了一个棱柱体，其中蓝色箭头指向前方，绿色箭头指向上方。还请注意，前左边缘是唯一的直角。
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 color_this("orange")
 prismoid([8,8],[6,6],shift=-[1,1],h=8) {
@@ -770,10 +650,10 @@ prismoid([8,8],[6,6],shift=-[1,1],h=8) {
 }
 ```
 
-If we attach this to the TOP by the LEFT side then we get the result
-below.  Notice how the green UP arrow is pointing back.
+如果我们将其附加到 TOP 的 LEFT 侧，那么我们会得到如下结果。注意绿色的 UP 箭头指向后方。
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 cube(30) attach(TOP,LEFT)
 color_this("orange")
@@ -783,11 +663,9 @@ color_this("orange")
   }
 ```
 
-If we attach to the RIGHT using the same LEFT side anchor on the
-prismoid then we get the result below.  Note that the green UP anchor
-is pointing UP, in accordance with rule 2 from above.  
+如果我们使用相同的 LEFT 侧锚点将其附加到 RIGHT，则会得到如下结果。请注意，绿色的 UP 锚点指向 UP，符合上面规则 2 的要求。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube(30) attach(RIGHT,LEFT)
 color_this("orange")
@@ -797,12 +675,9 @@ color_this("orange")
   }
 ```
 
-The green UP arrow can always be arranged to point up unless we attach
-either the top or bottom to one of the cube's vertical faces.  Here we
-attach the bottom so you can still see both arrows.  The blue FRONT
-arrow on the object is pointing down, as expected based on rule 2.  
+绿色的 UP 箭头始终可以安排指向 UP，除非我们将顶部或底部附加到立方体的垂直面之一。在这里，我们附加底部，因此仍然可以看到两个箭头。对象上的蓝色 FRONT 箭头指向下方，符合规则 2 的预期。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube(30) attach(RIGHT,BOT)
 color_this("orange")
@@ -812,13 +687,10 @@ color_this("orange")
   }
 ```
 
-What do you do if the direction the child appears is not the direction
-you need?  To address this issue `attach()` provides a `spin=`
-parameter which spins the attached child around the axis defined by
-the joined anchor vectors.  Here is the last example with a rotation
-applied to bring the front anchor back to the front:
+如果子对象出现的方向不是您需要的方向，该怎么办？为了解决这个问题，`attach()` 提供了一个 `spin=` 参数，允许您围绕由连接的锚点向量定义的轴旋转附加的子对象。以下是上一个示例，应用旋转将前锚点重新指向前方：
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 cube(30) attach(RIGHT,BOT,spin=-90)
 color_this("orange")
@@ -828,15 +700,9 @@ color_this("orange")
   }
 ```
 
-Be aware that specifying `spin=` to `attach()` is not equivalent to
-using the `spin=` argument to the child.  Unlike `orient=` and
-`anchor=`, which are ignored, the child `spin=` argument is still
-respected, but it may be difficult to figure out which axis it will
-rotate on.  It is more intuitive to ignore the child spin parameter
-and only use the spin parameter to `attach()`.  The spin must be
-scalar but need not be a multiple of 90 degrees.
+请注意，指定 `spin=` 给 `attach()` 并不等同于将 `spin=` 参数传递给子对象。与 `orient=` 和 `anchor=` 不同，后者会被忽略，子对象的 `spin=` 参数仍然会被尊重，但可能很难弄清楚它将绕哪个轴旋转。更直观的做法是忽略子对象的旋转参数，只使用 `attach()` 中的 `spin=` 参数。旋转角度必须是标量，但不必是 90 度的倍数。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube(30) attach(RIGHT,BOT,spin=-37)
 color_this("orange")
@@ -846,36 +712,26 @@ color_this("orange")
   }
 ```
 
-By default, `attach()` places the child exactly flush with the surface
-of the parent.  Sometimes it's useful to have the child overlap the
-parent by translating it into the parent.  You can do this with the
-`overlap=` argument to `attach()`.  A positive value will cause the
-child to overlap the parent, and a negative value will move the child
-away from the parent, leaving a small gap.  In the first example we use a very large value of
-overlap so the cube is sunk deeply into the parent.  In the second
-example a large negative overlap value raises the child high above the
-parent.  
+默认情况下，`attach()` 将子对象精确地放置在父对象的表面上。有时，将子对象通过平移到父对象内部使其与父对象重叠是很有用的。您可以通过 `attach()` 的 `overlap=` 参数来实现这一点。正值会导致子对象与父对象重叠，而负值则会将子对象移离父对象，留下一个小间隙。在第一个示例中，我们使用了一个非常大的重叠值，使得立方体深深地沉入父对象中。在第二个示例中，一个较大的负重叠值将子对象抬高，远高于父对象。
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 cuboid(50)
     attach(TOP,BOT,overlap=15)
         color("green")cuboid(20);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube(50,center=true)
     attach(TOP,BOT,overlap=-20)
         cyl(d=20,h=20);
 ```
 
-Another feature provided by the double argument form of `attach()` is
-alignment, which works in a similar way to `align()`.  You can specify
-`align=` to align the attached child to an edge or corner.  The
-example below shows five different alignments.  
+`attach()` 的双参数形式提供的另一个功能是对齐，它的工作方式类似于 `align()`。您可以指定 `align=` 来将附加的子对象对齐到边缘或角落。下面的示例展示了五种不同的对齐方式。
 
-```openscad-3D;Big
+```openscad
 include <BOSL2/std.scad>
 module thing(){
   color_this("orange")
@@ -893,21 +749,12 @@ prismoid([50,50],[35,35],h=25,anchor=BOT){
 }
 ```
 
-As with `align()` if you turn an object 90 degrees it can match up
-with parallel edges, but if you turn it an arbitrary angle, a corner
-of the child will contact the edge of the parent.  Also like align()
-the anchor points of the parent and child are aligned but this does
-not necessarily mean that edges line up neatly when the shapes have
-varying angles.  This misalignment is visible in the object attached
-at the RIGHT and aligned to the FRONT.
+与 `align()` 类似，如果您将对象旋转 90 度，它可以与平行边对齐，但如果您将其旋转一个任意角度，子对象的一个角落将接触到父对象的边缘。与 `align()` 相同，父对象和子对象的锚点会对齐，但这并不一定意味着当形状具有不同的角度时，边缘会整齐对齐。这种对不齐现象在附加到 RIGHT 并对齐到 FRONT 的对象中可见。
 
-You may be wondering why all this fuss with align is necessary.
-Couldn't you just attach an object at an anchor on an edge?  When you
-do this, the object will be attached using the edge anchor, which is
-not perpendicular to the faces of the object.  The example below shows
-attachment to an edge anchor and also a corner anchor.  
+您可能会想，为什么需要这么多关于 `align` 的操作？难道不能直接将对象附加到边缘上的锚点吗？当您这样做时，对象将使用边缘锚点进行附加，而该边缘锚点并不垂直于对象的面。下面的示例展示了如何附加到边缘锚点和角落锚点。
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 cube(30)
    color("orange"){
@@ -918,12 +765,10 @@ cube(30)
    }
 ```
 
-When using the `align` option to `attach()` you can also set `inset`,
-which works the same way as the `inset` parameter to `align()`.  It
-shifts the child away from the edge or edges where it is aligned by
-the specified amount.  
+在使用 `attach()` 的 `align` 选项时，您还可以设置 `inset`，它与 `align()` 中的 `inset` 参数作用相同。它会将子对象从与其对齐的边缘或多个边缘上偏移指定的距离。
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 prismoid([50,50],[50,25],25){
   attach(FWD,BOT,align=TOP,inset=3) color("lavender")cuboid(5);
@@ -931,28 +776,20 @@ prismoid([50,50],[50,25],25){
 }
 ```
 
-The last capability provided by `attach()` is to attach the child
-**inside** the parent object.  This is useful if you want to subtract
-the child from the parent.  Doing this requires using tagged
-operations with `diff()` which is explained in more detail below. 
-For the examples here, note that the `diff()` and `tag()` operations
-that appear cause the child to be subtracted.  We return to the
-example that started this section, with anchor arrows shown on the two
-objects.  
+`attach()` 提供的最后一个功能是将子对象**附加**到父对象**内部**。这对于您想从父对象中减去子对象时非常有用。执行此操作需要使用带标签的布尔操作与 `diff()`，详细内容将在下面进一步解释。在这里的示例中，注意出现的 `diff()` 和 `tag()` 操作会导致子对象被减去。我们回到本节开始时的示例，显示了两个对象的锚点箭头。
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 cube(50,anchor=BOT) attach(TOP) anchor_arrow(30);
 right(60)cylinder(d1=30,d2=15,h=25) attach(TOP) anchor_arrow(30);
 ```
 
-Inside attachment is activated using `inside=true` and it lines up the
-anchor arrows so they point together the **same** direction instead of
-opposite directions like regular outside attachment.  The result in
-this case is appears below, where we have cut away the front half to
-show the interior: 
+内部附加通过使用 `inside=true` 激活，它使锚点箭头指向**相同**的方向，而不是像常规的外部附加那样指向相反的方向。  
+在这种情况下，结果如下所示，我们已经切掉了前半部分以展示内部：
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 back_half(s=200)
 diff()
@@ -961,15 +798,13 @@ cube(50,anchor=BOT)
     cylinder(d1=30,d2=15,h=25);
 ```
 
-The top of the cavity has a thin layer on it, which occurs because the
-two objects share a face in the difference.  To fix this you can use
-the `shiftout` parameter to `attach()`.  In this case you could also
-use a negative `overlay` value, but the `shiftout` parameter shifts
-out in every direction that is needed, which may be three directions
-if you align the child at a corner.  The above example looks like this
-with with the shift added:
+空腔的顶部有一层薄薄的层，这是因为两个对象在差集操作中共享了一个面。  
+为了解决这个问题，您可以使用 `attach()` 的 `shiftout` 参数。  
+在这种情况下，您也可以使用负值的 `overlay`，但 `shiftout` 参数会在需要的每个方向上进行偏移，如果您将子对象对齐到一个角落，可能会涉及三个方向。  
+带有 `shift` 的上述示例如下所示：
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 back_half(s=200)
 diff()
@@ -978,12 +813,10 @@ cube(50,anchor=BOT)
     cylinder(d1=30,d2=15,h=25);
 ```
 
-Here is an example of connecting the same object on the right, but
-this time with the BOTTOM anchor.  Note how the BOTTOM anchor is
-aligned to the RIGHT so it is parallel and pointing in the same
-direction as the RIGHT anchor.  
+这是将相同对象连接到右侧的示例，但这次使用的是 BOTTOM 锚点。  
+请注意，BOTTOM 锚点如何与 RIGHT 对齐，使其与 RIGHT 锚点平行并指向相同的方向。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 back_half(s=200)
 diff()
@@ -992,10 +825,10 @@ cuboid(50)
     cylinder(d1=30,d2=15,h=25);
 ```
 
-Here is an example where alignment moves the object into the corner,
-and we benefit from shiftout providing 3 dimensions of adjustment:
+这是一个示例，其中对齐将对象移动到角落，并且我们受益于 `shiftout` 提供的三维调整：
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 diff()
 cuboid(10)
@@ -1003,14 +836,11 @@ cuboid(10)
     cuboid([2,5,9]);
 ```
 
-As with `position()`, with any use of `attach()` you can still apply your own translations and
-other transformations even after attaching an object.  However, the
-order of operations now matters.  If you apply a translation outside
-of the anchor then it acts in the parent's global coordinate system, so the
-child moves up in this example, where the light gray shows the
-untranslated object.  
+与 `position()` 类似，在使用 `attach()` 时，即使在附加对象后，您仍然可以应用自己的平移和其他变换。  
+然而，操作顺序现在变得重要。如果您在锚点外部应用平移，它将在父对象的全局坐标系统中起作用，因此子对象在此示例中会向上移动，浅灰色部分显示的是未进行平移的对象。
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 cuboid(50){
   %attach(RIGHT,BOT)
@@ -1021,11 +851,11 @@ cuboid(50){
 }
 ```
 
-On the other hand, if you put the translation between the attach and
-the object in your code, then it will act in the local coordinate system of
-the parent at the parent's anchor, so in the example below it moves to the right.  
+另一方面，如果您将平移操作放在 `attach` 和对象之间，那么它将在父对象的局部坐标系统中起作用，  
+即相对于父对象的锚点进行平移。因此，在下面的示例中，子对象会向右移动。
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 cuboid(50){
   %attach(RIGHT,BOT)
@@ -1036,40 +866,32 @@ cuboid(50){
 }
 ```
 
-Parent-child Anchor attachment with CENTER anchors can be surprising because the anchors
-both point upwards, so in the example below, the child's CENTER anchor
-points up, so it is inverted when it is attached to the parent cone.
-Note that the anchors are CENTER anchors, so the bases of the anchors are
-hidden in the middle of the objects.  
+使用 CENTER 锚点进行父子锚点附加时可能会令人惊讶，因为两个锚点都指向上方，因此在下面的示例中，子对象的 CENTER 锚点指向上方，  
+所以它在附加到父圆锥时会被反转。请注意，这些锚点是 CENTER 锚点，因此锚点的基部隐藏在对象的中间。
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 cylinder(d1=30,d2=15,h=25) attach(CENTER) anchor_arrow(40);
 right(40)cylinder(d1=30,d2=15,h=25) attach(CENTER) anchor_arrow(40);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cylinder(d1=30,d2=15,h=25)
     attach(CENTER,CENTER)
         cylinder(d1=30,d2=15,h=25);
 ```
 
-Is is also possible to attach to edges and corners of the parent
-object.  The anchors for edges spin the child so its BACK direction is
-aligned with the edge.  If the edge belongs to a top or bottom
-horizontal face, then the BACK directions will point clockwise around
-the face, as seen from outside the shape.  (This is the same direction
-required for construction of valid faces in OpenSCAD.)  Otherwise, the
-BACK direction will point upwards.
+也可以将对象附加到父对象的边缘和角落。边缘锚点会旋转子对象，使其 BACK 方向与边缘对齐。如果边缘属于顶部或底部的水平面，  
+则 BACK 方向将顺时针指向该面（从外部看）。 （这是构建有效面所需的方向，在 OpenSCAD 中也是如此。）  
+否则，BACK 方向将指向上方。
 
-Examine the red flags below, where only edge anchors appear on a
-prismoid.  The top face shows the red flags pointing clockwise.
-The sloped side edges point along the edges, generally upward, and
-the bottom ones appear to point counter-clockwise, but if we viewed
-the shape from the bottom they would also appear clockwise.  
+观察下面的红旗，这里只显示了一个棱柱体的边缘锚点。顶部面显示了红旗顺时针指向。  
+倾斜的侧边沿着边缘指向，通常向上，而底边似乎指向逆时针，但如果我们从底部查看该形状，它们也会显得顺时针。
 
-```openscad-3D;Big
+
+```openscad
 include <BOSL2/std.scad>
 prismoid([100,175],[55,88], h=55)
   for(i=[-1:1], j=[-1:1], k=[-1:1])
@@ -1078,10 +900,9 @@ prismoid([100,175],[55,88], h=55)
          attach(anchor,BOT)anchor_arrow(40);
 ```
 
-In this example cylinders sink half-way into the top edges of the
-prismoid:
+在这个示例中，圆柱体沉入棱柱体顶部边缘的一半：
 
-```openscad-3D;Big
+```openscad
 include <BOSL2/std.scad>
 $fn=16;
 r=6;
@@ -1091,10 +912,10 @@ prismoid([100,175],[55,88], h=55){
 }
 ```
 
-This type of edge attachment is useful for attaching 3d edge masks to
-edges:
+这种类型的边缘附加对于将 3D 边缘蒙版附加到边缘非常有用：
 
-```openscad-3D;Big
+
+```openscad
 include <BOSL2/std.scad>
 $fn=32;
 diff()
@@ -1104,84 +925,68 @@ cuboid(75)
      rounding_edge_mask(l=76, r1=8,r2=28);
 ```
 
-## Parent Anchor Attachment (Single Argument Attachment)
+## 父锚点附加（单参数附加）/Parent Anchor Attachment (Single Argument Attachment)
 
-The second form of attachment is parent anchor attachment, which just
-uses a single argument.  This form of attachment is less useful in
-general and does not provide alignment.  When you give `attach()` a parent anchor but no child anchor it
-orients the child according to the parent anchor direction but then
-simply places the child based on its internally defined anchor at the
-parent anchor position.  For most objects the default anchor is the
-CENTER anchor, so objects will appear sunk half-way into the parent.
+第二种附加形式是父锚点附加，它只使用一个参数。这种附加形式通常不太有用，也不提供对齐功能。  
+当您给 `attach()` 一个父锚点，但没有提供子锚点时，它会根据父锚点的方向对齐子对象，但然后只是根据子对象内部定义的锚点将其放置在父锚点位置。  
+对于大多数对象，默认的锚点是 CENTER 锚点，因此对象会看起来半埋在父对象内部。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid(30)
     attach(TOP)
         color("green")cuboid(10);
 ```
 
-Some objects such as `cylinder()`, `prismoid()`, and `anchor_arrow()` have default anchors on the bottom, so they will appear
-on the surface.  For objects like this you can save a little bit of
-typing by using parent anchor attachment.  But in the case of `cube()`
-the anchor is not centered, so the result is:
+某些对象，如 `cylinder()`、`prismoid()` 和 `anchor_arrow()`，默认的锚点位于底部，因此它们会显示在表面上。  
+对于这些对象，您可以通过使用父锚点附加来节省一些输入。但是在 `cube()` 的情况下，锚点不是居中的，所以结果是：
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 cube(30)
     attach(TOP)
         color("green")cube(10);
 ```
 
-In order to make single argument attachment produce the results you
-need you will probably need to change the child anchor.  Note that unlike
-parent-child anchor attachment, **with parent anchor attachment the `anchor=` and `orient=` arguments
-are respected.**  We could therefore place a cuboid like this:
+为了使单参数附加产生所需的结果，您可能需要更改子对象的锚点。请注意，与父子锚点附加不同，  
+**在父锚点附加中，`anchor=` 和 `orient=` 参数会被尊重。**  
+因此，我们可以像这样放置一个长方体：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid(30)
   attach(RIGHT)
       color("green")cuboid(10,anchor=BOT);
 ```
 
-If you need to place a cuboid at the anchor point but need it anchored
-relative to one of the bottom edge or corner anchors then you can do
-that with parent anchor attachment:
+如果您需要将长方体放置在锚点上，但需要相对于底部边缘或角落锚点进行定位，那么您可以使用父锚点附加来实现：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid(30)
   attach(RIGHT)
       color("green")cuboid(10,anchor=BOT+FWD);
 ```
 
-Another case where single argument attachment is useful is when the
-child doesn't have proper attachment support.
-If you use double argument attachment in such cases the results will
-be incorrect because the child doesn't properly respond to the
-internally propagated anchor directives.  With single argument
-attachment, this is not a problem: the origin
-of the child will be placed at the parent anchor point.  One module
-without attachment support is `linear_extrude()`.  
+单参数附加的另一个有用场景是当子对象没有正确的附加支持时。如果在这种情况下使用双参数附加，结果将不正确，因为子对象无法正确响应内部传播的锚点指令。  
+使用单参数附加时，这就不是问题：子对象的原点将被放置在父锚点位置。  
+一个没有附加支持的模块是 `linear_extrude()`。
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 cuboid(20)
   attach(RIGHT)
      color("red")linear_extrude(height=2) star(n=7,ir=3,or=7);
 ```
 
-As noted earlier, you can set `orient=` for children with parent
-anchor attachment, though the behavior may not be intuitive because
-the attachment process transforms the coordinate system and the
-orientation is done in the attached coordinate system.  It may be
-helpful to start with the object attached to TOP and recall the rules
-from the previous section about how orientation works.  The same rules
-apply here.  Note that the forward arrow is pointing down after
-attaching the object on the RIGHT face.
+如前所述，您可以在父锚点附加中为子对象设置 `orient=`，尽管行为可能不太直观，因为附加过程会变换坐标系，方向调整是在附加后的坐标系中进行的。  
+从将对象附加到 TOP 开始，并回顾前面一节中关于方向如何工作的规则，可能会有所帮助。相同的规则适用于此处。  
+请注意，在将对象附加到 RIGHT 面后，前进箭头指向下方。
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 cuboid(20){
   attach(RIGHT)
@@ -1195,11 +1000,11 @@ cuboid(20){
 
 
 
-## Positioning and Attaching Multiple Children
+## 定位和附加多个子对象/Positioning and Attaching Multiple Children
 
-You can attach or position more than one child at a time by enclosing them all in braces:
+您可以通过将多个子对象括在大括号中，同时附加或定位它们：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube(50, center=true) {
     attach(TOP) cylinder(d1=50,d2=20,h=20);
@@ -1207,30 +1012,29 @@ cube(50, center=true) {
 }
 ```
 
-If you want to attach the same shape to multiple places on the same parent, you can pass the
-desired anchors as a list to the `attach()` or `position()` modules:
+如果您希望将相同的形状附加到同一个父对象的多个位置，您可以将所需的锚点作为列表传递给 `attach()` 或 `position()` 模块：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube(50, center=true)
     attach([RIGHT,FRONT],TOP) cylinder(d1=35,d2=20,h=25);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cube(50, center=true)
     position([TOP,RIGHT,FRONT]) cylinder(d1=35,d2=20,h=25);
 ```
 
 
-## Attaching 2D Children
-You can use attachments in 2D as well.  As usual for the 2D case you
-can use TOP and BOTTOM as alternative to BACK and FORWARD.  With
-parent-child anchor attachment you cannot use the spin parameter to
-`attach()` nor can you specify spin to the child.  Spinning the child
-on the Z axis would rotate the anchor arrows out of alignment.  
+## 附加 2D 子对象/Attaching 2D Children
 
-```openscad-2D
+您也可以在 2D 中使用附加。对于 2D 情况，您可以使用 TOP 和 BOTTOM 代替 BACK 和 FORWARD。  
+在父子锚点附加中，您不能使用 `attach()` 的旋转参数，也不能为子对象指定旋转。  
+在 Z 轴上旋转子对象会使锚点箭头失去对齐。
+
+
+```openscad
 include <BOSL2/std.scad>
 rect(50){
     attach(RIGHT,FRONT)
@@ -1240,7 +1044,7 @@ rect(50){
 }
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 diff()
 circle(d=50){
@@ -1253,28 +1057,26 @@ circle(d=50){
 ```
 
 
-## Tagged Operations
-BOSL2 introduces the concept of tags.  Tags are names that can be given to attachables, so that
-you can refer to them when performing `diff()`, `intersect()`, and `conv_hull()` operations.
-Each object can have no more than one tag at a time.  
+## 标签操作/Tagged Operations
+
+BOSL2 引入了标签的概念。标签是可以分配给可附加对象的名称，以便在执行 `diff()`、`intersect()` 和 `conv_hull()` 操作时引用它们。  
+每个对象一次只能有一个标签。
 
 ### `diff([remove], [keep])`
-The `diff()` operator is used to difference away all shapes marked with the tag(s) given to
-`remove`, from the other shapes.  
+`diff()` 操作符用于从其他形状中去除所有带有 `remove` 标签的形状。
 
-For example, to difference away a child cylinder from the middle of a parent cube, you can
-do this:
+例如，要从父立方体的中间去除一个子圆柱体，您可以这样做：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 diff("hole")
 cube(100, center=true)
     tag("hole")cylinder(h=101, d=50, center=true);
 ```
 
-The `keep=` argument takes tags for shapes that you want to keep in the output.
+`keep=` 参数用于指定您希望保留在输出中的形状标签。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 diff("dish", keep="antenna")
 cube(100, center=true)
@@ -1284,11 +1086,11 @@ cube(100, center=true)
     }
 ```
 
-Remember that tags applied with `tag()` are inherited by children.  In this case, we need to explicitly
-untag the first cylinder (or change its tag to something else), or it
-will inherit the "keep" tag and get kept.  
+请记住，使用 `tag()` 应用的标签会被子对象继承。在这种情况下，我们需要显式地移除第一个圆柱体的标签（或将其标签更改为其他标签），  
+否则它会继承 "keep" 标签并被保留。
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 diff("hole", "keep")
 tag("keep")cube(100, center=true)
@@ -1298,20 +1100,19 @@ tag("keep")cube(100, center=true)
     }
 ```
 
-You can apply a tag that is not propagated to the children using
-`tag_this()`.  The above example could then be redone:
+您可以使用 `tag_this()` 应用一个不会传播到子对象的标签。然后，以上示例可以重新编写为：
 
+```openscad
 diff("hole", "keep")
 tag_this("keep")cube(100, center=true)
     attach([RIGHT,TOP]) {
         cylinder(d=95, h=5);
         tag("hole") cylinder(d=50, h=11, anchor=CTR);
     }
+```
+当然，您也可以将`tag()`应用到多个子对象。
 
-
-You can of course apply `tag()` to several children.
-
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 diff("hole")
 cube(100, center=true)
@@ -1322,11 +1123,10 @@ cube(100, center=true)
         }
 ```
 
-Many of the modules that use tags have default values for their tags.  For diff the default
-remove tag is "remove" and the default keep tag is "keep".  In this example we rely on the
-default values:
+许多使用标签的模块都有默认的标签值。对于 `diff`，默认的移除标签是 "remove"，默认的保留标签是 "keep"。  
+在这个示例中，我们依赖于默认值：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 diff()
 sphere(d=100) {
@@ -1336,26 +1136,22 @@ sphere(d=100) {
 ```
 
 
-The parent object can be differenced away from other shapes.  Tags are inherited by children,
-though, so you will need to set the tags of the children as well as the parent.
+父对象可以从其他形状中去除。不过，标签会被子对象继承，因此您需要为子对象和父对象设置标签。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 diff("hole")
 tag("hole")cube([20,11,45], center=true)
     tag("body")cube([40,10,90], center=true);
 ```
 
-Tags (and therefore tag-based operations like `diff()`) only work correctly with attachable
-children.  However, a number of built-in modules for making shapes are *not* attachable.
-Some notable non-attachable modules are `text()`, `linear_extrude()`, `rotate_extrude()`,
-`polygon()`, `polyhedron()`, `import()`, `surface()`, `union()`, `difference()`,
-`intersection()`, `offset()`, `hull()`, and `minkowski()`.
+标签（因此包括基于标签的操作，如 `diff()`）仅在可附加的子对象上正确工作。  
+然而，一些用于创建形状的内置模块是*不可附加*的。  
+一些显著的不可附加模块包括 `text()`、`linear_extrude()`、`rotate_extrude()`、`polygon()`、`polyhedron()`、`import()`、`surface()`、`union()`、`difference()`、`intersection()`、`offset()`、`hull()` 和 `minkowski()`。
 
-To allow you to use tags-based operations with non-attachable shapes, you can wrap them with the
-`force_tag()` module to specify their tags.  For example:
+为了让您在不可附加的形状上使用基于标签的操作，您可以通过 `force_tag()` 模块将它们包装起来以指定其标签。例如：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 diff("hole")
 cuboid(50)
@@ -1368,28 +1164,23 @@ cuboid(50)
 
 ### `intersect([intersect], [keep])`
 
-To perform an intersection of attachables, you can use the `intersect()` module.  This is
-specifically intended to address the situation where you want intersections involving a parent
-and a child, something that is impossible with the native `intersection()` module.  This module
-treats the children in three groups: objects matching the `intersect` tags, objects matching
-the tags listed in `keep` and the remaining objects that don't match any listed tags.  The
-intersection is computed between the union of the `intersect` tagged objects and the union of
-the objects that don't match any listed tags.  Finally the objects listed in `keep` are union
-ed with the result.  
+要执行可附加对象的交集操作，您可以使用 `intersect()` 模块。  
+这个模块专门用于处理需要涉及父对象和子对象的交集的情况，这是原生的 `intersection()` 模块无法做到的。  
+该模块将子对象分为三组：匹配 `intersect` 标签的对象、匹配 `keep` 中列出的标签的对象，以及不匹配任何列出标签的其余对象。  
+交集是通过 `intersect` 标签对象的并集与不匹配任何标签的对象的并集进行计算的。最后，将 `keep` 中列出的对象与结果进行并集操作。
 
-In this example the parent (untagged) is intersected with a conical
-bounding shape, which is tagged with the intersect tag.
+在这个示例中，父对象（未标记）与一个圆锥形边界对象相交，圆锥形边界对象被标记为 `intersect` 标签。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 intersect("bounds")
 cube(100, center=true)
     tag("bounds") cylinder(h=100, d1=120, d2=95, center=true, $fn=72);
 ```
 
-In this example the child objects are intersected with the bounding box parent.  
+在这个示例中，子对象与边界框父对象相交。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 intersect("pole cap")
 cube(100, center=true)
@@ -1399,10 +1190,10 @@ cube(100, center=true)
     }
 ```
 
-The default `intersect` tag is "intersect" and the default `keep` tag is "keep".  Here is an
-example where "keep" is used to keep the pole from being removed by the intersection. 
+默认的 `intersect` 标签是 "intersect"，默认的 `keep` 标签是 "keep"。这是一个示例，在这个示例中使用了 "keep" 来防止极点在交集操作中被移除。
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 intersect()
 cube(100, center=true) {
@@ -1412,12 +1203,13 @@ cube(100, center=true) {
 ```
 
 ### `conv_hull([keep])`
-You can use the `conv_hull()` module to hull shapes together.  Objects
-marked with the keep tags are excluded from the hull and unioned into the final result.
-The default keep tag is "keep".  
+
+您可以使用 `conv_hull()` 模块将形状合并成外包络。  
+标记为 `keep` 标签的对象会被排除在外包络之外，并与最终结果进行并集操作。  
+默认的 `keep` 标签是 "keep"。
 
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 conv_hull()
 cube(50, center=true) {
@@ -1425,21 +1217,19 @@ cube(50, center=true) {
     tag("keep")xcyl(h=100, d=20);
 }
 ```
+## 3D 边缘蒙版附加/3D Masking Attachments
 
-
-## 3D Masking Attachments
-To make it easier to mask away shapes from various edges of an attachable parent shape, there
-are a few specialized alternatives to the `attach()` and `position()` modules.
+为了更方便地从可附加父形状的各个边缘去除形状，提供了一些专门的替代模块来代替 `attach()` 和 `position()`。
 
 ### `edge_mask()`
-If you have a 3D mask shape that you want to difference away from various edges, you can use
-the `edge_mask()` module.  This module will take a vertically oriented shape, and will rotate
-and move it such that the BACK, RIGHT (X+,Y+) side of the shape will be aligned with the given
-edges.  The shape will be tagged as a "remove" so that you can use
-`diff()` with its default "remove" tag.  For example,
-here's a shape for rounding an edge:
 
-```openscad-3D
+如果您有一个 3D 蒙版形状，并希望将其从多个边缘中去除，可以使用 `edge_mask()` 模块。  
+该模块会将一个垂直方向的形状旋转并移动，使得形状的 BACK、RIGHT（X+，Y+）面与给定的边缘对齐。  
+该形状会被标记为 "remove"，以便您可以使用 `diff()` 和其默认的 "remove" 标签。  
+例如，下面是一个用于圆化边缘的形状：
+
+
+```openscad
 include <BOSL2/std.scad>
 module round_edge(l,r) difference() {
     translate([-1,-1,-l/2])
@@ -1450,9 +1240,9 @@ module round_edge(l,r) difference() {
 round_edge(l=30, r=19);
 ```
 
-You can use that mask to round various edges of a cube:
+您可以使用该蒙版来圆化立方体的多个边缘：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 module round_edge(l,r) difference() {
     translate([-1,-1,-l/2])
@@ -1467,14 +1257,14 @@ cube([50,60,70],center=true)
 ```
 
 ### `corner_mask()`
-If you have a 3D mask shape that you want to difference away from various corners, you can use
-the `corner_mask()` module.  This module will take a shape and rotate and move it such that the
-BACK RIGHT TOP (X+,Y+,Z+) side of the shape will be aligned with the given corner.  The shape
-will be tagged as a "remove" so that you can use `diff()` with its
-default "remove" tag.  For example, here's a shape for
-rounding a corner:
 
-```openscad-3D
+如果您有一个 3D 蒙版形状，并希望将其从多个角落中去除，可以使用 `corner_mask()` 模块。  
+该模块会将形状旋转并移动，使得形状的 BACK RIGHT TOP（X+，Y+，Z+）面与给定的角落对齐。  
+该形状会被标记为 "remove"，以便您可以使用 `diff()` 和其默认的 "remove" 标签。  
+例如，下面是一个用于圆化角落的形状：
+
+
+```openscad
 include <BOSL2/std.scad>
 module round_corner(r) difference() {
     translate(-[1,1,1])
@@ -1485,9 +1275,9 @@ module round_corner(r) difference() {
 round_corner(r=10);
 ```
 
-You can use that mask to round various corners of a cube:
+您可以使用该蒙版来圆化立方体的多个角落：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 module round_corner(r) difference() {
     translate(-[1,1,1])
@@ -1501,10 +1291,12 @@ cube([50,60,70],center=true)
         round_corner(r=10);
 ```
 
-### Mix and Match Masks
-You can use `edge_mask()` and `corner_mask()` together as well:
+### 混合使用蒙版/Mix and Match Masks
 
-```openscad-3D
+您也可以将 `edge_mask()` 和 `corner_mask()` 一起使用：
+
+
+```openscad
 include <BOSL2/std.scad>
 module round_corner(r) difference() {
     translate(-[1,1,1])
@@ -1525,41 +1317,38 @@ cube([50,60,70],center=true) {
 }
 ```
 
-## 2D Profile Mask Attachments
-While 3D mask shapes give you a great deal of control, you need to make sure they are correctly
-sized, and you need to provide separate mask shapes for corners and edges.  Often, a single 2D
-profile could be used to describe the edge mask shape (via `linear_extrude()`), and the corner
-mask shape (via `rotate_extrude()`).  This is where `edge_profile()`, `corner_profile()`, and
-`face_profile()` come in.
+## 2D 外形蒙版附加/2D Profile Mask Attachments
+
+虽然 3D 蒙版形状提供了很大的控制能力，但您需要确保它们的大小正确，并且需要为角落和边缘提供不同的蒙版形状。  
+通常，可以使用单个 2D 外形来描述边缘蒙版形状（通过 `linear_extrude()`）和角落蒙版形状（通过 `rotate_extrude()`）。  
+这就是 `edge_profile()`、`corner_profile()` 和 `face_profile()` 的用途。
 
 ### `edge_profile()`
-Using the `edge_profile()` module, you can provide a 2D profile shape and it will be linearly
-extruded to a mask of the appropriate length for each given edge.  The resultant mask will be
-tagged with "remove" so that you can difference it away with `diff()`
-with the default "remove" tag.  The 2D profile is
-assumed to be oriented with the BACK, RIGHT (X+,Y+) quadrant as the "cutter edge" that gets
-re-oriented towards the edges of the parent shape.  A typical mask profile for chamfering an
-edge may look like:
 
-```openscad-2D
+使用 `edge_profile()` 模块，您可以提供一个 2D 外形，并将其线性拉伸为适当长度的蒙版，以适应每个给定的边缘。  
+生成的蒙版将被标记为 "remove"，以便您可以使用默认的 "remove" 标签通过 `diff()` 将其去除。  
+假设 2D 外形与 BACK、RIGHT（X+，Y+）象限对齐，作为“切割边缘”，该边缘将重新定向到父形状的边缘。  
+一个典型的用于倒角的蒙版外形可能是：
+
+```openscad
 include <BOSL2/std.scad>
 mask2d_roundover(10);
 ```
 
-Using that mask profile, you can mask the edges of a cube like:
+使用该蒙版外形，您可以像这样对立方体的边缘进行蒙版处理：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 diff()
 cube([50,60,70],center=true)
    edge_profile("ALL")
        mask2d_roundover(10);
 ```
-
 ### `corner_profile()`
-You can use the same profile to make a rounded corner mask as well:
 
-```openscad-3D
+您也可以使用相同的外形来制作圆角蒙版：
+
+```openscad
 include <BOSL2/std.scad>
 diff()
 cube([50,60,70],center=true)
@@ -1568,10 +1357,11 @@ cube([50,60,70],center=true)
 ```
 
 ### `face_profile()`
-As a simple shortcut to apply a profile mask to all edges and corners of a face, you can use the
-`face_profile()` module:
 
-```openscad-3D
+作为将外形蒙版应用于面上所有边缘和角落的简便方法，您可以使用 `face_profile()` 模块：
+
+
+```openscad
 include <BOSL2/std.scad>
 diff()
 cube([50,60,70],center=true)
@@ -1580,11 +1370,13 @@ cube([50,60,70],center=true)
 ```
 
 
-## Coloring Attachables
-Usually, when coloring a shape with the `color()` module, the parent color overrides the colors of
-all children.  This is often not what you want:
+## 颜色附加对象/Coloring Attachables
 
-```openscad-3D
+通常，当使用 `color()` 模块为形状着色时，父对象的颜色会覆盖所有子对象的颜色。  
+这通常不是您想要的效果：
+
+
+```openscad
 include <BOSL2/std.scad>
 $fn = 24;
 color("red") spheroid(d=3) {
@@ -1594,10 +1386,11 @@ color("red") spheroid(d=3) {
 }
 ```
 
-If you use the `recolor()` module, however, the child's color
-overrides the color of the parent.  This is probably easier to understand by example:
+然而，如果您使用 `recolor()` 模块，子对象的颜色会覆盖父对象的颜色。  
+通过示例可能更容易理解：
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 $fn = 24;
 recolor("red") spheroid(d=3) {
@@ -1607,12 +1400,11 @@ recolor("red") spheroid(d=3) {
 }
 ```
 
-Be aware that `recolor()` will only work if you avoid using the native
-`color()` module.  Also note that `recolor()` still affects all its
-children.  If you want to color an object without affecting the
-children you can use `color_this()`.  See the difference below:
+请注意，`recolor()` 仅在避免使用原生的 `color()` 模块时有效。  
+另外，`recolor()` 仍会影响所有子对象。如果您想为一个对象着色而不影响其子对象，可以使用 `color_this()`。  
+请参阅下面的区别：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 $fn = 24;
 recolor("red") spheroid(d=3) {
@@ -1628,30 +1420,22 @@ recolor("red") spheroid(d=3) {
 }
 ```
 
-As with all of the attachable features, these color modules only work
-on attachable objects, so they will have no effect on objects you
-create using `linear_extrude()` or `rotate_extrude()`.  
+与所有可附加功能一样，这些颜色模块仅适用于可附加对象，因此它们不会影响您使用 `linear_extrude()` 或 `rotate_extrude()` 创建的对象。
 
+## 制作可附加对象/Making Attachables
 
-## Making Attachables
-To make a shape attachable, you just need to wrap it with an `attachable()` module with a
-basic description of the shape's geometry.  By default, the shape is expected to be centered
-at the origin.  The `attachable()` module expects exactly two children.  The first will be
-the shape to make attachable, and the second will be `children()`,
-literally.
+要使形状成为可附加对象，您只需使用 `attachable()` 模块将其包装，并提供形状几何的基本描述。  
+默认情况下，形状应以原点为中心。  
+`attachable()` 模块要求恰好有两个子对象。第一个是要使其成为可附加对象的形状，第二个是 `children()`，字面意义上。
 
-### Pass-through Attachables
-The simplest way to make your own attachable module is to simply pass
-through to a pre-existing attachable submodule.  This could be
-appropriate if you want to rename a module, or if the anchors of an
-existing module are suited to (or good enough for) your object.  In
-order for your attachable module to work properly you need to accept
-the `anchor`, `spin` and `orient` parameters, give them suitable
-defaults, and pass them to the attachable submodule.  Don't forget to
-pass the children to the attachable submodule as well, or your new
-module will ignore its children.  
+### 透传可附加对象/Pass-through Attachables
 
-```openscad-3D
+制作自己可附加模块的最简单方法是直接透传到现有的可附加子模块。  
+如果您想重命名模块，或者现有模块的锚点适合（或足够好）您的对象，这可能是合适的做法。  
+为了确保您的可附加模块正常工作，您需要接受 `anchor`、`spin` 和 `orient` 参数，给它们适当的默认值，并将它们传递给可附加子模块。  
+别忘了也将子对象传递给可附加子模块，否则您的新模块会忽略它的子对象。
+
+```openscad
 include <BOSL2/std.scad>
 $fn=32;
 module cutcube(anchor=CENTER,spin=0,orient=UP)
@@ -1669,14 +1453,13 @@ cutcube()
   tag("remove")attach(RIGHT) cyl(d=2,h=8);
 ```
 
-### Prismoidal/Cuboidal Attachables
-To make a cuboidal or prismoidal shape attachable, you use the `size`, `size2`, and `offset`
-arguments of `attachable()`.
+### 棱柱形/长方体可附加对象/Prismoidal/Cuboidal Attachables
 
-In the most basic form, where the shape is fully cuboid, with top and bottom of the same size,
-and directly over one another, you can just use `size=`.
+要使长方体或棱柱形状成为可附加对象，您需要使用 `attachable()` 的 `size`、`size2` 和 `offset` 参数。
 
-```openscad-3D;Big
+在最基本的形式中，当形状完全是长方体，且顶部和底部大小相同并直接重叠时，您只需使用 `size=`。
+
+```openscad
 include <BOSL2/std.scad>
 module cubic_barbell(s=100, anchor=CENTER, spin=0, orient=UP) {
     attachable(anchor,spin,orient, size=[s*3,s,s]) {
@@ -1690,11 +1473,10 @@ module cubic_barbell(s=100, anchor=CENTER, spin=0, orient=UP) {
 cubic_barbell(100) show_anchors(60);
 ```
 
-When the shape is prismoidal, where the top is a different size from the bottom, you can use
-the `size2=` argument as well. While `size=` takes all three axes sizes, the `size2=` argument
-only takes the [X,Y] sizes of the top of the shape.
+当形状是棱柱形的，顶部与底部的大小不同时，您可以使用 `size2=` 参数。  
+虽然 `size=` 参数包含所有三个轴的大小，但 `size2=` 参数只接受形状顶部的 [X, Y] 大小。
 
-```openscad-3D;Big
+```openscad
 include <BOSL2/std.scad>
 module prismoidal(size=[100,100,100], scale=0.5, anchor=CENTER, spin=0, orient=UP) {
     attachable(anchor,spin,orient, size=size, size2=[size.x, size.y]*scale) {
@@ -1712,11 +1494,10 @@ module prismoidal(size=[100,100,100], scale=0.5, anchor=CENTER, spin=0, orient=U
 prismoidal([100,60,30], scale=0.5) show_anchors(20);
 ```
 
-When the top of the prismoid can be shifted away from directly above the bottom, you can use
-the `shift=` argument.  The `shift=` argument takes an [X,Y] vector of the offset of the center
-of the top from the XY center of the bottom of the shape.
+当棱柱体的顶部可以从底部正上方偏移时，您可以使用 `shift=` 参数。  
+`shift=` 参数接受一个 [X, Y] 向量，表示顶部中心相对于形状底部 XY 中心的偏移。
 
-```openscad-3D;Big
+```openscad
 include <BOSL2/std.scad>
 module prismoidal(size=[100,100,100], scale=0.5, shift=[0,0], anchor=CENTER, spin=0, orient=UP) {
     attachable(anchor,spin,orient, size=size, size2=[size.x, size.y]*scale, shift=shift) {
@@ -1734,11 +1515,10 @@ module prismoidal(size=[100,100,100], scale=0.5, shift=[0,0], anchor=CENTER, spi
 prismoidal([100,60,30], scale=0.5, shift=[-30,20]) show_anchors(20);
 ```
 
-In the case that the prismoid is not oriented vertically, (ie, where the `shift=` or `size2=`
-arguments should refer to a plane other than XY) you can use the `axis=` argument.  This lets
-you make prismoids naturally oriented forwards/backwards or sideways.
+如果棱柱体不是垂直定向的（即，`shift=` 或 `size2=` 参数应该引用除 XY 外的其他平面），您可以使用 `axis=` 参数。  
+这使得您可以将棱柱体自然地定向为前后或侧向。
 
-```openscad-3D;Big
+```openscad
 include <BOSL2/std.scad>
 module yprismoidal(
     size=[100,100,100], scale=0.5, shift=[0,0],
@@ -1763,11 +1543,11 @@ module yprismoidal(
 yprismoidal([100,60,30], scale=1.5, shift=[20,20]) show_anchors(20);
 ```
 
+### 圆柱形可附加对象/Cylindrical Attachables
 
-### Cylindrical Attachables
-To make a cylindrical shape attachable, you use the `l`, and `r`/`d`, args of `attachable()`.
+要使圆柱形状成为可附加对象，您需要使用 `attachable()` 的 `l` 和 `r`/`d` 参数。
 
-```openscad-3D;Big
+```openscad
 include <BOSL2/std.scad>
 module twistar(l,r,d, anchor=CENTER, spin=0, orient=UP) {
     r = get_radius(r=r,d=d,dflt=1);
@@ -1780,10 +1560,9 @@ module twistar(l,r,d, anchor=CENTER, spin=0, orient=UP) {
 twistar(l=100, r=40) show_anchors(20);
 ```
 
-If the cylinder is elipsoidal in shape, you can pass the unequal X/Y sizes as a 2-item vector
-to the `r=` or `d=` argument.
+如果圆柱体是椭圆形的，您可以将不相等的 X/Y 尺寸作为一个包含两个元素的向量传递给 `r=` 或 `d=` 参数。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 module ovalstar(l,rx,ry, anchor=CENTER, spin=0, orient=UP) {
     attachable(anchor,spin,orient, r=[rx,ry], l=l) {
@@ -1796,9 +1575,9 @@ module ovalstar(l,rx,ry, anchor=CENTER, spin=0, orient=UP) {
 ovalstar(l=100, rx=50, ry=30) show_anchors(20);
 ```
 
-For cylindrical shapes that aren't oriented vertically, use the `axis=` argument.
+对于非垂直定向的圆柱形状，使用 `axis=` 参数。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 module ytwistar(l,r,d, anchor=CENTER, spin=0, orient=UP) {
     r = get_radius(r=r,d=d,dflt=1);
@@ -1812,11 +1591,12 @@ module ytwistar(l,r,d, anchor=CENTER, spin=0, orient=UP) {
 ytwistar(l=100, r=40) show_anchors(20);
 ```
 
-### Conical Attachables
-To make a conical shape attachable, you use the `l`, `r1`/`d1`, and `r2`/`d2`, args of
-`attachable()`.
+### 锥形可附加对象/Conical Attachables
 
-```openscad-3D;Big
+要使锥形状成为可附加对象，您需要使用 `attachable()` 的 `l`、`r1`/`d1` 和 `r2`/`d2` 参数。
+
+
+```openscad
 include <BOSL2/std.scad>
 module twistar(l, r,r1,r2, d,d1,d2, anchor=CENTER, spin=0, orient=UP) {
     r1 = get_radius(r1=r1,r=r,d1=d1,d=d,dflt=1);
@@ -1830,10 +1610,9 @@ module twistar(l, r,r1,r2, d,d1,d2, anchor=CENTER, spin=0, orient=UP) {
 twistar(l=100, r1=40, r2=20) show_anchors(20);
 ```
 
-If the cone is ellipsoidal in shape, you can pass the unequal X/Y sizes as a 2-item vectors
-to the `r1=`/`r2=` or `d1=`/`d2=` arguments.
+如果锥体是椭圆形的，您可以将不相等的 X/Y 尺寸作为包含两个元素的向量传递给 `r1=`/`r2=` 或 `d1=`/`d2=` 参数。
 
-```openscad-3D;Big
+```openscad
 include <BOSL2/std.scad>
 module ovalish(l,rx1,ry1,rx2,ry2, anchor=CENTER, spin=0, orient=UP) {
     attachable(anchor,spin,orient, r1=[rx1,ry1], r2=[rx2,ry2], l=l) {
@@ -1851,10 +1630,9 @@ module ovalish(l,rx1,ry1,rx2,ry2, anchor=CENTER, spin=0, orient=UP) {
 ovalish(l=100, rx1=50, ry1=30, rx2=30, ry2=50) show_anchors(20);
 ```
 
-For conical shapes that are not oriented vertically, use the `axis=` argument to indicate the
-direction of the primary shape axis:
+对于非垂直定向的锥形状，使用 `axis=` 参数来指示主要形状轴的方向：
 
-```openscad-3D;Big
+```openscad
 include <BOSL2/std.scad>
 module ytwistar(l, r,r1,r2, d,d1,d2, anchor=CENTER, spin=0, orient=UP) {
     r1 = get_radius(r1=r1,r=r,d1=d1,d=d,dflt=1);
@@ -1869,10 +1647,12 @@ module ytwistar(l, r,r1,r2, d,d1,d2, anchor=CENTER, spin=0, orient=UP) {
 ytwistar(l=100, r1=40, r2=20) show_anchors(20);
 ```
 
-### Spherical Attachables
-To make a spherical shape attachable, you use the `r`/`d` args of `attachable()`.
+### 球形可附加对象/Spherical Attachables
 
-```openscad-3D;Big
+要使球形状成为可附加对象，您需要使用 `attachable()` 的 `r`/`d` 参数。
+
+
+```openscad
 include <BOSL2/std.scad>
 module spikeball(r, d, anchor=CENTER, spin=0, orient=UP) {
     r = get_radius(r=r,d=d,dflt=1);
@@ -1887,9 +1667,9 @@ module spikeball(r, d, anchor=CENTER, spin=0, orient=UP) {
 spikeball(r=50) show_anchors(20);
 ```
 
-If the shape is an ellipsoid, you can pass a 3-item vector of sizes to `r=` or `d=`.
+如果形状是椭球体，您可以将一个包含三个元素的尺寸向量传递给 `r=` 或 `d=` 参数。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 module spikeball(r, d, scale, anchor=CENTER, spin=0, orient=UP) {
     r = get_radius(r=r,d=d,dflt=1);
@@ -1904,14 +1684,14 @@ module spikeball(r, d, scale, anchor=CENTER, spin=0, orient=UP) {
 spikeball(r=50, scale=[0.75,1,1.5]) show_anchors(20);
 ```
 
-### VNF Attachables
-If the shape just doesn't fit into any of the above categories, and you constructed it as a
-[VNF](vnf.scad), you can use the VNF itself to describe the geometry with the `vnf=` argument.
+### VNF 可附加对象/VNF Attachables
 
-There are two variations to how anchoring can work for VNFs. When `extent=true`, (the default)
-then a plane is projected out from the origin, perpendicularly in the direction of the anchor,
-to the furthest distance that intersects with the VNF shape.  The anchor point is then the
-center of the points that still intersect that plane.
+如果形状不适合上述任何类别，并且您将其构建为 [VNF](vnf.scad)，  
+您可以使用 VNF 本身通过 `vnf=` 参数来描述几何形状。
+
+VNF 的锚定方式有两种变体。当 `extent=true`（默认值）时，  
+一个平面将从原点垂直投影，沿着锚点的方向延伸，直到与 VNF 形状相交的最远距离。  
+锚点然后是仍与该平面相交的点的中心。
 
 ```openscad-FlatSpin,VPD=500
 include <BOSL2/std.scad>
@@ -1946,10 +1726,8 @@ stellate_cube(25) {
 }
 ```
 
-When `extent=false`, then the anchor point will be the furthest intersection of the VNF with
-the anchor ray from the origin. The orientation of the anchor point will be the normal of the
-face at the intersection.  If the intersection is at an edge or corner, then the orientation
-will bisect the angles between the faces.
+当 `extent=false` 时，锚点将是 VNF 与从原点发出的锚点射线的最远交点。  
+锚点的方向将是交点处面的法线。如果交点位于边缘或角落，则方向将平分面之间的角度。
 
 ```openscad-VPD=1250
 include <BOSL2/std.scad>
@@ -1979,7 +1757,7 @@ module stellate_cube(s=100, anchor=CENTER, spin=0, orient=UP) {
 stellate_cube() show_anchors(50);
 ```
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 $fn=32;
 R = difference(circle(10), right(2, circle(9)));
@@ -1987,24 +1765,19 @@ linear_sweep(R,height=10,atype="hull")
     attach(RIGHT) anchor_arrow();
 ```
 
+## 制作命名锚点/Making Named Anchors
 
-## Making Named Anchors
-While vector anchors are often useful, sometimes there are logically extra attachment points that
-aren't on the perimeter of the shape.  This is what named string anchors are for.  For example,
-the `teardrop()` shape uses a cylindrical geometry for it's vector anchors, but it also provides
-a named anchor "cap" that is at the tip of the hat of the teardrop shape.
+虽然向量锚点通常很有用，但有时会有一些逻辑上额外的附加点，这些点不在形状的外周上。这就是命名字符串锚点的用途。  
+例如，`teardrop()` 形状使用圆柱几何来定义它的向量锚点，但它还提供了一个名为 "cap" 的命名锚点，该锚点位于泪滴形状帽尖的位置。
 
-Named anchors are passed as an array of `named_anchor()`s to the `anchors=` argument of `attachable()`.
-The `named_anchor()` call takes a name string, a positional point, an orientation vector, and a spin.
-The name is the name of the anchor.  The positional point is where the anchor point is at.  The
-orientation vector is the direction that a child attached at that anchor point should be oriented.
-The spin is the number of degrees that an attached child should be rotated counter-clockwise around
-the orientation vector.  Spin is optional, and defaults to 0.
+命名锚点作为 `named_anchor()` 数组传递给 `attachable()` 的 `anchors=` 参数。  
+`named_anchor()` 调用接受一个名称字符串、一个位置点、一个方向向量和一个旋转角度。  
+名称是锚点的名称。位置点是锚点所在的位置。方向向量是附加在该锚点上的子对象应对齐的方向。  
+旋转角度是附加子对象绕方向向量逆时针旋转的度数。旋转是可选的，默认值为 0。
 
-To make a simple attachable shape similar to a `teardrop()` that provides a "cap" anchor, you may
-define it like this:
+要制作一个类似于 `teardrop()` 的简单可附加形状，并提供一个 "cap" 锚点，您可以这样定义：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 module raindrop(r, thick, anchor=CENTER, spin=0, orient=UP) {
     anchors = [
@@ -2021,7 +1794,7 @@ module raindrop(r, thick, anchor=CENTER, spin=0, orient=UP) {
 raindrop(r=25, thick=20, anchor="cap");
 ```
 
-If you want multiple named anchors, just add them to the list of anchors:
+如果您想要多个命名锚点，只需将它们添加到锚点列表中：
 
 ```openscad-FlatSpin,VPD=150
 include <BOSL2/std.scad>
@@ -2042,17 +1815,15 @@ module raindrop(r, thick, anchor=CENTER, spin=0, orient=UP) {
 raindrop(r=15, thick=10) show_anchors();
 ```
 
-Sometimes the named anchor you want to add may be at a point that is reached through a complicated
-set of translations and rotations.  One quick way to calculate that point is to reproduce those
-transformations in a transformation matrix chain.  This is simplified by how you can use the
-function forms of almost all the transformation modules to get the transformation matrices, and
-chain them together with matrix multiplication.  For example, if you have:
+有时，您想添加的命名锚点可能位于通过一系列复杂的平移和旋转得到的点上。计算该点的一个快捷方法是通过在变换矩阵链中重现这些变换。通过使用几乎所有变换模块的函数形式获取变换矩阵，并通过矩阵乘法将它们链在一起，简化了这一过程。  
+例如，如果您有：
+
 
 ```
 scale([1.1, 1.2, 1.3]) xrot(15) zrot(25) right(20) sphere(d=1);
 ```
 
-and you want to calculate the center point of the sphere, you can do it like:
+如果您想计算球体的中心点，可以像这样操作：
 
 ```
 sphere_pt = apply(
@@ -2061,22 +1832,16 @@ sphere_pt = apply(
 );
 ```
 
+## 重写标准锚点/Overriding Standard Anchors
 
-## Overriding Standard Anchors
+有时您可能希望使用标准锚点，但重写其中一些。  
+回到上面的方形杠铃示例，右侧和左侧的锚点位于每个端点的立方体上，但位于 x=0 处的锚点漂浮在空间中。  
+对于 3D 中的棱柱形/立方体锚点和 2D 中的梯形/矩形锚点，我们可以通过指定重写选项并给出要重写的锚点，  
+然后以 `[position, direction, spin]` 的形式给出替换值，从而重写单个锚点。  
+通常，您只需要重写位置。如果省略其他列表项，则将使用从标准锚点推导出的值。  
+下面我们重写了 FWD 锚点的位置：
 
-Sometimes you may want to use the standard anchors but override some
-of them.  Returning to the square barebell example above, the anchors
-at the right and left sides are on the cubes at each end, but the
-anchors at x=0 are in floating in space.  For prismoidal/cubic anchors
-in 3D and trapezoidal/rectangular anchors in 2D we can override a single anchor by
-specifying the override option and giving the anchor that is being
-overridden, and then the replacement in the form
-`[position, direction, spin]`.  Most often you will only want to
-override the position.  If you omit the other list items then the
-value drived from the standard anchor will be used. Below we override
-position of the FWD anchor:
-
-```openscad-3D;Big
+```openscad
 include<BOSL2/std.scad>
 module cubic_barbell(s=100, anchor=CENTER, spin=0, orient=UP) {
     override = [
@@ -2093,11 +1858,9 @@ module cubic_barbell(s=100, anchor=CENTER, spin=0, orient=UP) {
 cubic_barbell(100) show_anchors(60);
 ```
 
-Note how the FWD anchor is now rooted on the cylindrical portion.  If
-you wanted to also change its direction and spin you could do it like
-this:
+请注意，FWD 锚点现在已固定在圆柱部分。如果您还想改变它的方向和旋转，可以像这样操作：
 
-```openscad-3D;Big
+```openscad
 include<BOSL2/std.scad>
 module cubic_barbell(s=100, anchor=CENTER, spin=0, orient=UP) {
     override = [
@@ -2114,15 +1877,10 @@ module cubic_barbell(s=100, anchor=CENTER, spin=0, orient=UP) {
 cubic_barbell(100) show_anchors(60);
 ```
 
-In the above example we give three values for the override.  As
-before, the first one places the anchor on the cylinder.  We have
-added the second entry which points the anchor off to the left.
-The third entry gives a spin override, whose effect is shown by the
-position of the red flag on the arrow.  If you want to override all of
-the x=0 anchors to be on the cylinder, with their standard directions,
-you can do that by supplying a list: 
+在上述示例中，我们为重写提供了三个值。如之前所述，第一个值将锚点放置在圆柱体上。我们添加了第二个值，将锚点指向左侧。  
+第三个值提供了旋转重写，其效果通过箭头上的红旗位置来显示。如果您想将所有 x=0 的锚点重写为放置在圆柱体上，并保持其标准方向，可以通过提供一个列表来实现：
 
-```openscad-3D;Big
+```openscad
 include<BOSL2/std.scad>
 module cubic_barbell(s=100, anchor=CENTER, spin=0, orient=UP) {
     override = [
@@ -2140,14 +1898,10 @@ module cubic_barbell(s=100, anchor=CENTER, spin=0, orient=UP) {
 cubic_barbell(100) show_anchors(30);
 ```
 
-Now all of the anchors in the middle are all rooted to the cylinder.  Another
-way to do the same thing is to use a function literal for override.
-It will be called with the anchor as its argument and needs to return undef to just use
-the default, or a `[position, direction, spin]` triple to override the
-default.  As before, you can omit values to keep their default.
-Here is the same example using a function literal for the override:
+现在，中间的所有锚点都固定在圆柱体上。另一种实现相同效果的方法是使用函数字面量进行重写。该函数将以锚点作为参数调用，并需要返回 `undef` 以使用默认值，或者返回一个 `[position, direction, spin]` 三元组来重写默认值。如之前所述，您可以省略值以保留默认值。下面是使用函数字面量进行重写的相同示例：
 
-```openscad-3D;Big
+
+```openscad
 include<BOSL2/std.scad>
 module cubic_barbell(s=100, anchor=CENTER, spin=0, orient=UP) {
     override = function (anchor) 
