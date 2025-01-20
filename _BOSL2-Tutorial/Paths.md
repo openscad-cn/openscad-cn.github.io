@@ -5,244 +5,255 @@ nav_order: 2.1
 ---
 # 路径与区域
 
-<!-- TOC -->
+{: .no_toc }
 
-## Paths
-A number of advanced features in BOSL2 rely on paths, which are just ordered lists of points.
+## 目录
+{: .no_toc .text-delta }
 
-First-off, some terminology:
-- A 2D point is a vector of X and Y axis position values.  ie: `[3,4]` or `[7,-3]`.
-- A 3D point is a vector of X, Y and Z axis position values.  ie: `[3,4,2]` or `[-7,5,3]`.
-- A 2D path is simply a list of two or more 2D points.  ie: `[[5,7], [1,-5], [-5,6]]`
-- A 3D path is simply a list of two or more 3D points.  ie: `[[5,7,-1], [1,-5,3], [-5,6,1]]`
-- A polygon is a 2D (or planar 3D) path where the last point is assumed to connect to the first point.
-- A region is a list of 2D polygons, where each polygon is XORed against all the others.  ie: if one polygon is inside another, it makes a hole in the first polygon.
+1. TOC
+{:toc}
 
-### Stroke
-A path can be hard to visualize, since it's just a bunch of numbers in the source code.
-One way to see the path is to pass it to `polygon()`:
+## 路径/Paths
 
-```openscad-2D
+BOSL2 中的许多高级功能依赖于路径，它们只是点的有序列表。
+
+首先，一些术语：
+- 2D 点是由 X 和 Y 轴位置值组成的向量。例如：`[3,4]` 或 `[7,-3]`。
+- 3D 点是由 X、Y 和 Z 轴位置值组成的向量。例如：`[3,4,2]` 或 `[-7,5,3]`。
+- 2D 路径只是由两个或更多 2D 点组成的列表。例如：`[[5,7], [1,-5], [-5,6]]`
+- 3D 路径只是由两个或更多 3D 点组成的列表。例如：`[[5,7,-1], [1,-5,3], [-5,6,1]]`
+- 多边形是一个 2D（或平面 3D）路径，其中最后一个点默认连接到第一个点。
+- 区域是由 2D 多边形组成的列表，每个多边形与其他多边形进行 XOR 操作。例如：如果一个多边形在另一个多边形内，则会在第一个多边形中创建一个孔。
+
+### 描边/Stroke
+
+路径可能难以可视化，因为它在源代码中只是一些数字。可视化路径的一种方法是将其传递给 `polygon()`：
+
+
+```openscad
 include <BOSL2/std.scad>
 path = [[0,0], [-10,10], [0,20], [10,20], [10,10]];
 polygon(path);
 ```
 
-Sometimes, however, it's easier to see just the path itself.  For this, you can use the `stroke()` module.
-At its most basic, `stroke()` just shows the path's line segments:
+然而，有时直接查看路径本身会更容易。为此，您可以使用 `stroke()` 模块。在最基本的情况下，`stroke()` 仅显示路径的线段：
 
-```openscad-2D
+
+```openscad
 include <BOSL2/std.scad>
 path = [[0,0], [-10,10], [0,20], [10,20], [10,10]];
 stroke(path);
 ```
 
-You can vary the width of the drawn path with the `width=` argument:
+您可以使用 `width=` 参数来调整绘制路径的宽度：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = [[0,0], [-10,10], [0,20], [10,20], [10,10]];
 stroke(path, width=3);
 ```
 
-You can vary the line length along the path by giving a list of widths, one per point:
+您可以通过提供一个宽度列表（每个点对应一个宽度）来调整路径上线段的长度：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = [[0,0], [-10,10], [0,20], [10,20], [10,10]];
 stroke(path, width=[3,2,1,2,3]);
 ```
 
-If a path is meant to represent a closed polygon, you can use `closed=true` to show it that way:
+如果路径表示一个封闭的多边形，您可以使用 `closed=true` 以这种方式显示：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = [[0,0], [-10,10], [0,20], [10,20], [10,10]];
 stroke(path, closed=true);
 ```
 
-The ends of the drawn path are normally capped with a "round" endcap, but there are other options:
+绘制路径的两端通常以“圆形”端帽结束，但还有其他选项可供选择：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = [[0,0], [-10,10], [0,20], [10,20], [10,10]];
 stroke(path, endcaps="round");
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = [[0,0], [-10,10], [0,20], [10,20], [10,10]];
 stroke(path, endcaps="butt");
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = [[0,0], [-10,10], [0,20], [10,20], [10,10]];
 stroke(path, endcaps="line");
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = [[0,0], [-10,10], [0,20], [10,20], [10,10]];
 stroke(path, endcaps="tail");
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = [[0,0], [-10,10], [0,20], [10,20], [10,10]];
 stroke(path, endcaps="arrow2");
 ```
 
-For more standard supported endcap options, see the docs for [`stroke()`](shapes2d.scad#stroke).
+有关更多标准支持的端帽选项，请参阅 [`stroke()`](shapes2d.scad#stroke) 的文档。
 
-The start and ending endcaps can be specified individually or separately, using `endcap1=` and `endcap2=`:
+起始端帽和结束端帽可以分别通过 `endcap1=` 和 `endcap2=` 单独指定：
 
-```openscad-2D
+
+```openscad
 include <BOSL2/std.scad>
 path = [[0,0], [-10,10], [0,20], [10,20], [10,10]];
 stroke(path, endcap2="arrow2");
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = [[0,0], [-10,10], [0,20], [10,20], [10,10]];
 stroke(path, endcap1="butt", endcap2="arrow2");
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = [[0,0], [-10,10], [0,20], [10,20], [10,10]];
 stroke(path, endcap1="tail", endcap2="arrow");
 ```
 
-The size of the endcaps will be relative to the width of the line where the endcap is to be placed:
+端帽的大小将相对于放置端帽的线段宽度：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = [[0,0], [-10,10], [0,20], [10,20], [10,10]];
 widths = [1, 1.25, 1.5, 1.75, 2];
 stroke(path, width=widths, endcaps="arrow2");
 ```
 
-If none of the standard endcaps are useful to you, it is possible to design your own, simply by
-passing a path to the `endcaps=`, `endcap1=`, or `endcap2=` arguments.  You may also need to give
-`trim=` to tell it how far back to trim the main line, so it renders nicely.  The values in the
-endcap polygon, and in the `trim=` argument are relative to the line width.  A value of 1 is one
-line width size.
+如果标准端帽对您没有用处，您可以通过将路径传递给 `endcaps=`、`endcap1=` 或 `endcap2=` 参数来设计自己的端帽。  
+您可能还需要提供 `trim=` 参数，以指定主线需要修剪的长度，从而使其呈现效果更好。  
+端帽多边形中的值和 `trim=` 参数中的值相对于线宽，其中 1 表示一个线宽大小。
 
-Untrimmed:
+未修剪：
 
-```openscad-2D
+
+```openscad
 include <BOSL2/std.scad>
 path = [[0,0], [-10,10], [0,20], [10,20], [10,10]];
 dblarrow = [[0,0], [2,-3], [0.5,-2.3], [2,-4], [0.5,-3.5], [-0.5,-3.5], [-2,-4], [-0.5,-2.3], [-2,-3]];
 stroke(path, endcaps=dblarrow);
 ```
 
-Trimmed:
+已修剪：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = [[0,0], [-10,10], [0,20], [10,20], [10,10]];
 dblarrow = [[0,0], [2,-3], [0.5,-2.3], [2,-4], [0.5,-3.5], [-0.5,-3.5], [-2,-4], [-0.5,-2.3], [-2,-3]];
 stroke(path, trim=3.5, endcaps=dblarrow);
 ```
 
-### Standard 2D Shape Polygons
-BOSL2 will let you get the perimeter polygon for almost all of the standard 2D shapes simply by calling them like a function:
+### 标准2D形状多边形/Standard 2D Shape Polygons
 
-```openscad-2D
+通过像调用函数一样调用它们，BOSL2 可以为几乎所有的标准2D形状生成其外边界多边形：
+
+
+```openscad
 include <BOSL2/std.scad>
 path = square(40, center=true);
 stroke(list_wrap(path), endcap2="arrow2");
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = rect([40,30], rounding=5);
 stroke(list_wrap(path), endcap2="arrow2");
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = trapezoid(w1=40, w2=20, h=30);
 stroke(list_wrap(path), endcap2="arrow2");
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = circle(d=50);
 stroke(list_wrap(path), endcap2="arrow2");
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = ellipse(d=[50,30]);
 stroke(list_wrap(path), endcap2="arrow2");
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = pentagon(d=50);
 stroke(list_wrap(path), endcap2="arrow2");
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = star(n=5, step=2, d=50);
 stroke(list_wrap(path), endcap2="arrow2");
 ```
+### 弧形/Arcs
 
-### Arcs
-Often, when you are constructing a path, you will want to add an arc.  The `arc()` command lets you do that:
+在构建路径时，您经常需要添加一个弧形。`arc()` 命令可以实现这一点：
 
-```openscad-2D
+
+```openscad
 include <BOSL2/std.scad>
 path = arc(r=30, angle=120);
 stroke(path, endcap2="arrow2");
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = arc(d=60, angle=120);
 stroke(path, endcap2="arrow2");
 ```
 
-If you give the `n=` argument, you can control exactly how many points the arc is divided into:
+如果您提供 `n=` 参数，可以精确控制弧形被分成的点数：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = arc(n=5, r=30, angle=120);
 stroke(path, endcap2="arrow2");
 ```
 
-With the `start=` argument, you can start the arc somewhere other than the X+ axis:
+使用 `start=` 参数，您可以从 X+ 轴以外的其他位置开始绘制弧形：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = arc(start=45, r=30, angle=120);
 stroke(path, endcap2="arrow2");
 ```
 
-Alternatively, you can give starting and ending angles in a list in the `angle=` argument:
+或者，您可以在 `angle=` 参数中以列表形式指定起始和结束角度：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = arc(angle=[120,45], r=30);
 stroke(path, endcap2="arrow2");
 ```
 
-The `cp=` argument lets you center the arc somewhere other than the origin:
+`cp=` 参数允许您将弧的中心设置在原点以外的位置：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = arc(cp=[10,0], r=30, angle=120);
 stroke(path, endcap2="arrow2");
 ```
 
-The arc can also be given by three points on the arc:
+弧形还可以通过弧上的三个点来定义：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 pts = [[-15,10],[0,20],[35,-5]];
 path = arc(points=pts);
@@ -250,13 +261,13 @@ stroke(path, endcap2="arrow2");
 ```
 
 
-### Turtle Graphics
-Another way you can create a path is using the `turtle()` command.  It implements a simple path
-description language that is similar to LOGO Turtle Graphics. The concept is that you have a virtial
-turtle or cursor walking a path.  It can "move" forward or backward, or turn "left" or "right" in
-place:
+### 乌龟绘图/Turtle Graphics
 
-```openscad-2D
+另一种创建路径的方法是使用 `turtle()` 命令。它实现了一种类似于 LOGO 乌龟绘图的简单路径描述语言。  
+其概念是有一个虚拟的乌龟或光标沿路径行进。它可以向前或向后“移动”，或者原地“左转”或“右转”：
+
+
+```openscad
 include <BOSL2/std.scad>
 path = turtle([
     "move", 10,
@@ -272,10 +283,10 @@ path = turtle([
 stroke(path, endcap2="arrow2");
 ```
 
-The position and the facing of the turtle/cursor updates after each command.  The motion and turning
-commands can also have default distances or angles given:
+乌龟/光标的位置和朝向会在每个命令之后更新。运动和转向命令还可以设置默认的距离或角度：
 
-```openscad-2D
+
+```openscad
 include <BOSL2/std.scad>
 path = turtle([
     "angle",360/6,
@@ -289,9 +300,9 @@ path = turtle([
 stroke(path, endcap2="arrow2");
 ```
 
-You can use "scale" to relatively scale up the default motion length:
+您可以使用 "scale" 来相对放大默认的运动长度：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = turtle([
     "angle",360/6,
@@ -307,9 +318,9 @@ path = turtle([
 stroke(path, endcap2="arrow2");
 ```
 
-Sequences of commands can be repeated using the "repeat" command:
+可以使用 "repeat" 命令重复一系列命令：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path=turtle([
     "angle",360/5,
@@ -319,9 +330,9 @@ path=turtle([
 stroke(path, endcap2="arrow2");
 ```
 
-More complicated commands also exist, including those that form arcs:
+还有更复杂的命令，包括用于绘制弧形的命令：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = turtle([
     "move", 10,
@@ -333,114 +344,115 @@ path = turtle([
 stroke(path, endcap2="arrow2");
 ```
 
-A comprehensive list of supported turtle commands can be found in the docs for [`turtle()`](shapes2d.scad#turtle).
+支持的乌龟命令的完整列表可以在 [`turtle()`](shapes2d.scad#turtle) 的文档中找到。
 
-### Transforming Paths and Polygons
-To translate a path, you can just pass it to the `move()` (or up/down/left/right/fwd/back) function in the `p=` argument:
+### 转换路径和多边形/Transforming Paths and Polygons
 
-```openscad-2D
+要平移路径，只需将其作为 `p=` 参数传递给 `move()`（或 up/down/left/right/fwd/back）函数：
+
+```openscad
 include <BOSL2/std.scad>
 path = move([-15,-30], p=square(50,center=true));
 stroke(list_wrap(path), endcap2="arrow2");
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = fwd(30, p=square(50,center=true));
 stroke(list_wrap(path), endcap2="arrow2");
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = left(30, p=square(50,center=true));
 stroke(list_wrap(path), endcap2="arrow2");
 ```
 
-To scale a path, you can just pass it to the `scale()` (or [xyz]scale) function in the `p=` argument:
+要缩放路径，只需将其作为 `p=` 参数传递给 `scale()`（或 [xyz]scale）函数：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = scale([1.5,0.75], p=square(50,center=true));
 stroke(list_wrap(path), endcap2="arrow2");
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = xscale(1.5, p=square(50,center=true));
 stroke(list_wrap(path), endcap2="arrow2");
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = yscale(1.5, p=square(50,center=true));
 stroke(list_wrap(path), endcap2="arrow2");
 ```
 
-To rotate a path, just can pass it to the `rot()` (or [xyz]rot) function in the `p=` argument:
+要旋转路径，只需将其作为 `p=` 参数传递给 `rot()`（或 [xyz]rot）函数：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = rot(30, p=square(50,center=true));
 stroke(list_wrap(path), endcap2="arrow2");
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = zrot(30, p=square(50,center=true));
 stroke(list_wrap(path), endcap2="arrow2");
 ```
 
-To mirror a path, just can pass it to the `mirror()` (or [xyz]flip) function in the `p=` argument:
+要镜像路径，只需将其作为 `p=` 参数传递给 `mirror()`（或 [xyz]flip）函数：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = mirror([1,1], p=trapezoid(w1=40, w2=10, h=25));
 stroke(list_wrap(path), endcap2="arrow2");
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = xflip(p=trapezoid(w1=40, w2=10, h=25));
 stroke(list_wrap(path), endcap2="arrow2");
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 path = yflip(p=trapezoid(w1=40, w2=10, h=25));
 stroke(list_wrap(path), endcap2="arrow2");
 ```
 
-You can get raw transformation matrices for various transformations by calling them like a function without a `p=` argument:
+您可以通过在没有 `p=` 参数的情况下调用它们（就像调用函数一样），获取各种变换的原始变换矩阵：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 mat = move([5,10,0]);
 multmatrix(mat) square(50,center=true);
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 mat = scale([1.5,0.75,1]);
 multmatrix(mat) square(50,center=true);
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 mat = rot(30);
 multmatrix(mat) square(50,center=true);
 ```
 
-Raw transformation matrices can be multiplied together to precalculate a compound transformation.  For example, to scale a shape, then rotate it, then translate the result, you can do something like:
+原始变换矩阵可以相乘以预先计算复合变换。例如，要先缩放一个形状，然后旋转它，最后平移结果，您可以这样操作：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 mat = move([5,10,0]) * rot(30) * scale([1.5,0.75,1]);
 multmatrix(mat) square(50,center=true);
 ```
 
-To apply a compound transformation matrix to a path, you can use the `apply()` function:
+要将复合变换矩阵应用于路径，可以使用 `apply()` 函数：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 mat = move([5,10]) * rot(30) * scale([1.5,0.75]);
 path = square(50,center=true);
@@ -449,22 +461,22 @@ stroke(tpath, endcap2="arrow2");
 ```
 
 
-### Regions
-A polygon is good to denote a single closed 2D shape with no holes in it.  For more complex 2D
-shapes, you will need to use regions.  A region is a list of 2D polygons, where each polygon is
-XORed against all the others.  You can display a region using the `region()` module.
+### 区域/Regions
 
-If you have a region with one polygon fully inside another, it makes a hole:
+多边形适合表示没有孔的单一封闭2D形状。对于更复杂的2D形状，您需要使用区域。  
+区域是一个2D多边形的列表，其中每个多边形与其他多边形进行 XOR 操作。您可以使用 `region()` 模块显示一个区域。
 
-```openscad-2D
+如果一个区域中有一个多边形完全位于另一个多边形内部，就会形成一个孔：
+
+```openscad
 include <BOSL2/std.scad>
 rgn = [square(50,center=true), circle(d=30)];
 region(rgn);
 ```
 
-If you have a region with multiple polygons that are not contained by any others, they make multiple discontiguous shapes:
+如果一个区域包含多个彼此不包含的多边形，它们将形成多个不连续的形状：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 rgn = [
     move([-30, 20], p=square(20,center=true)),
@@ -474,9 +486,9 @@ rgn = [
 region(rgn);
 ```
 
-Region polygons can be nested abitrarily deep, in multiple discontiguous shapes:
+区域中的多边形可以任意嵌套，形成多个不连续的形状：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 rgn = [
     for (d=[50:-10:10]) left(30, p=circle(d=d)),
@@ -485,9 +497,9 @@ rgn = [
 region(rgn);
 ```
 
-A region with crossing polygons is somewhat poorly formed, but the intersection(s) of the polygons become holes:
+带有交叉多边形的区域构造不佳，但多边形的交叉部分会成为孔：
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 rgn = [
     left(15, p=circle(d=50)),
@@ -496,11 +508,12 @@ rgn = [
 region(rgn);
 ```
 
-### Boolean Region Geometry
-Similarly to how OpenSCAD can perform operations like union/difference/intersection/offset on shape geometry,
-the BOSL2 library lets you perform those same operations on regions:
+### 布尔区域几何/Boolean Region Geometry
 
-```openscad-2D
+类似于 OpenSCAD 可以对形状几何体执行联合/差集/交集/偏移等操作，  
+BOSL2 库也允许您对区域执行相同的操作：
+
+```openscad
 include <BOSL2/std.scad>
 rgn1 = [for (d=[40:-10:10]) circle(d=d)];
 rgn2 = [square([60,12], center=true)];
@@ -508,7 +521,7 @@ rgn = union(rgn1, rgn2);
 region(rgn);
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 rgn1 = [for (d=[40:-10:10]) circle(d=d)];
 rgn2 = [square([60,12], center=true)];
@@ -516,7 +529,7 @@ rgn = difference(rgn1, rgn2);
 region(rgn);
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 rgn1 = [for (d=[40:-10:10]) circle(d=d)];
 rgn2 = [square([60,12], center=true)];
@@ -524,7 +537,7 @@ rgn = intersection(rgn1, rgn2);
 region(rgn);
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 rgn1 = [for (d=[40:-10:10]) circle(d=d)];
 rgn2 = [square([60,12], center=true)];
@@ -532,7 +545,7 @@ rgn = exclusive_or(rgn1, rgn2);
 region(rgn);
 ```
 
-```openscad-2D
+```openscad
 include <BOSL2/std.scad>
 orig_rgn = [star(n=5, step=2, d=50)];
 rgn = offset(orig_rgn, r=-3, closed=true);
@@ -540,10 +553,10 @@ color("blue") region(orig_rgn);
 region(rgn);
 ```
 
-You can use regions for several useful things.  If you wanted a grid of holes in your object that
-form the shape given by a region, you can do that with `grid_copies()`:
+您可以将区域用于多种有用的功能。如果您希望在对象中创建一个孔的网格，并且这些孔的形状由区域定义，可以使用 `grid_copies()` 来实现：
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 rgn = [
     circle(d=100),
@@ -555,9 +568,9 @@ difference() {
 }
 ```
 
-You can also sweep a region through 3-space to make a solid:
+您还可以通过三维空间扫掠一个区域来生成一个实体：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 $fa=1; $fs=1;
 rgn = [ for (d=[50:-10:10]) circle(d=d) ];
