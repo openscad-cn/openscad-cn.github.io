@@ -206,7 +206,7 @@ vnf = [
 vnf_validate(vnf, size=0.1);
 ```
 
-```text
+```log
 ECHO: "ERROR HOLE_EDGE (red): Edge bounds Hole at [[-1, -1, -1], [1, -1, -1]]"
 ECHO: "ERROR HOLE_EDGE (red): Edge bounds Hole at [[-1, -1, -1], [1, -1, 1]]"
 ECHO: "ERROR HOLE_EDGE (red): Edge bounds Hole at [[1, -1, -1], [1, -1, 1]]"
