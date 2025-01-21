@@ -5,24 +5,31 @@ nav_order: 3.1
 ---
 # 分形树
 
-<!-- TOC -->
 
-### Start with a Tree Trunk
+{: .no_toc }
 
-Firstoff, include the BOSL2 library, then make a starting module that just has a tapered cylinder for the tree trunk.
+## 目录
+{: .no_toc .text-delta }
 
-```openscad-3D
+1. TOC
+{:toc}
+
+### 从树干开始/Start with a Tree Trunk
+
+首先，包含 BOSL2 库，然后创建一个起始模块，其中仅包含一个 tapered（渐变）圆柱体作为树干。
+
+```openscad
 include <BOSL2/std.scad>
 module tree(l=1500, sc=0.7)
     cylinder(h=l, d1=l/5, d2=l/5*sc);
 tree();
 ```
 
-### Attaching a Branch
+### 附加树枝/Attaching a Branch
 
-You can attach a branch to the top of the trunk by using `attach()` as a child of the trunk cylinder.
+您可以通过将 `attach()` 作为树干圆柱体的子对象，将树枝附加到树干的顶部。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 module tree(l=1500, sc=0.7)
     cylinder(h=l, d1=l/5, d2=l/5*sc)
@@ -31,11 +38,11 @@ module tree(l=1500, sc=0.7)
 tree();
 ```
 
-### Replicating the Branch
+### 复制树枝/Replicating the Branch
 
-Instead of attaching each branch individually, you can make multiple copies of one branch, that are rotated relative to each other.
+您可以通过复制一个树枝并使它们相互旋转，而不是单独附加每个树枝。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 module tree(l=1500, sc=0.7)
     cylinder(h=l, d1=l/5, d2=l/5*sc)
@@ -45,11 +52,12 @@ module tree(l=1500, sc=0.7)
 tree();
 ```
 
-### Use Recursion
+### 使用递归/Use Recursion
 
-Since branches look much like the main trunk, we can make the tree recursive. Don't forget the termination clause, or else it'll try to recurse forever!
+由于树枝与主干非常相似，我们可以使树的生成具有递归性。  
+不要忘记终止条件，否则它将尝试无限递归下去！
 
-```openscad-Med
+```openscad
 include <BOSL2/std.scad>
 module tree(l=1500, sc=0.7, depth=10)
     cylinder(h=l, d1=l/5, d2=l/5*sc)
@@ -61,11 +69,11 @@ module tree(l=1500, sc=0.7, depth=10)
 tree();
 ```
 
-### Make it Not Flat
+### 使其不平坦/Make it Not Flat
 
-A flat planar tree isn't what we want, so lets bush it out a bit by rotating each level 90 degrees.
+平面的树形状并不是我们想要的，因此我们可以通过将每一层旋转 90 度来让它看起来更加蓬松。
 
-```openscad-Med
+```openscad
 include <BOSL2/std.scad>
 module tree(l=1500, sc=0.7, depth=10)
     cylinder(h=l, d1=l/5, d2=l/5*sc)
@@ -78,11 +86,11 @@ module tree(l=1500, sc=0.7, depth=10)
 tree();
 ```
 
-### Adding Leaves
+### 添加树叶/Adding Leaves
 
-Let's add leaves. They look much like squashed versions of the standard teardrop() module, so lets use that.
+让我们添加一些树叶。它们看起来像是标准 `teardrop()` 模块的压扁版本，所以我们可以使用该模块来实现。
 
-```openscad-Big
+```openscad
 include <BOSL2/std.scad>
 module tree(l=1500, sc=0.7, depth=10)
     cylinder(h=l, d1=l/5, d2=l/5*sc)
@@ -98,14 +106,12 @@ module tree(l=1500, sc=0.7, depth=10)
 tree();
 ```
 
-### Adding Color
+### 添加颜色/Adding Color
 
-We can finish this off with some color. The `color()` module will force all it's children and
-their descendants to the new color, even if they were colored before. The `recolor()` module,
-however, will only color children and decendants that don't already have a color set by a more
-nested `recolor()`.
+我们可以为这个模型添加颜色。`color()` 模块将强制所有子对象及其后代使用新颜色，即使它们之前已经有了颜色。  
+然而，`recolor()` 模块只会为那些没有被更深层次的 `recolor()` 设置颜色的子对象和后代着色。
 
-```openscad-Big
+```openscad
 include <BOSL2/std.scad>
 module tree(l=1500, sc=0.7, depth=10)
     recolor("lightgray")
