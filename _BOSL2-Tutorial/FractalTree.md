@@ -128,5 +128,3 @@ module tree(l=1500, sc=0.7, depth=10)
             }
 tree();
 ```
-
-
