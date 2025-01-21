@@ -6,86 +6,94 @@ nav_order: 2.3
 
 # 立方体圆角
 
-One of the shape primitives you'll use most often in your OpenSCAD designs is the cube.  Rounding the edges of cube-like objects impacts both the visual appeal and functional aspects of the final design. The BOSL2 library provides a variety of methods for rounding edges and corners.
+{: .no_toc }
 
-There are four different 3d shape primitives that you can use to make cube-like objects:
+## 目录
+{: .no_toc .text-delta }
 
-* [**cuboid()**](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#module-cuboid) - Creates a cube with chamfering and roundovers.
+1. TOC
+{:toc}
 
-* [**cube()**](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#functionmodule-cube) -  An extended version of OpenSCAD's [cube()](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Primitive_Solids#cube) with anchors for attaching children. (See the [Attachments Tutorial](https://github.com/BelfrySCAD/BOSL2/wiki/Tutorial-Attachments)).
+在您的 OpenSCAD 设计中，最常使用的形状原语之一是立方体。圆化类似立方体对象的边缘不仅影响最终设计的视觉效果，还会影响其功能。BOSL2 库提供了多种方法来圆化边缘和角落。
 
-* [**prismoid()**](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#functionmodule-prismoid) - Creates a rectangular prismoid shape with optional roundovers and chamfering.
+您可以使用四种不同的 3D 形状原语来创建类似立方体的对象：
 
-* [**rounded_prism()**](https://github.com/BelfrySCAD/BOSL2/wiki/rounding.scad#functionmodule-rounded_prism) - Makes a rounded 3d object by connecting two polygons with the same vertex count. Rounded_prism supports continuous curvature rounding. (See [Types of Roundovers](https://github.com/BelfrySCAD/BOSL2/wiki/rounding.scad#section-types-of-roundovers)).
+* [**cuboid()**](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#module-cuboid) - 创建一个带有倒角和圆角的立方体。
 
-BOSL2 provides two different methods for rounding the edges of these cube-like primitives.
+* [**cube()**](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#functionmodule-cube) - OpenSCAD 的 [cube()](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Primitive_Solids#cube) 的扩展版本，具有附加子对象的锚点。（请参见 [附件教程](https://github.com/BelfrySCAD/BOSL2/wiki/Tutorial-Attachments)）
 
-* **Built-in Rounding** - The [cuboid()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#module-cuboid), [prismoid()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#functionmodule-prismoid), and [rounded_prism()](https://github.com/BelfrySCAD/BOSL2/wiki/rounding.scad#functionmodule-rounded_prism) all have built-in arguments for rounding some or all of their edges.
+* [**prismoid()**](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#functionmodule-prismoid) - 创建一个矩形棱柱形状，支持可选的圆角和倒角。
 
-* **Masking** -  BOSL2 includes a number of options for masking the edges and corners of objects. Masking can accomplish rounding tasks that are not possible with the built-in rounding arguments. For example with masking you can have a cube with a different rounding radius on the top edges than the rounding radius on the bottom edges.
+* [**rounded_prism()**](https://github.com/BelfrySCAD/BOSL2/wiki/rounding.scad#functionmodule-rounded_prism) - 通过连接两个具有相同顶点数的多边形，创建一个圆角 3D 对象。`rounded_prism` 支持连续曲率圆角。（请参见 [圆角类型](https://github.com/BelfrySCAD/BOSL2/wiki/rounding.scad#section-types-of-roundovers)）
 
-Cube-like objects have six named faces: **LEFT, RIGHT, TOP, BOT, FWD, BACK**.
+BOSL2 提供了两种不同的方法来圆化这些类似立方体的原语的边缘。
+
+* **内建圆角** - [cuboid()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#module-cuboid)、[prismoid()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#functionmodule-prismoid) 和 [rounded_prism()](https://github.com/BelfrySCAD/BOSL2/wiki/rounding.scad#functionmodule-rounded_prism) 都有内建的参数来圆化它们的一些或所有边缘。
+
+* **蒙版** -  BOSL2 包含多种选项，用于蒙版对象的边缘和角落。蒙版可以实现内建圆角参数无法完成的圆角任务。例如，使用蒙版，您可以让立方体的顶部边缘具有不同的圆角半径，底部边缘则使用不同的圆角半径。
+
+类似立方体的对象有六个命名面：**LEFT, RIGHT, TOP, BOT, FWD, BACK**。
 
 ![](https://github.com/BelfrySCAD/BOSL2/wiki/images/attachments/subsection-specifying-edges_fig2.png)
 
-Each of those face names is a vector pointing to the face.  e.g. UP is [0,0,1], and FWD is [0,-1,0].  By adding two of those vectors we can specify an edge.  For example, TOP + RIGHT is the same as [0,0,1] + [0,1,0] = [0,1,1].
+这些面名称每个都是指向该面的向量。例如，UP 是 [0,0,1]，FWD 是 [0,-1,0]。通过将这两个向量相加，我们可以指定一个边缘。例如，TOP + RIGHT 就等同于 [0,0,1] + [0,1,0] = [0,1,1]。
 
 ![](https://github.com/BelfrySCAD/BOSL2/wiki/images/attachments/subsection-specifying-edges_fig1.png)
 
-See [Specifying Edges](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#subsection-specifying-edges) for more details.
+有关更多详细信息，请参见 [指定边缘](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#subsection-specifying-edges)。
 
-## Cuboid Rounding
+## 长方体圆角/Cuboid Rounding
 
-You can round the edges of a [cuboid()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#module-cuboid) with the `rounding` argument by specifying the radius of curvature:
+您可以通过指定圆角半径，使用 `rounding` 参数来圆化 [cuboid()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#module-cuboid) 的边缘：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid(100, rounding=20);
 ```
 
-We can round the edges aligned with one of the axes, X, Y, or Z:
+我们可以圆化与某一轴对齐的边缘，如 X、Y 或 Z 轴：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=20, edges = "Z");
 ```
 
-You can round all the edges on one of the faces. Here we're rounding only the top edges:
+您可以圆化一个面上的所有边缘。这里我们只圆化顶部边缘：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=20, edges = TOP);
 ```
 
-...or just the bottom edges.  Here we're using the `teardrop` argument to limit the overhang angle to enable 3d printing on FDM printers without requiring supports:
+...或者只圆化底部边缘。这里我们使用 `teardrop` 参数将悬垂角度限制，以便在 FDM 打印机上进行 3D 打印而无需支撑：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=20, teardrop = 45, edges = BOTTOM);
 ```
 
-It is possible to round one or more of the edges while leaving others unrounded:
+可以圆化一个或多个边缘，同时保留其他边缘不圆化：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=20, edges = TOP+FRONT);
 ```
 
-...or exclude the rounding of one or more edges while rounding all the others:
+...或者在圆化所有其他边缘的同时，排除一个或多个边缘的圆角：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=20, except = TOP+FRONT);
 ```
 
-Multiple edges can be specified in the form of a list:
+多个边缘可以以列表的形式指定：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=20, edges=[FWD,TOP], except=[TOP+LEFT,FWD+RIGHT]);
 ```
 
-You can also specify which edges to round using a 3x4 array, where each entry corresponds to one of the 12 edges and is set to 1 if that edge is included and 0 if the edge is not. The edge ordering is:
+您还可以使用一个 3x4 数组来指定要圆化的边缘，其中每个条目对应于 12 个边缘之一，如果该边缘被包含，则设置为 1，如果未包含，则设置为 0。边缘的顺序是：
 
 [  
     [Y-Z-, Y+Z-, Y-Z+, Y+Z+],
@@ -93,70 +101,70 @@ You can also specify which edges to round using a 3x4 array, where each entry co
     [X-Y-, X+Y-, X-Y+, X+Y+]  
 ]
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=20, edges = [[1,0,1,0],[0,1,0,1],[1,0,0,1]]);
 ```
 
-Similarly, you can use an array to exclude selected edges from rounding:
+类似地，您可以使用一个数组来排除选定的边缘不进行圆化：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=20, except = [[1,0,1,0],[0,1,0,1],[1,0,0,1]]);
 ```
 
-### Negative Rounding
+### 负圆角/Negative Rounding
 
-You can fillet top or bottom edges by using negative rounding values. Note that you cannot use negative rounding values on Z-aligned (side) edges.  If you need to add a fillet on a Z-aligned edge, use [fillet()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#module-fillet):
+您可以通过使用负圆角值来倒角顶部或底部边缘。请注意，不能在 Z 对齐（侧面）边缘上使用负圆角值。如果您需要在 Z 对齐的边缘上添加倒角，请使用 [fillet()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#module-fillet)：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], rounding=-20, edges = BOTTOM);
 ```
 
-### Chamfering
+### 倒角/Chamfering
 
-Chamfering the edges of the cuboid() can be done in a manner similar to rounding:
+对 `cuboid()` 的边缘进行倒角可以采用类似于圆角的方式：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], chamfer=20);
 ```
 
-You can specify edges as with rounding:
+您可以像圆角一样指定边缘：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 cuboid([100,80,60], chamfer=20, edges = "Z", except = FWD+RIGHT);
 ```
 
-## Prismoid Rounding
+## 棱柱形圆角/Prismoid Rounding
 
-The [prismoid()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#functionmodule-prismoid) differs from the cuboid and cube in that you can only round or chamfer the vertical(ish) edges using the built-in parameters. For those edges, you can specify rounding and/or chamfering for top and bottom separately:
+与 `cuboid()` 和 `cube()` 不同，`prismoid()`（[prismoid()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#functionmodule-prismoid)）只能使用内建参数圆化或倒角垂直（或接近垂直）边缘。对于这些边缘，您可以分别为顶部和底部指定圆角和/或倒角：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 prismoid(size1=[35,50], size2=[20,30], h=20, rounding1 = 8, rounding2 = 1);
 ```
 
-You can also specify rounding of the individual vertical(ish) edges on an edge by edge basis by listing the edges in counter-clockwise order starting with the BACK+RIGHT (X+Y+) edge:
+您还可以按边缘逐个指定垂直（或接近垂直）边缘的圆角，通过以逆时针顺序列出边缘，从 BACK+RIGHT（X+Y+）边缘开始：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 prismoid(100, 80, rounding1=[0,50,0,50], rounding2=[40,0,40,0], h=50);
 ```
 
-## Masking Edges of the Cuboid, Cube and Prismoid
+## 长方体、立方体和棱柱形的边缘蒙版/Masking Edges of the Cuboid, Cube and Prismoid
 
-### 2D Edge Masking with [edge_profile()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_profile) and [edge_profile_asym()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_profile_asym)
+### 使用 [edge_profile()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_profile) 和 [edge_profile_asym()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_profile_asym) 进行 2D 边缘蒙版
 
-One limitation of using rounding arguments in [cuboid()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#module-cuboid) is that all the rounded edges must have the same rounding radius.  Using masking we have the flexibility to apply different edge treatments to the same cube.  Masking can also be used on the [cube()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#functionmodule-cube) and [prismoid()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#functionmodule-prismoid) shapes.
+在 [cuboid()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#module-cuboid) 中使用圆角参数的一个限制是，所有圆角边缘必须具有相同的圆角半径。通过使用蒙版，我们可以灵活地对同一个立方体应用不同的边缘处理。蒙版还可以用于 [cube()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#functionmodule-cube) 和 [prismoid()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#functionmodule-prismoid) 形状。
 
-2D edge masks are attached to edges using [edge_profile()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_profile). They have a default tag of "remove" to enable differencing them away from your cube using [diff()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-diff).
+2D 边缘蒙版通过 [edge_profile()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_profile) 附加到边缘。它们默认使用 "remove" 标签，使得您可以通过 [diff()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-diff) 从立方体中去除它们。
 
-We can use a negative rounding value to fillet the bottom of a cuboid and [edge_profile()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_profile) to round the top.  Here [edge_profile()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_profile) applies a 2d roundover mask to the top edges of the cuboid.
+我们可以使用负圆角值来倒角长方体的底部，并使用 [edge_profile()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_profile) 来圆化顶部。这里，[edge_profile()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_profile) 将 2D 圆角蒙版应用于长方体的顶部边缘。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 diff()
     cuboid([50,60,70], rounding = -10, edges = BOT)
@@ -164,18 +172,18 @@ diff()
             mask2d_roundover(r=10);
 ```
 
-We could also fillet the bottom of the cube using [edge_profile_asym()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_profile_asym) and [xflip()](https://github.com/BelfrySCAD/BOSL2/wiki/transforms.scad#functionmodule-xflip)
+我们还可以使用 [edge_profile_asym()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_profile_asym) 和 [xflip()](https://github.com/BelfrySCAD/BOSL2/wiki/transforms.scad#functionmodule-xflip) 来倒角立方体的底部。
 
-```openscad-3D
+```openscad
 include<BOSL2/std.scad>
 cuboid(50)
  edge_profile_asym(BOT, corner_type="round")
   xflip() mask2d_roundover(10);
 ```
 
-The flip argumet in [edge_profile_asym()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_profile_asym) determines whether the fillet flares out or up.  The corner_type argument is used to shape the corners of external fillets.
+[edge_profile_asym()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_profile_asym) 中的 `flip` 参数决定了倒角是向外扩展还是向上扩展。`corner_type` 参数用于塑造外部倒角的角部形状。
 
-```openscad-3D
+```openscad
 include<BOSL2/std.scad>
 cuboid(50){
  edge_profile_asym(TOP, flip = true)
@@ -185,9 +193,9 @@ cuboid(50){
    } 
 ```
 
-See [mask2d_roundover()](https://github.com/BelfrySCAD/BOSL2/wiki/masks2d.scad#functionmodule-mask2d_roundover) for additional mask parameters.  Here we use the *inset* parameter to produce a bead.
+请参见 [mask2d_roundover()](https://github.com/BelfrySCAD/BOSL2/wiki/masks2d.scad#functionmodule-mask2d_roundover) 获取更多蒙版参数。在这里，我们使用 *inset* 参数来制作一个圆珠。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 diff()
  cube([50,60,70],center=true)
@@ -195,9 +203,10 @@ diff()
         mask2d_roundover(h=12, inset=4);
 ```
 
-You can use [edge-profile()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_profile) to round the top or bottom of a [prismoid()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#functionmodule-prismoid).  Because the side faces of a [prismoid()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#functionmodule-prismoid) are not strictly vertical, it's is necessary to increase the length of the masks using the *excess* parameter in [edge_profile()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_profile), and to set the mask\_angle to $edge\_angle in [mask2d\_roundover()](https://github.com/BelfrySCAD/BOSL2/wiki/masks2d.scad#functionmodule-mask2d_roundover).
+您可以使用 [edge-profile()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_profile) 来圆化 [prismoid()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#functionmodule-prismoid) 的顶部或底部。  
+由于 [prismoid()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#functionmodule-prismoid) 的侧面并非严格垂直，因此需要使用 [edge_profile()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_profile) 中的 *excess* 参数来增加蒙版的长度，并在 [mask2d_roundover()](https://github.com/BelfrySCAD/BOSL2/wiki/masks2d.scad#functionmodule-mask2d_roundover) 中将 mask_angle 设置为 $edge_angle。
 
-```openscad-3D
+```openscad
 include<BOSL2/std.scad>
 diff()
  prismoid(size1=[35,50], size2=[30,30], h=20, rounding1 = 8, rounding2 = 0)
@@ -205,9 +214,9 @@ diff()
         mask2d_roundover(r = 15, mask_angle = $edge_angle, $fn = 64);
 ```
 
-Instead of specifying the rounding radius, you can specify the height of edge rounding.
+您可以指定边缘圆角的高度，而不是指定圆角半径。
 
-```openscad-3D
+```openscad
 include<BOSL2/std.scad>
 diff()
    cube(30)
@@ -215,9 +224,9 @@ diff()
          mask2d_roundover(h = 12, $fn = 64);
 ```
 
-Rounding heights larger than an adjacent edge/2 will produce a ridge line on the top surface.
+圆角高度大于相邻边缘的一半将会在顶部表面产生一个脊线。
 
-```openscad-3D
+```openscad
 include<BOSL2/std.scad>
 diff()
    cube(30)
@@ -225,7 +234,8 @@ diff()
          mask2d_roundover(h = 20, $fn = 64);
 ```
 
-The [mask2d_teardrop()](https://github.com/BelfrySCAD/BOSL2/wiki/masks2d.scad#functionmodule-mask2d_teardrop) mask can be used to round the bottom of a cube-like object.  It limits the overhang angle to 45° or a value you specify in with the **angle** argument.
+[mask2d_teardrop()](https://github.com/BelfrySCAD/BOSL2/wiki/masks2d.scad#functionmodule-mask2d_teardrop) 蒙版可以用来圆化类似立方体的对象的底部。  
+它将悬垂角度限制为 45° 或您通过 **angle** 参数指定的值。
 
 ```
 include<BOSL2/std.scad>
@@ -235,7 +245,7 @@ diff()
          mask2d_teardrop(h = 5, angle = 50, mask_angle = $edge_angle, $fn = 64);
 ```
 
-```openscad-3d; ImgOnly VPR=[88.5,0,6.4] VPT=[0,16,10] VPD=110
+```openscad; ImgOnly VPR=[88.5,0,6.4] VPT=[0,16,10] VPD=110
 include<BOSL2/std.scad>
 diff()
    prismoid([30,20], [40,30], rounding = 2, h = 20, $fn = 64)
@@ -243,11 +253,11 @@ diff()
          mask2d_teardrop(h = 5, angle = 50, mask_angle = $edge_angle, $fn = 64);
 ```
 
-In addition to the simple [roundover](https://github.com/BelfrySCAD/BOSL2/wiki/masks2d.scad#functionmodule-mask2d_roundover) mask, and the [teardrop](https://github.com/BelfrySCAD/BOSL2/wiki/masks2d.scad#functionmodule-mask2d_teardrop) mask, there are masks for [cove](https://github.com/BelfrySCAD/BOSL2/wiki/masks2d.scad#functionmodule-mask2d_cove), [chamfer](https://github.com/BelfrySCAD/BOSL2/wiki/masks2d.scad#functionmodule-mask2d_chamfer), [rabbet](https://github.com/BelfrySCAD/BOSL2/wiki/masks2d.scad#functionmodule-mask2d_rabbet), [dovetail](https://github.com/BelfrySCAD/BOSL2/wiki/masks2d.scad#functionmodule-mask2d_dovetail) and [ogee](https://github.com/BelfrySCAD/BOSL2/wiki/masks2d.scad#functionmodule-mask2d_ogee) edges.  
+除了简单的 [roundover](https://github.com/BelfrySCAD/BOSL2/wiki/masks2d.scad#functionmodule-mask2d_roundover) 蒙版和 [teardrop](https://github.com/BelfrySCAD/BOSL2/wiki/masks2d.scad#functionmodule-mask2d_teardrop) 蒙版外，还有用于 [cove](https://github.com/BelfrySCAD/BOSL2/wiki/masks2d.scad#functionmodule-mask2d_cove)、[chamfer](https://github.com/BelfrySCAD/BOSL2/wiki/masks2d.scad#functionmodule-mask2d_chamfer)、[rabbet](https://github.com/BelfrySCAD/BOSL2/wiki/masks2d.scad#functionmodule-mask2d_rabbet)、[dovetail](https://github.com/BelfrySCAD/BOSL2/wiki/masks2d.scad#functionmodule-mask2d_dovetail) 和 [ogee](https://github.com/BelfrySCAD/BOSL2/wiki/masks2d.scad#functionmodule-mask2d_ogee) 边缘的蒙版。
 
-The mask2d_ogee() only works on [cube()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#functionmodule-cube) and [cuboid()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#module-cuboid) shapes, or a [prismoid()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#functionmodule-prismoid) where size2 >= size1 in both the X and Y dimensions.
+`mask2d_ogee()` 仅适用于 [cube()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#functionmodule-cube) 和 [cuboid()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#module-cuboid) 形状，或适用于 [prismoid()](https://github.com/BelfrySCAD/BOSL2/wiki/shapes3d.scad#functionmodule-prismoid) 形状，其中 X 和 Y 维度的 `size2 >= size1`。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 diff()
  prismoid(size1 = [50,50],size2 = [80,80], rounding1 = 25, height = 80)
@@ -259,7 +269,7 @@ diff()
         ]);
 ```
 
-Prismoids, espcecially prismoids with substantial shift, require careful selection of mask2d_roundover() arguments.  Here we're setting radius = 5 and mask_angle = $edge_angle.
+棱柱形，尤其是具有显著偏移的棱柱形，需要仔细选择 `mask2d_roundover()` 参数。 在这里，我们设置了 `radius = 5` 和 `mask_angle = $edge_angle`。
 
 ```
 include<BOSL2/std.scad>
@@ -269,7 +279,7 @@ diff()
          mask2d_roundover(r=5, mask_angle=$edge_angle, $fn=128);
 ```
 
-```openscad-3D; ImgOnly VPT=[16,16,12] VPD=185 VPR=[84,0,82]
+```openscad; ImgOnly VPT=[16,16,12] VPD=185 VPR=[84,0,82]
 include<BOSL2/std.scad>
 diff()
    prismoid([30,20], [50,60], h=20, shift=[30,40])
@@ -277,9 +287,9 @@ diff()
          mask2d_roundover(r=5, mask_angle=$edge_angle, $fn=128);
 ```
 
-Specifying rounding height rather than rounding radius produces a different shape.
+指定圆角高度而不是圆角半径会产生不同的形状。
 
-```openscad-3D; ImgOnly VPT=[16,16,12] VPD=185 VPR=[84,0,82]
+```openscad; ImgOnly VPT=[16,16,12] VPD=185 VPR=[84,0,82]
 include<BOSL2/std.scad>
 diff()
    prismoid([30,20], [50,60], h=20, shift=[30,40])
@@ -295,9 +305,9 @@ diff()
          mask2d_roundover(h=5, mask_angle=$edge_angle, $fn=128);
 ```
 
-The quarter_round argument works well for edges with acute angles, but leaves a ledge on the edges with obtuse angles.
+`quarter_round` 参数适用于具有锐角的边缘，但会在具有钝角的边缘上留下台阶。
 
-```openscad-3D; ImgOnly VPT=[16,16,12] VPD=185 VPR=[84,0,82]
+```openscad; ImgOnly VPT=[16,16,12] VPD=185 VPR=[84,0,82]
 include<BOSL2/std.scad>
 diff()
    prismoid([30,20], [50,60], h=20, shift=[30,40])
@@ -313,9 +323,9 @@ diff()
          mask2d_roundover(r=5, mask_angle=$edge_angle, quarter_round = true, $fn=128);
 ```
 
-A work-around is to use quarter_round only on the edges with acute angles.
+一种解决方法是仅在具有锐角的边缘上使用 `quarter_round`。
 
-```openscad-3D; ImgOnly VPT=[16,16,12] VPD=185 VPR=[84,0,82]
+```openscad; ImgOnly VPT=[16,16,12] VPD=185 VPR=[84,0,82]
 include<BOSL2/std.scad>
 diff()
    prismoid([30,20], [50,60], h=20, shift=[30,40])
@@ -331,13 +341,15 @@ diff()
          mask2d_roundover(r=5, mask_angle=$edge_angle, quarter_round = $edge_angle<90, $fn=128);
 ```
 
-### 3D Edge and Corner Masking
+### 3D 边缘和角落蒙版/3D Edge and Corner Masking
 
-BOSL2 contains a number of 3d edge and corner masks in addition to the 2d edge profiles shown above.
+除了上面展示的 2D 边缘轮廓外，BOSL2 还包含了多个 3D 边缘和角落蒙版。
 
-The 3d edge masks have the advantage of being able to vary the rounding radius along the edge.  3d edge masks, such as[rounding_edge_mask()](https://github.com/BelfrySCAD/BOSL2/wiki/masks3d.scad#module-rounding_edge_mask), can be attached using [edge_mask()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_mask). The 3D edge masks have a default tag of "remove" to enable differencing them away from your cube using [diff()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-diff).
+3D 边缘蒙版的优势在于可以沿边缘变化圆角半径。  
+像 [rounding_edge_mask()](https://github.com/BelfrySCAD/BOSL2/wiki/masks3d.scad#module-rounding_edge_mask) 这样的 3D 边缘蒙版，可以使用 [edge_mask()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_mask) 附加。  
+这些 3D 边缘蒙版有一个默认标签 "remove"，以便您可以使用 [diff()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-diff) 从立方体中去除它们。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 diff()
  cuboid(80)
@@ -345,9 +357,10 @@ diff()
    rounding_edge_mask(r1 = 40, r2 = 0, l = 80);
 ```
 
-While you can specify the length of the mask with the l or h argument, [edge_mask()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_mask) sets a special variable, `$parent_size`, to the size of the parent object.  In the case where the parent is not a perfect cube, you need to mask each edge individually:
+虽然您可以使用 `l` 或 `h` 参数指定蒙版的长度，[edge_mask()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_mask) 会将一个特殊变量 `$parent_size` 设置为父对象的大小。 
+如果父对象不是完美的立方体，您需要单独为每个边缘添加蒙版：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 diff()
  cuboid([60,80,40])  {
@@ -360,9 +373,11 @@ diff()
  } 
 ```
 
-As you can see above, using only [rounding\_edge_mask()](https://github.com/BelfrySCAD/BOSL2/wiki/masks3d.scad#module-rounding_edge_mask) to round the top of the cube leaves the corners unrounded.  Use [corner_mask()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-corner_mask) and [rounding\_corner_mask()](https://github.com/BelfrySCAD/BOSL2/wiki/masks3d.scad#module-rounding_corner_mask) for a smoother corner.
+如上所示，仅使用 [rounding_edge_mask()](https://github.com/BelfrySCAD/BOSL2/wiki/masks3d.scad#module-rounding_edge_mask) 来圆化立方体的顶部会留下未圆化的角落。  
+使用 [corner_mask()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-corner_mask) 和 [rounding_corner_mask()](https://github.com/BelfrySCAD/BOSL2/wiki/masks3d.scad#module-rounding_corner_mask) 可以获得更平滑的角落。
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 diff()
  cuboid([60,80,40]) {
@@ -378,9 +393,12 @@ diff()
  
 ```
 
-As with the built-in rounding arguments, you can use [edge\_mask()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_mask) and [corner\_mask()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-corner_mask) to apply teardrop roundings using [teardrop\_edge_mask()](https://github.com/BelfrySCAD/BOSL2/wiki/masks3d.scad#module-teardrop_edge_mask) and [teardrop\_corner_mask()](https://github.com/BelfrySCAD/BOSL2/wiki/masks3d.scad#module-teardrop_corner_mask) to limit the overhang angle for better printing on FDM printers. Note that the vertical mask on the RIGHT_FWD edge is a [rounding\_edge\_mask()](https://github.com/BelfrySCAD/BOSL2/wiki/masks3d.scad#module-rounding_edge_mask).
+与内建圆角参数一样，您可以使用 [edge_mask()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-edge_mask) 和 [corner_mask()](https://github.com/BelfrySCAD/BOSL2/wiki/attachments.scad#module-corner_mask) 来应用悬垂圆角，  
+通过使用 [teardrop_edge_mask()](https://github.com/BelfrySCAD/BOSL2/wiki/masks3d.scad#module-teardrop_edge_mask) 和 [teardrop_corner_mask()](https://github.com/BelfrySCAD/BOSL2/wiki/masks3d.scad#module-teardrop_corner_mask) 来限制悬垂角度，以便在 FDM 打印机上获得更好的打印效果。  
+请注意，RIGHT_FWD 边缘上的垂直蒙版是 [rounding_edge_mask()](https://github.com/BelfrySCAD/BOSL2/wiki/masks3d.scad#module-rounding_edge_mask)。
 
-```openscad-3D
+
+```openscad
 include <BOSL2/std.scad>
 diff()
  cuboid([60,80,40]) {
@@ -395,37 +413,40 @@ diff()
  }
  
 ```
+## 圆角棱柱/Rounded Prism
 
-## Rounded Prism
+您可以使用 [rounded_prism()](https://github.com/BelfrySCAD/BOSL2/wiki/rounding.scad#functionmodule-rounded_prism) 来构建类似立方体的对象，以及各种其他棱柱体。在本教程中，我们专注于圆化立方体，但 [rounded_prism()](https://github.com/BelfrySCAD/BOSL2/wiki/rounding.scad#functionmodule-rounded_prism) 的功能远超类似立方体的对象。  
+请查看 [rounded_prism()](https://github.com/BelfrySCAD/BOSL2/wiki/rounding.scad#functionmodule-rounded_prism) 示例以了解更多。
 
-You can construct cube-like objects, as well as a variety of other prisms using [rounded_prism()](https://github.com/BelfrySCAD/BOSL2/wiki/rounding.scad#functionmodule-rounded_prism). In this tutorial we're concentrating on rounding cubes, but [rounded_prism()](https://github.com/BelfrySCAD/BOSL2/wiki/rounding.scad#functionmodule-rounded_prism) has capabilities that extend well beyond cube-like objects.  See the [rounded_prism()](https://github.com/BelfrySCAD/BOSL2/wiki/rounding.scad#functionmodule-rounded_prism) examples to learn more.
+[rounded_prism()](https://github.com/BelfrySCAD/BOSL2/wiki/rounding.scad#functionmodule-rounded_prism) 独特的功能是它使用连续曲率圆角。  
+与使用恒定半径弧线不同，连续曲率圆角使用 4 阶 Bezier 曲线。有关如何实现这一点的完整细节，请参见 [圆角类型](https://github.com/BelfrySCAD/BOSL2/wiki/rounding.scad#section-types-of-roundovers)。
 
-A feature unique to [rounded_prism()](https://github.com/BelfrySCAD/BOSL2/wiki/rounding.scad#functionmodule-rounded_prism) is that it uses continuous curvature rounding. Rather than using constant radius arcs, continuous curvature rounding uses 4th-order Bezier curves. For complete details on how this works see [Types of Roundovers](https://github.com/BelfrySCAD/BOSL2/wiki/rounding.scad#section-types-of-roundovers).
+两个参数控制圆角效果，分别是 k 和 joint。  
+`joint` 参数是圆角开始位置到未圆角边缘的距离。`k` 参数的范围是 0 到 1，默认值为 0.5。较大的值会产生更急剧的过渡，而较小的值会产生更平滑的过渡。
 
-Two parameters control the roundover, k and joint.  The joint parameter is the distance from where the rounding starts to the unrounded edge. The k parameter ranges from 0 to 1 with a default of 0.5. Larger values give a more abrupt transition and smaller ones a more gradual transition.
-
-Parameters of a "smooth" roundover, with k=0.75.
+以下是 "平滑" 圆角的参数，k=0.75。
 
 ![](https://github.com/BelfrySCAD/BOSL2/wiki/images/rounding/section-types-of-roundovers_fig3.png)
 
-Parameters of a "smooth" roundover, with k=0.15. The transition is so gradual that it appears that the roundover is much smaller than specified. The cut length is much smaller for the same joint length.
+以下是 "平滑" 圆角的参数，k=0.15。过渡非常平缓，导致圆角看起来比指定的要小得多。对于相同的接头长度，切割长度更小。
 
 ![](https://github.com/BelfrySCAD/BOSL2/wiki/images/rounding/section-types-of-roundovers_fig4.png)
 
-The joint parameter is specified separately for the top, bottom and side edges; joint\_top, joint\_bot, and joint_sides.
+`joint` 参数可以分别为顶部、底部和侧边的边缘指定；分别为 `joint_top`、`joint_bot` 和 `joint_sides`。
 
- If you want a very smooth roundover, set the joint parameter as large as possible and then adjust the k value down low enough to achieve a sufficiently large roundover.  Joint parameters usually need to be < side/2.
+如果您想要非常平滑的圆角，可以将 `joint` 参数设置为尽可能大，然后调整 `k` 值，使圆角足够大。  
+`joint` 参数通常需要小于侧边的一半 (`side/2`)。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 include <BOSL2/rounding.scad>
 rounded_prism(rect(20), height=20, 
     joint_top=9.99, joint_bot=9.99, joint_sides=9.99, k = 0.5);
 ```
 
-Here we're using the same cube size and joint sizes, but varying the k parameter.
+在这里，我们使用相同的立方体大小和接头尺寸，但调整了 `k` 参数。
 
-```openscad-3D;ImgOnly NoScales Med VPD=170 VPR=[75,0,25]
+```openscad
 include <BOSL2/std.scad>
 include <BOSL2/rounding.scad>
  left(30) {
@@ -444,9 +465,9 @@ right(30){
 }
 ```
 
-Alternatively, we can keep k constant at k=0.5 and vary the joint length:
+另外，我们可以保持 `k` 常数为 k=0.5，并调整接头长度：
 
-```openscad-3D;ImgOnly NoScales Med VPD=170 VPR=[75,0,25]
+```openscad
 include <BOSL2/std.scad>
 include <BOSL2/rounding.scad>
  left(30) {
@@ -465,9 +486,9 @@ right(30){
 }
 ```
 
-You can match the cicrular roundover of cuboid() by setting the joint values to the rounding used in cuboid() and setting the k value to 0.93:
+您可以通过将接头值设置为 `cuboid()` 中使用的圆角值，并将 `k` 值设置为 0.93，来匹配 `cuboid()` 的圆形圆角：
 
-```openscad-3D: Med, VPR=[75,0,25], VPD=180
+```openscad: Med, VPR=[75,0,25], VPD=180
 include <BOSL2/std.scad>
 include <BOSL2/rounding.scad>
 left(15) 
@@ -476,9 +497,9 @@ right(15)
     cuboid(20, rounding = 4, $fn = 72);
 ```
 
-Unlike other cube-like objects, the rounded prism smoothness is not affected by the special variable $fn, but by the splinesteps argument. Splinesteps defaults to 16.
+与其他类似立方体的对象不同，圆角棱柱的平滑度不受特殊变量 `$fn` 的影响，而是由 `splinesteps` 参数控制。`splinesteps` 的默认值为 16。
 
-```openscad-3D;ImgOnly NoScales, Med, VPD=170, VPR=[75,0,45]
+```openscad
 include <BOSL2/std.scad>
 include <BOSL2/rounding.scad>
  left(35) {
@@ -497,18 +518,18 @@ right(35){
 }
 ```
 
-The joint size can be set to different values for each side of the prism:
+接头大小可以为棱柱的每一侧设置不同的值：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 include <BOSL2/rounding.scad>
 rounded_prism(rect(20), height=20, 
     joint_top=4, joint_bot=3, joint_sides=[2, 10, 5, 10], k = 0.5);
 ```
 
-Likewise, k can be set to different values for each side of the prism:
+同样，`k` 值也可以为棱柱的每一侧设置不同的值：
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 include <BOSL2/rounding.scad>
 rounded_prism(rect(20), height=20, 
@@ -516,9 +537,9 @@ rounded_prism(rect(20), height=20,
     k_top=0.5, k_bot=0.1, k_sides=[0,0.7,0.3,0.7]);
 ```
 
-You can specify a 2-vector for the joint distance to produce asymmetric rounding which is different on the two sides of the edge. This may be useful when one one edge in your polygon is much larger than another.
+您可以为接头距离指定一个 2 元素向量，以产生不对称的圆角，使得边缘的两侧圆角不同。当多边形的一个边远大于另一个边时，这可能会很有用。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 include <BOSL2/rounding.scad>
 rounded_prism(rect([50.1,20.1]), height=6.1, 
@@ -527,20 +548,22 @@ rounded_prism(rect([50.1,20.1]), height=6.1,
    k_sides=0.3);
 ```
 
-For the top and bottom you can specify negative joint distances. If you give a scalar negative value then the roundover will flare outward.
+对于顶部和底部，您可以指定负的接头距离。如果您给出一个标量负值，那么圆角将向外扩展。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 include <BOSL2/rounding.scad>
 rounded_prism(rect(20), height=20, 
     joint_top=5, joint_bot=-5, joint_sides=8, k=0.5);
 ```
 
-If you give a 2-vector then if joint\_top[0] is negative the shape will flare outward, but if joint\_top[1] is negative the shape will flare upward. At least one value must be non-negative. The same rules apply for joint\_bot. The joint\_sides parameter must be entirely nonnegative.
+如果您给出一个 2 元素向量，那么如果 `joint_top[0]` 为负值，形状将向外扩展；  
+但如果 `joint_top[1]` 为负值，形状将向上扩展。至少有一个值必须是非负的。对于 `joint_bot` 也适用相同的规则。  
+`joint_sides` 参数必须完全是非负的。
 
-Flaring the top upward. The bottom has an asymmetric rounding with a small flare but a large rounding up the side.
+将顶部向上扩展。底部具有不对称的圆角，边缘有一个小的外扩圆角，而侧面则有一个较大的圆角。
 
-```openscad-3D
+```openscad
 include <BOSL2/std.scad>
 include <BOSL2/rounding.scad>
 rounded_prism(rect(20), height=20, 
