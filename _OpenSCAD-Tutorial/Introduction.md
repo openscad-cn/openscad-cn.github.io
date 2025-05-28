@@ -20,8 +20,6 @@ nav_order: 0
 
 ---
 
-<iframe src="//player.bilibili.com/player.html?aid=113654733217309&bvid=BV1VEqoYmENY&cid=27349680499&page=1&high_quality=1&danmaku=0" allowfullscreen="allowfullscreen" width="100%" height="500" scrolling="no" frameborder="0" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"></iframe>
-
 ## 关于本教程
 
 本教程假设读者对编程或 CAD 完全没有任何基础知识，旨在通过逐步的示例和练习，引导您快速理解核心概念，并为您提供创建自己模型的必要工具。
