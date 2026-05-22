@@ -103,7 +103,7 @@ OpenSCAD 提供了两种内置的 2D 基本形状：`square()` 和 `circle()`。
 >
 >```
 
-You can add vectors together to point to corners:
+你可以将向量相加来指向角点：
 
 {: .code }
 >```openscad

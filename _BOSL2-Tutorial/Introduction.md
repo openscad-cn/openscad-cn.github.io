@@ -40,6 +40,9 @@ nav_order: 0
 
 ## 关于本教程
 
+BOSL2（Belfry OpenScad Library, version 2）是 OpenSCAD 最重要的第三方库之一，为 OpenSCAD 提供了增强的形状模块、变换工具、附加系统以及大量实用函数。
+
+本教程系列旨在帮助中文用户快速上手 BOSL2 的核心功能。
 
 ---
 
