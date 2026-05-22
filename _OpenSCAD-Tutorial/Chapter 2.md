@@ -30,6 +30,8 @@ nav_order: 2
 >    cube([60,20,10],center=true);
 >```
 
+![加长车身底部的汽车](/assets/images/Car_with_lengthened_body_base.jpg)
+
 ---
 
 您会注意到，`scale` 命令的使用方式与 `translate` 和 `rotate` 命令相似。它被添加在现有语句的左侧，中间没有分号。它的输入参数是一个包含三个值的向量。与 `translate` 和 `rotate` 命令类似，每个值分别对应于沿 X、Y 和 Z 轴的缩放比例。
@@ -63,6 +65,8 @@ nav_order: 2
 >}
 >```
 
+![加长车身](/assets/images/Car_with_lengthened_body.jpg)
+
 ---
 
 {: .new }
@@ -73,18 +77,9 @@ nav_order: 2
 >2. **增加可读性**  
 >   注意如何通过空白和注释来提高脚本的可读性。以下脚本与上面的脚本完全等效，您可以自行决定更喜欢哪种风格：
 
----
+![加长并收窄车身的汽车](/assets/images/Car_with_lengthened_and_narrowed_body_base.jpg)
 
-{: .code-title }
->示例代码（无注释版本）
->
->```openscad
->scale([1.2,1,1]) {
->    cube([60,20,10],center=true);
->    translate([5,0,10 - 0.001])
->        cube([30,20,10],center=true);
->}
->```
+![加长并加宽车身的汽车](/assets/images/Car_with_lengthened_and_widened_body_base.jpg)
 
 ---
 
@@ -93,6 +88,8 @@ nav_order: 2
 >- 您是否记得将所有语句包括在大括号内？  
 >- 为了使轮子不变形，沿 X 和 Z 轴的缩放因子应该是什么关系？  
 >- 如果要使汽车保持相同比例但尺寸加倍，缩放因子应该是多少？
+
+![缩放后的汽车](/assets/images/Scaled_car.jpg)
 
 ---
 
@@ -188,6 +185,8 @@ nav_order: 2
 >    cylinder(h=30,r=2,center=true);
 >```
 
+![转弯的汽车](/assets/images/Turning_car.jpg)
+
 ---
 
 通过这次练习，您应该能更好地理解如何结合 `rotate` 命令创建更复杂、更逼真的模型。
@@ -239,6 +238,8 @@ nav_order: 2
 >    cylinder(h=30,r=2,center=true);
 >```
 
+![具有相同大小轮子的汽车](/assets/images/Car_with_same_sized_wheels.jpg)
+
 ---
 
 {: .new }
@@ -257,6 +258,10 @@ nav_order: 2
 {: .note }
 > **提示**  
 > 在 `{}` 大括号内定义的变量仅在大括号内有效。即使同名变量在不同的大括号层级中重复赋值，也不会被视为冲突。
+
+![有更小轮子的汽车](/assets/images/Car_with_smaller_wheels.jpg)
+
+![有更大轮子的汽车](/assets/images/Car_with_larger_wheels.jpg)
 
 ---
 
@@ -287,6 +292,8 @@ nav_order: 2
 >    cube([30,20,top_height],center=true);
 >```
 
+![车身顶部分离的汽车](/assets/images/Car_with_floating_body_top.jpg)
+
 ---
 
 {: .note }
@@ -316,6 +323,8 @@ nav_order: 2
 >    cube([30,20,top_height],center=true);
 >```
 
+![车身顶部正确连接的汽车](/assets/images/Car_with_properly_attached_body_top.jpg)
+
 ---
 
 {: .code-title }
@@ -325,6 +334,8 @@ nav_order: 2
 >base_height = 8;
 >top_height = 14;
 >```
+
+![更高车身的汽车](/assets/images/Car_with_higher_body.jpg)
 
 ---
 
@@ -363,6 +374,8 @@ nav_order: 2
 >    cylinder(h=3,r=wheel_radius,center=true);
 >```
 
+![轮子未连接的汽车](/assets/images/Car_with_unattached_wheels.jpg)
+
 ---
 
 {: .code-title }
@@ -395,6 +408,8 @@ nav_order: 2
 >    rotate([90,0,0])
 >    cylinder(h=track,r=2,center=true);
 >```
+
+![轮子正确连接的汽车](/assets/images/Car_with_properly_attached_wheels.jpg)
 
 ---
 
@@ -450,6 +465,8 @@ nav_order: 2
 >    cylinder(h=track,r=2,center=true);
 >```
 
+![来自参数化脚本的汽车](/assets/images/Car_from_parameterized_script.jpg)
+
 ---
 
 {: .ex }
@@ -503,6 +520,8 @@ nav_order: 2
 >    rotate([90,0,0])
 >    cylinder(h=track,r=2,center=true);
 >```
+
+![参数化脚本中转弯的汽车](/assets/images/Turning_car_from_parameterized_script.jpg)
 
 ---
 

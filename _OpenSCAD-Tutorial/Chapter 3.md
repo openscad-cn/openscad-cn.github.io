@@ -35,6 +35,8 @@ nav_order: 3
 
 球体创建后会以原点为中心。输入参数 `r` 对应球体的半径。一个想法是用球形替代圆柱形轮子：
 
+![采用球形轮子的汽车](/assets/images/Car_with_spherical_wheels.jpg)
+
 ---
 
 {: .ex }
@@ -65,6 +67,8 @@ nav_order: 3
 >scale([1,0.4,1])
 >    sphere(r=10);
 >```
+
+![缩窄的球形轮子](/assets/images/Narrowed_spherical_wheel.jpg)
 
 ---
 
@@ -114,6 +118,10 @@ nav_order: 3
 ---
 
 新的轮子设计看起来很酷！接下来您可以创建更适合这种风格的车身。
+
+![采用缩窄球形轮子的汽车](/assets/images/Car_with_narrowed_spherical_wheels.jpg)
+
+![采用缩窄球形轮子和匹配车身的汽车](/assets/images/Car_with_narrowed_spherical_wheels_and_body.jpg)
 
 ---
 
@@ -188,6 +196,8 @@ nav_order: 3
 >}
 >```
 
+![两个球体的差集](/assets/images/Difference_of_two_spheres.jpg)
+
 ---
 
 如果有第三个或更多对象，它们也会被减去：
@@ -207,12 +217,33 @@ nav_order: 3
 >}
 >```
 
+![三个球体的差集](/assets/images/Difference_of_three_spheres.jpg)
+
 ---
 
 {: .new-title }
 >交集操作
 >
 >`intersection` 命令保留所有对象的重叠部分。以下是交集的示例：
+
+---
+
+{: .code-title }
+>示例代码 `intersection_of_two_spheres.scad`
+>
+>```openscad
+>intersection() {
+>    sphere(r=10);
+>    translate([12,0,0])
+>        sphere(r=10);
+>}
+>```
+
+![两个球体的交集](/assets/images/Intersection_of_two_spheres.jpg)
+
+---
+
+如果只定义两个球体，交集结果如下：
 
 ---
 
@@ -229,22 +260,7 @@ nav_order: 3
 >}
 >```
 
----
-
-如果只定义两个球体，交集结果如下：
-
----
-
-{: .code-title }
->示例代码 `intersection_of_two_spheres.scad`
->
->```openscad
->intersection() {
->    sphere(r=10);
->    translate([12,0,0])
->        sphere(r=10);
->}
->```
+![三个球体的交集](/assets/images/Intersection_of_three_spheres.jpg)
 
 ---
 
@@ -357,6 +373,8 @@ nav_order: 3
 >    }
 >// Repeat similar structures for other wheels...
 >```
+
+![采用带球形侧面和孔洞轮子的汽车](/assets/images/Car_with_wheels_with_spherical_sides_and_holes.jpg)
 
 ---
 
