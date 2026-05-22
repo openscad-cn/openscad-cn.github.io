@@ -20,7 +20,7 @@ Bézier 曲线的形式根据定义曲线的多项式的度数而有所不同。
 二次 Bézier 曲线，即度数为 2 的 Bézier 曲线，定义由 [二次多项式](https://en.wikipedia.org/wiki/Quadratic_polynomial)。  
 二次 Bézier 曲线有一个起始控制点、一个结束控制点，以及一个通常不在曲线上的中间控制点。曲线从起始点开始，朝向中间控制点，然后转向，最终从中间控制点的方向到达结束点。
 
-![图片来源于 Wikipedia](images/bezier_2_big.gif "Quadratic Bézier 动画，图片来源于 Wikipedia")
+![图片来源于 Wikipedia](/assets/images/bezier_2_big.gif "Quadratic Bézier 动画，图片来源于 Wikipedia")
 
 为了可视化 Bézier 曲线，我们可以使用模块 [debug_bezier()](https://github.com/BelfrySCAD/BOSL2/wiki/beziers.scad#module-debug_bezier)。  
 参数 N 告诉 `debug_bezier` Bézier 曲线的度数。
@@ -46,7 +46,7 @@ debug_bezier(bez, N = 2);
 三次 Bézier 曲线（度数为 3）由三次多项式定义。三次 Bézier 曲线有四个控制点。  
 第一个和最后一个控制点是曲线的端点。曲线从第二个控制点开始，然后转向，使其从第三个控制点的方向到达终点。
 
-![图片来源于 Wikipedia](images/bezier_3_big.gif "Cubic Bézier 动画，图片来源于 Wikipedia")
+![图片来源于 Wikipedia](/assets/images/bezier_3_big.gif "Cubic Bézier 动画，图片来源于 Wikipedia")
 
 
 ```openscad
@@ -72,7 +72,7 @@ debug_bezier(bez, N = 3);
 更高阶的 Bézier 曲线，如四次（度数为 4）和五次（度数为 5）Bézier 曲线也存在。  
 度数为 4 的 Bézier 曲线用于 [round_corners()](https://github.com/BelfrySCAD/BOSL2/wiki/rounding.scad#function-round_corners) 和 [rounded_prism()](https://github.com/BelfrySCAD/BOSL2/wiki/rounding.scad#functionmodule-rounded_prism) 的连续圆角操作。
 
-![图片来源于 Wikipedia](images/bezier_4_big.gif "Quartic Bézier 动画，图片来源于 Wikipedia")
+![图片来源于 Wikipedia](/assets/images/bezier_4_big.gif "Quartic Bézier 动画，图片来源于 Wikipedia")
 
 更高阶的 Bézier 曲线，因此具有更多的控制点，提供了更多的形状控制。如果您需要精细调整曲线的形状，可以向 Bézier 曲线中添加更多控制点。
 
