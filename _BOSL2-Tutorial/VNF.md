@@ -195,11 +195,14 @@ VNF 结构（通常称为 VNF）只是一个包含两个项目的列表，第一
 >
 >```
 
-```log
-ECHO: "ERROR REVERSAL (violet): Faces Reverse Across Edge at [[-1, -1, 1], [1, -1, 1]]"
-ECHO: "ERROR REVERSAL (violet): Faces Reverse Across Edge at [[1, -1, 1], [1, 1, 1]]"
-ECHO: "ERROR REVERSAL (violet): Faces Reverse Across Edge at [[1, 1, 1], [-1, -1, 1]]"
-```
+{: .code-title }
+>控制台输出
+>
+>```log
+>ECHO: "ERROR REVERSAL (violet): Faces Reverse Across Edge at [[-1, -1, 1], [1, -1, 1]]"
+>ECHO: "ERROR REVERSAL (violet): Faces Reverse Across Edge at [[1, -1, 1], [1, 1, 1]]"
+>ECHO: "ERROR REVERSAL (violet): Faces Reverse Across Edge at [[1, 1, 1], [-1, -1, 1]]"
+>```
 
 `vnf_validate()` 模块在显示第一个找到的问题类型后会停止，因此一旦解决了这些问题，您需要再次运行它以显示任何其他剩余的问题。例如，上述示例中的反向面隐藏了前面上的一个非流形孔：
 
@@ -224,9 +227,12 @@ ECHO: "ERROR REVERSAL (violet): Faces Reverse Across Edge at [[1, 1, 1], [-1, -1
 >
 >```
 
-```log
-ECHO: "ERROR HOLE_EDGE (red): Edge bounds Hole at [[-1, -1, -1], [1, -1, -1]]"
-ECHO: "ERROR HOLE_EDGE (red): Edge bounds Hole at [[-1, -1, -1], [1, -1, 1]]"
-ECHO: "ERROR HOLE_EDGE (red): Edge bounds Hole at [[1, -1, -1], [1, -1, 1]]"
-```
+{: .code-title }
+>控制台输出
+>
+>```log
+>ECHO: "ERROR HOLE_EDGE (red): Edge bounds Hole at [[-1, -1, -1], [1, -1, -1]]"
+>ECHO: "ERROR HOLE_EDGE (red): Edge bounds Hole at [[-1, -1, -1], [1, -1, 1]]"
+>ECHO: "ERROR HOLE_EDGE (red): Edge bounds Hole at [[1, -1, -1], [1, -1, 1]]"
+>```
 
